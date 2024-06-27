@@ -1,5 +1,6 @@
-# paper-template
-A template repository for scientific projects.
+# affective-instability
+
+Curation and analysis code for the Affective Instability (PAFIN) dataset.
 
 ## File organization on CUBIC
 
