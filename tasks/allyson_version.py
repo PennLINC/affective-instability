@@ -31,12 +31,13 @@ if dlg.OK is False:
 
 experiment_info["date"] = data.getDateStr()  # add a simple timestamp
 experiment_info["experiment_name"] = experiment_name
+image_file = "Pixar.png"
 if experiment_info["stimulus"] == "Bao":
-    movie_file = "Bao.mp4"
-    image_file = "Bao.png"
+    movie_file = "Bao_Body_with_Fadeout.mp4"
+    video_duration = 427
 elif experiment_info["stimulus"] == "YFTR":
-    movie_file = "YFTR.mp4"
-    image_file = "YFTR.png"
+    movie_file = "YFTR_with_Fadeout.mp4"
+    video_duration = 638
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = os.path.join(
@@ -95,6 +96,7 @@ if experiment_info["frameRate"] is not None:
     frameDur = 1.0 / round(experiment_info["frameRate"])
 else:
     frameDur = 1.0 / 60.0  # could not measure, so guess
+    print("frameRate not found")
 
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
@@ -116,7 +118,7 @@ image = visual.ImageStim(
     interpolate=True,
     depth=0.0,
 )
-movie = visual.MovieStim3(
+movie = visual.VlcMovieStim(
     win=win,
     name="movie",
     noAudio=False,
@@ -140,8 +142,8 @@ trialClock.reset()  # clock
 frameN = -1
 continueRoutine = True
 # allows for time between running the script and starting the scan
-# XXX: TS: I don't understand the purpose of this step. What does it do?
-routineTimer.add(400.000000)
+# The routineTimer will stop the task after the timer runs out.
+routineTimer.add(video_duration)
 # update component parameters for each repeat
 # keep track of which components have finished
 trialComponents = [image, movie]
@@ -163,9 +165,9 @@ while continueRoutine and routineTimer.getTime() > 0:
         image.setAutoDraw(True)
 
     # Changed trigger from "t" key to 5 (TS)
-    allKeys = event.getKeys(keyList=[5, "escape"])
+    allKeys = event.getKeys(keyList=["5", "escape"])
     for key in allKeys:
-        if image.status == STARTED and key == 5:
+        if image.status == STARTED and key == "5":
             image.setAutoDraw(False)
 
             movie.tStart = t
