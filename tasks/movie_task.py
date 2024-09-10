@@ -152,9 +152,9 @@ win = visual.Window(
 win.mouseVisible = False
 
 # store frame rate of monitor if we can measure it
-experiment_info["frameRate"] = win.getActualFrameRate()
+# experiment_info["frameRate"] = win.getActualFrameRate()
 
-# Initialize components for Routine "trial"
+# Initialize components for the task
 trial_clock = core.Clock()
 waiting = visual.TextStim(
     win,
@@ -181,42 +181,36 @@ movie = MovieStim(
     depth=-1.0,
     units="pix",
     size=(1440, 810),
+    volume=0.0,
 )
 
+# Show message until scan starts ('5' key)
 draw_until_keypress(win=win, stim=waiting)
 
-# ------Prepare to start Routine "trial"-------
-curr_time = 0
+# Start the video
 trial_clock.reset()  # clock for the movie
-frame_num = -1
 continue_routine = True
-
 this_experiment.addData("trial_type", "film")
-this_experiment.addData("onset", curr_time)
+this_experiment.addData("onset", trial_clock.getTime())
 
-# -------Start Routine "trial"-------
+# NOTE: I set volume to 0 at initialization because I was
+# getting a small blip of sound between the "framerate check" and
+# the wait screen.
+movie.volume = 1.0
+movie.setAutoDraw(True)
+win.flip()
 while continue_routine:
-    # get current time
-    curr_time = trial_clock.getTime()
-    frame_num = frame_num + 1  # number of completed frames (so 0 is the first)
-
-    movie.tStart = curr_time
-    movie.frameNStart = frame_num  # exact frame index
-    movie.setAutoDraw(True)
-    win.flip()
-
     if "escape" in event.getKeys():
-        this_experiment.addData("duration", curr_time)
+        this_experiment.addData("duration", trial_clock.getTime())
         this_experiment.addData("resp.key", "escape")
         save_and_quit(this_experiment, win, filename)
 
     if movie.isFinished:
         movie.setAutoDraw(False)
-        this_experiment.addData("duration", curr_time)
+        this_experiment.addData("duration", trial_clock.getTime())
         continue_routine = False
 
     # refresh the screen
-    # don't flip if this routine is over or we'll get a blank screen
     win.flip()
 
 # Final note that task is over. Runs after scan ends.
@@ -227,6 +221,8 @@ this_experiment.addData("onset", curr_time)
 draw(win=win, stim=end_screen, duration=2, clock=trial_clock)
 this_experiment.addData("duration", trial_clock.getTime() - curr_time)
 win.flip()
+
+# Task is over. Close everything.
 logging.flush()
 win.close()
 core.quit()
