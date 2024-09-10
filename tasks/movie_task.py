@@ -35,12 +35,10 @@ experiment_info["experiment_name"] = experiment_name
 image_file = "Pixar.png"
 if experiment_info["stimulus"] == "Bao":
     movie_file = "Bao_Body_with_Fadeout.mp4"
-    video_duration = 427
 elif experiment_info["stimulus"] == "YFTR":
     movie_file = "YFTR_with_Fadeout.mp4"
-    video_duration = 638
 
-# Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
+# Data file name stem = absolute path + name; later add .psyexp, .csv, etc
 filename = os.path.join(
     script_dir,
     "data",
@@ -60,7 +58,8 @@ thisExp = data.ExperimentHandler(
 )
 # save a log file for detail verbose info
 logFile = logging.LogFile(filename + ".log", level=logging.EXP)
-logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
+# this outputs to the screen, not a file
+logging.console.setLevel(logging.WARNING)
 
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
@@ -142,9 +141,6 @@ t = 0
 trialClock.reset()  # clock
 frameN = -1
 continueRoutine = True
-# allows for time between running the script and starting the scan
-# The routineTimer will stop the task after the timer runs out.
-routineTimer.add(video_duration)
 # update component parameters for each repeat
 # keep track of which components have finished
 trialComponents = [image, movie]
@@ -153,8 +149,7 @@ for thisComponent in trialComponents:
         thisComponent.status = NOT_STARTED
 
 # -------Start Routine "trial"-------
-# note: globalClock has been reset to 0.0 by launchScan()
-while continueRoutine and routineTimer.getTime() > 0:
+while continueRoutine:
     # get current time
     t = trialClock.getTime()
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
