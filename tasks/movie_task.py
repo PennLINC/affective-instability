@@ -42,11 +42,14 @@ elif experiment_info["stimulus"] == "YFTR":
 filename = os.path.join(
     script_dir,
     "data",
-    f'{experiment_info["participant"]}_{experiment_name}_{experiment_info["date"]}',
+    (
+        f'{experiment_info["participant"]}_{experiment_name}_'
+        f'{experiment_info["date"]}'
+    ),
 )
 
 # An ExperimentHandler isn't essential but helps with data saving
-thisExp = data.ExperimentHandler(
+this_experiment = data.ExperimentHandler(
     name=experiment_name,
     version="",
     extraInfo=experiment_info,
@@ -57,7 +60,7 @@ thisExp = data.ExperimentHandler(
     dataFileName=filename,
 )
 # save a log file for detail verbose info
-logFile = logging.LogFile(filename + ".log", level=logging.EXP)
+log_file = logging.LogFile(filename + ".log", level=logging.EXP)
 # this outputs to the screen, not a file
 logging.console.setLevel(logging.WARNING)
 
@@ -92,7 +95,7 @@ win.mouseVisible = False
 experiment_info["frameRate"] = win.getActualFrameRate()
 
 # Initialize components for Routine "trial"
-trialClock = core.Clock()
+trial_clock = core.Clock()
 image = visual.ImageStim(
     win=win,
     name="image",
@@ -123,52 +126,48 @@ movie = MovieStim(
     size=(1920, 1080),  # size=(1440,900)  # used (1600,900) with Shared PC
 )
 
-# Create some handy timers
-# to track the time since experiment started
-globalClock = core.Clock()
-
 # ------Prepare to start Routine "trial"-------
-t = 0
-trialClock.reset()  # clock
-frameN = -1
-continueRoutine = True
+curr_time = 0
+trial_clock.reset()  # clock for the movie
+frame_num = -1
+continue_routine = True
 # update component parameters for each repeat
 # keep track of which components have finished
-trialComponents = [image, movie]
-for thisComponent in trialComponents:
-    if hasattr(thisComponent, "status"):
-        thisComponent.status = NOT_STARTED
+task_components = [image, movie]
+for task_component in task_components:
+    if hasattr(task_component, "status"):
+        task_component.status = NOT_STARTED
 
 # -------Start Routine "trial"-------
-while continueRoutine:
+while continue_routine:
     # get current time
-    t = trialClock.getTime()
-    frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+    curr_time = trial_clock.getTime()
+    frame_num = frame_num + 1  # number of completed frames (so 0 is the first)
 
-    if t >= 0.0 and image.status == NOT_STARTED:
+    if curr_time >= 0.0 and image.status == NOT_STARTED:
         # keep track of start time/frame for later
-        image.tStart = t
-        image.frameNStart = frameN  # exact frame index
+        image.tStart = curr_time
+        image.frameNStart = frame_num  # exact frame index
         image.setAutoDraw(True)
 
     # Changed trigger from "t" key to 5 (TS)
-    allKeys = event.getKeys(keyList=["5", "escape"])
-    for key in allKeys:
+    valid_keys = event.getKeys(keyList=["5", "escape"])
+    for key in valid_keys:
         if image.status == STARTED and key == "5":
             image.setAutoDraw(False)
 
-            movie.tStart = t
-            movie.frameNStart = frameN  # exact frame index
+            movie.tStart = curr_time
+            movie.frameNStart = frame_num  # exact frame index
             movie.setAutoDraw(True)
             win.flip()
 
         if key == "escape":
-            save_and_quit(thisExp, win, filename)
+            save_and_quit(this_experiment, win, filename)
 
     if movie.status == FINISHED:
-        save_and_quit(thisExp, win, filename)
+        save_and_quit(this_experiment, win, filename)
 
     # refresh the screen
     # don't flip if this routine is over or we'll get a blank screen
-    if continueRoutine:
+    if continue_routine:
         win.flip()
