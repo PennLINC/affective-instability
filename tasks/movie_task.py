@@ -61,8 +61,6 @@ logFile = logging.LogFile(filename + ".log", level=logging.EXP)
 # this outputs to the screen, not a file
 logging.console.setLevel(logging.WARNING)
 
-endExpNow = False  # flag for 'escape' or other condition => quit the exp
-
 
 def save_and_quit(experiment, window, filename):
     experiment.saveAsWideText(filename + ".csv")
@@ -92,11 +90,6 @@ win.mouseVisible = False
 
 # store frame rate of monitor if we can measure it
 experiment_info["frameRate"] = win.getActualFrameRate()
-if experiment_info["frameRate"] is not None:
-    frameDur = 1.0 / round(experiment_info["frameRate"])
-else:
-    frameDur = 1.0 / 60.0  # could not measure, so guess
-    print("frameRate not found")
 
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
@@ -133,8 +126,6 @@ movie = MovieStim(
 # Create some handy timers
 # to track the time since experiment started
 globalClock = core.Clock()
-# to track time remaining of each (non-slip) routine
-routineTimer = core.CountdownTimer()
 
 # ------Prepare to start Routine "trial"-------
 t = 0
