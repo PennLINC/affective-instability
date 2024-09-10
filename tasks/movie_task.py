@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
+"""Run a film-viewing task with PsychoPy.
+
 This experiment was created using PsychoPy2 Experiment Builder (v1.90.2),
     on Mon Jul  2 12:32:24 2018
 If you publish work using this script please cite the PsychoPy publications:
@@ -13,9 +14,10 @@ Modified by Taylor Salo, 2024.
 """
 
 import os
+import time
 
 from psychopy import core, data, event, gui, logging, visual
-from psychopy.constants import FINISHED, NOT_STARTED, STARTED
+from psychopy.constants import STARTED, STOPPED
 from psychopy.visual.movies import MovieStim
 
 # Ensure that relative paths start from the same directory as this script
@@ -24,7 +26,7 @@ os.chdir(script_dir)
 
 # Store info about the experiment session
 experiment_name = "PAFIN"
-experiment_info = {"participant": "", "stimulus": ["Bao", "YFTR"]}
+experiment_info = {"participant": "01", "stimulus": ["TEST", "Bao", "YFTR"]}
 
 dlg = gui.DlgFromDict(dictionary=experiment_info, title=experiment_name)
 if dlg.OK is False:
@@ -32,19 +34,20 @@ if dlg.OK is False:
 
 experiment_info["date"] = data.getDateStr()  # add a simple timestamp
 experiment_info["experiment_name"] = experiment_name
-image_file = "Pixar.png"
 if experiment_info["stimulus"] == "Bao":
     movie_file = "Bao_Body_with_Fadeout.mp4"
 elif experiment_info["stimulus"] == "YFTR":
     movie_file = "YFTR_with_Fadeout.mp4"
+else:
+    movie_file = "YFTR_test.mp4"
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, etc
 filename = os.path.join(
     script_dir,
     "data",
     (
-        f'{experiment_info["participant"]}_{experiment_name}_'
-        f'{experiment_info["date"]}'
+        f"sub-{experiment_info['participant']}_"
+        f"task-{experiment_info['stimulus']}_events"
     ),
 )
 
@@ -66,12 +69,69 @@ logging.console.setLevel(logging.WARNING)
 
 
 def save_and_quit(experiment, window, filename):
+    """Save the experiment data and close the window."""
     experiment.saveAsWideText(filename + ".csv")
     experiment.saveAsPickle(filename)
     logging.flush()
     experiment.abort()
     window.close()
     core.quit()
+
+
+def draw_until_keypress(win, stim, continueKeys=["5"]):
+    """Draw a stimulus until a key is pressed."""
+    response = event.BuilderKeyResponse()
+    win.callOnFlip(response.clock.reset)
+    event.clearEvents(eventType="keyboard")
+    while True:
+        if isinstance(stim, list):
+            for s in stim:
+                s.draw()
+        else:
+            stim.draw()
+        keys = event.getKeys(keyList=continueKeys)
+        if any([ck in keys for ck in continueKeys]):
+            return
+
+        if "escape" in event.getKeys():
+            win.close()
+            core.quit()
+
+        win.flip()
+
+
+def draw(win, stim, duration, clock):
+    """Draw stimulus for a given duration.
+
+    Parameters
+    ----------
+    win : (visual.Window)
+    stim : object with `.draw()` method
+    duration : (numeric) duration in seconds to display the stimulus
+    """
+    # Use a busy loop instead of sleeping so we can exit early if need be.
+    start_time = time.time()
+    response = event.BuilderKeyResponse()
+    response.tStart = start_time
+    response.frameNStart = 0
+    response.status = STARTED
+    win.callOnFlip(response.clock.reset)
+    event.clearEvents(eventType="keyboard")
+    while time.time() - start_time < duration:
+        stim.draw()
+        keys = event.getKeys(
+            keyList=["1", "2", "escape"],
+            timeStamped=clock,
+        )
+        if "escape" in keys:
+            save_and_quit(this_experiment, win, filename)
+        elif keys:
+            response.keys.extend(keys)
+            response.rt.append(response.clock.getTime())
+
+        win.flip()
+    response.status = STOPPED
+    return response.keys, response.rt
 
 
 # Start Code - component code to be run before the window creation
@@ -96,23 +156,19 @@ experiment_info["frameRate"] = win.getActualFrameRate()
 
 # Initialize components for Routine "trial"
 trial_clock = core.Clock()
-image = visual.ImageStim(
-    win=win,
-    name="image",
-    image=image_file,
-    mask=None,
-    ori=0,
-    pos=(0, 0),
-    size=(1920, 1080),
-    units="pix",  # added units, changed size from 0.5, 0.5 (ATP)
-    color=[1, 1, 1],
-    colorSpace="rgb",
-    opacity=1,
-    flipHoriz=False,
-    flipVert=False,
-    texRes=128,
-    interpolate=True,
-    depth=0.0,
+waiting = visual.TextStim(
+    win,
+    """\
+You are about to watch a video.
+Please keep your eyes open.""",
+    name="instructions",
+    color="white",
+)
+end_screen = visual.TextStim(
+    win,
+    "The task is now complete.",
+    name="end_screen",
+    color="white",
 )
 movie = MovieStim(
     win=win,
@@ -123,20 +179,20 @@ movie = MovieStim(
     pos=(0, 0),
     opacity=1,
     depth=-1.0,
-    size=(1920, 1080),  # size=(1440,900)  # used (1600,900) with Shared PC
+    units="pix",
+    size=(1440, 810),
 )
+
+draw_until_keypress(win=win, stim=waiting)
 
 # ------Prepare to start Routine "trial"-------
 curr_time = 0
 trial_clock.reset()  # clock for the movie
 frame_num = -1
 continue_routine = True
-# update component parameters for each repeat
-# keep track of which components have finished
-task_components = [image, movie]
-for task_component in task_components:
-    if hasattr(task_component, "status"):
-        task_component.status = NOT_STARTED
+
+this_experiment.addData("trial_type", "film")
+this_experiment.addData("onset", curr_time)
 
 # -------Start Routine "trial"-------
 while continue_routine:
@@ -144,30 +200,33 @@ while continue_routine:
     curr_time = trial_clock.getTime()
     frame_num = frame_num + 1  # number of completed frames (so 0 is the first)
 
-    if curr_time >= 0.0 and image.status == NOT_STARTED:
-        # keep track of start time/frame for later
-        image.tStart = curr_time
-        image.frameNStart = frame_num  # exact frame index
-        image.setAutoDraw(True)
+    movie.tStart = curr_time
+    movie.frameNStart = frame_num  # exact frame index
+    movie.setAutoDraw(True)
+    win.flip()
 
-    # Changed trigger from "t" key to 5 (TS)
-    valid_keys = event.getKeys(keyList=["5", "escape"])
-    for key in valid_keys:
-        if image.status == STARTED and key == "5":
-            image.setAutoDraw(False)
-
-            movie.tStart = curr_time
-            movie.frameNStart = frame_num  # exact frame index
-            movie.setAutoDraw(True)
-            win.flip()
-
-        if key == "escape":
-            save_and_quit(this_experiment, win, filename)
-
-    if movie.status == FINISHED:
+    if "escape" in event.getKeys():
+        this_experiment.addData("duration", curr_time)
+        this_experiment.addData("resp.key", "escape")
         save_and_quit(this_experiment, win, filename)
+
+    if movie.isFinished:
+        movie.setAutoDraw(False)
+        this_experiment.addData("duration", curr_time)
+        continue_routine = False
 
     # refresh the screen
     # don't flip if this routine is over or we'll get a blank screen
-    if continue_routine:
-        win.flip()
+    win.flip()
+
+# Final note that task is over. Runs after scan ends.
+curr_time = trial_clock.getTime()
+this_experiment.nextEntry()
+this_experiment.addData("trial_type", "end_screen")
+this_experiment.addData("onset", curr_time)
+draw(win=win, stim=end_screen, duration=2, clock=trial_clock)
+this_experiment.addData("duration", trial_clock.getTime() - curr_time)
+win.flip()
+logging.flush()
+win.close()
+core.quit()
