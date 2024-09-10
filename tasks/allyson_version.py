@@ -16,6 +16,7 @@ import os
 
 from psychopy import core, data, event, gui, logging, visual
 from psychopy.constants import FINISHED, NOT_STARTED, STARTED
+from psychopy.visual.movies import MovieStim
 
 # Ensure that relative paths start from the same directory as this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -82,7 +83,7 @@ win = visual.Window(
     screen=0,
     allowGUI=False,
     allowStencil=False,
-    monitor="testMonitor",
+    monitor=None,
     color=[0, 0, 0],
     colorSpace="rgb",
     blendMode="avg",
@@ -118,7 +119,7 @@ image = visual.ImageStim(
     interpolate=True,
     depth=0.0,
 )
-movie = visual.VlcMovieStim(
+movie = MovieStim(
     win=win,
     name="movie",
     noAudio=False,
