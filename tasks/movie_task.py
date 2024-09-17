@@ -34,12 +34,12 @@ if dlg.OK is False:
 
 experiment_info["date"] = data.getDateStr()  # add a simple timestamp
 experiment_info["experiment_name"] = experiment_name
-if experiment_info["stimulus"] == "Bao":
-    movie_file = "Bao_Body_with_Fadeout.mp4"
-elif experiment_info["stimulus"] == "YFTR":
-    movie_file = "YFTR_with_Fadeout.mp4"
-else:
-    movie_file = "YFTR_test.mp4"
+STIMULI = {
+    "Bao": "Bao_Body_with_Fadeout.mp4",
+    "YFTR": "YFTR_with_Fadeout.mp4",
+    "TEST": "YFTR_test.mp4",
+}
+movie_file = STIMULI[experiment_info["stimulus"]]
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, etc
 filename = os.path.join(
