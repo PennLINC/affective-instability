@@ -13,7 +13,7 @@ if __name__ == "__main__":
         glob(
             os.path.join(
                 in_dir,
-                "sourcedata/*_*/CAMRIS^Satterthwaite/*func*_PhysioLog/*.dcm",
+                "sourcedata/*_*/CAMRIS^Satterthwaite/*func*_PhysioLog*/*.dcm",
             )
         )
     )
