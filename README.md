@@ -5,7 +5,7 @@ Curation and analysis code for the Affective Instability (PAFIN) dataset.
 ## File organization on CUBIC
 
 ```
-/path/to/project/
+/cbica/projects/pafin/
     |-  code/           # Local clone of the GitHub repository
         |-  figures/    # Any figures for the manuscript
         |_  data/       # Tabular data that may be shared on GitHub
