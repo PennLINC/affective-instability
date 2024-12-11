@@ -1,0 +1,116 @@
+[
+    [
+        {
+            "parameters": {
+                "keras_kwargs": {
+                    "signature": "serving_default",
+                    "signature_outputs_as_dict": true
+                },
+                "url_or_path": "https://tfhub.dev/google/spice/2"
+            },
+            "transformer": "TFHubAudioExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "STFTAudioExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "STFTAudioExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "MeanAmplitudeExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "SpectralCentroidExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "TonnetzExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "ComplexTextExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "ChromaSTFTExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "ChromaCQTExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "MFCCExtractor"
+        }
+    ],
+    [
+        {
+            "parameters": {
+                "f_max": 8000,
+                "f_min": 20,
+                "n_mels": 64
+            },
+            "transformer": "MelspectrogramExtractor"
+        }
+    ],
+    [
+        {
+            "parameters": {
+                "center": false
+            },
+            "transformer": "RMSExtractor"
+        }
+    ],
+    [
+        {
+            "transformer": "FundamentalFrequencyExtractor"
+        }
+    ],
+    [
+        {
+            "parameters": {
+                "labels": [
+                    "Whistling",
+                    "Speech",
+                    "Heart sounds, heartbeat",
+                    "Wild animals",
+                    "Vehicle",
+                    "Fire",
+                    "Silence",
+                    "Domestic animals, pets",
+                    "Livestock, farm animals, working animals",
+                    "Alarm",
+                    "Tools",
+                    "Explosion",
+                    "Thunderstorm",
+                    "Engine",
+                    "Noise",
+                    "Water",
+                    "Wind",
+                    "Glass",
+                    "Animal",
+                    "Liquid",
+                    "Wood",
+                    "Mechanisms",
+                    "Musical instrument",
+                    "Hands",
+                    "Music"
+                ]
+            },
+            "transformer": "AudiosetLabelExtractor"
+        }
+    ]
+]
