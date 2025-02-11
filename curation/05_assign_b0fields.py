@@ -24,6 +24,7 @@ import json
 import os
 from glob import glob
 
+
 if __name__ == "__main__":
     dset_dir = "/Users/taylor/Documents/datasets/pafin/dset/"
     subject_dirs = sorted(glob(os.path.join(dset_dir, "sub-*")))
@@ -60,7 +61,7 @@ if __name__ == "__main__":
                     json.dump(json_metadata, fo, sort_keys=True, indent=4)
 
             # Add intendedfor-related fields to single-echo field maps.
-            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func*dir-AP*_epi.json")))
+            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func_*_epi.json")))
             se_fmap_jsons = [f for f in se_fmap_jsons if "echo-" not in f]
             for ap_fmap_json in se_fmap_jsons:
                 pa_fmap_json = ap_fmap_json.replace("_dir-AP_", "_dir-PA_")
@@ -79,9 +80,7 @@ if __name__ == "__main__":
                 target_jsons = [f.replace(".nii.gz", ".json") for f in target_files]
                 ap_metadata["B0FieldIdentifier"] = [b0fieldname]
                 pa_metadata["B0FieldIdentifier"] = [b0fieldname]
-                target_filenames = [
-                    "bids::" + tf.replace(dset_dir, "") for tf in target_files
-                ]
+                target_filenames = ["bids::" + tf.replace(dset_dir, "") for tf in target_files]
                 ap_metadata["IntendedFor"] = target_filenames
                 pa_metadata["IntendedFor"] = target_filenames
 

@@ -6,8 +6,9 @@ from glob import glob
 
 from bidsphysio.dcm2bids import dcm2bidsphysio
 
+
 if __name__ == "__main__":
-    in_dir = "/Users/taylor/Documents/datasets/pafin"
+    in_dir = "/cbica/home/salot/datasets/pafin"
 
     physio_dicoms = sorted(
         glob(

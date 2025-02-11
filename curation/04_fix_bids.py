@@ -5,7 +5,8 @@ The necessary steps are:
 
 1.  Split out noRF noise scans from multi-echo BOLD scans.
     -   Also copy the JSON.
-2.  Copy first echo of each multi-echo field map without echo entity.
+2.  Copy first echo of each multi-echo field map without echo entity,
+    and change the acq entity from func+meepi to func.
 3.  Update filenames in the scans.tsv files.
 4.  Remove events files.
 
@@ -32,7 +33,7 @@ TODO:
     - BackgroundSuppression: True
     - BackgroundSuppressionNumberPulses: 4
     - RepetitionTimePreparation: Take from RepetitionTimeExcitation
-12: Create aslcontext.tsv.
+12. Create aslcontext.tsv.
 """
 
 import os
@@ -42,11 +43,12 @@ from glob import glob
 import nibabel as nb
 import pandas as pd
 
+
 N_NOISE_VOLS = 3
 
 
 if __name__ == "__main__":
-    dset_dir = "/Users/taylor/Documents/datasets/pafin/dset/"
+    dset_dir = "/cbica/home/salot/datasets/pafin"
     subject_dirs = sorted(glob(os.path.join(dset_dir, "sub-*")))
     for subject_dir in subject_dirs:
         sub_id = os.path.basename(subject_dir)
@@ -85,7 +87,10 @@ if __name__ == "__main__":
 
                 # Overwrite the BOLD scan
                 os.remove(me_bold)
+                # Preserve the scale and intercept of the original BOLD scan.
+                bold_img.header.set_slope_inter(1, 0)
                 bold_img.to_filename(me_bold)
+                noise_img.header.set_slope_inter(1, 0)
                 noise_img.to_filename(noise_scan)
 
                 # Copy the JSON as well
@@ -104,7 +109,7 @@ if __name__ == "__main__":
             # Copy first echo of multi-echo field maps without echo entity.
             me_fmaps = sorted(glob(os.path.join(fmap_dir, "*_acq-func*_echo-1*epi.*")))
             for me_fmap in me_fmaps:
-                out_fmap = me_fmap.replace("_echo-1_", "_")
+                out_fmap = me_fmap.replace("_echo-1_", "_").replace("_acq-func+meepi", "_acq-func")
                 if os.path.isfile(out_fmap):
                     print(f"File exists: {os.path.basename(out_fmap)}")
                     continue
@@ -114,9 +119,9 @@ if __name__ == "__main__":
                 shutil.copyfile(me_fmap, out_fmap)
                 if me_fmap.endswith(".nii.gz"):
                     i_row = len(scans_df.index)
-                    scans_df.loc[i_row] = scans_df.loc[
-                        scans_df["filename"] == me_fmap_fname
-                    ].iloc[0]
+                    scans_df.loc[i_row] = scans_df.loc[scans_df["filename"] == me_fmap_fname].iloc[
+                        0
+                    ]
                     scans_df.loc[i_row, "filename"] = out_fmap_fname
 
             # Save out the modified scans.tsv file.

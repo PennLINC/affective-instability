@@ -13,17 +13,3 @@ do
         -ss 1 \
         --bids
 done
-
-# Run heudiconv on the second session
-declare -a subses2=("")
-for sub in "${subses2[@]}"
-do
-    echo "$sub"
-    heudiconv \
-        -f heuristic.py \
-        -o /cbica/home/salot/datasets/pafin/dset \
-        -d "/cbica/home/salot/datasets/pafin/sourcedata/{subject}_{session}/*/*/*/*.dcm" \
-        -s "${sub}" \
-        -ss 2 \
-        --bids
-done

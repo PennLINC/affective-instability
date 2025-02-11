@@ -5,6 +5,7 @@ import json
 import os
 from glob import glob
 
+
 if __name__ == "__main__":
     dset_dir = "/cbica/home/salot/datasets/pafin/dset/"
     drop_keys = [
