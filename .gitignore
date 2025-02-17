@@ -3,6 +3,7 @@
 *.mp4
 Pixar.png
 tasks/data/
+logs/
 
 # Python gitignore
 # Byte-compiled / optimized / DLL files
