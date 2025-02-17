@@ -7,35 +7,19 @@ The necessary steps are:
     -   Also copy the JSON.
 2.  Copy first echo of each multi-echo field map without echo entity,
     and change the acq entity from func+meepi to func.
-3.  Update filenames in the scans.tsv files.
-4.  Remove events files.
+3.  Remove events files.
+4.  Update filenames in the scans.tsv files.
+5.  Drop part-phase bvec and bval files from fmap and dwi directories.
+6.  Drop part entity from part-mag bvec and bval filenames in fmap and dwi directories.
+7.  Add "Units": "arbitrary" to all phase JSONs.
 
 TODO:
 
-1.  Split m0scan into two volumes.
-2.  Copy the two m0scan-derived volumes to anat as IRT1 with different inv entities.
-    -   Need to add the right InversionTime values to the JSONs.
-3.  Retain the first m0scan-derived volume as m0scan in the perf folder.
-4.  Update the scans.tsv files accordingly.
-5.  Drop part-phase bvec and bval files.
-6.  Drop part entity from part-mag bvec and bval filenames.
-7.  Add "Units": "arbitrary" to all phase JSONs.
-8.  Add cbf scans to .bidsignore.
-9.  Add multi-echo field maps to .bidsignore.
-10. Add DatasetType to dataset_description.json.
-11. Add ASL metadata:
-    - M0Type: Separate
-    - TotalAcquiredPairs: 4
-    - ArterialSpinLabelingType: PCASL
-    - PCASLType: unbalanced
-    - LabelingDuration: 1.8
-    - PostLabelingDelay: 1.8
-    - BackgroundSuppression: True
-    - BackgroundSuppressionNumberPulses: 4
-    - RepetitionTimePreparation: Take from RepetitionTimeExcitation
-12. Create aslcontext.tsv.
+1.  Add DatasetType to dataset_description.json.
+2.  Add multi-echo field maps to .bidsignore.
 """
 
+import json
 import os
 import shutil
 from glob import glob
@@ -55,18 +39,20 @@ if __name__ == "__main__":
         session_dirs = sorted(glob(os.path.join(subject_dir, "ses-*")))
         for session_dir in session_dirs:
             ses_id = os.path.basename(session_dir)
-            fmap_dir = os.path.join(session_dir, "fmap")
-            func_dir = os.path.join(session_dir, "func")
-
-            # Remove events files
-            events_files = sorted(glob(os.path.join(func_dir, "*_events.tsv")))
-            for events_file in events_files:
-                os.remove(events_file)
 
             # Load scans file
             scans_file = os.path.join(session_dir, f"{sub_id}_{ses_id}_scans.tsv")
             assert os.path.isfile(scans_file), f"Scans file DNE: {scans_file}"
             scans_df = pd.read_table(scans_file)
+
+            fmap_dir = os.path.join(session_dir, "fmap")
+            func_dir = os.path.join(session_dir, "func")
+            dwi_dir = os.path.join(session_dir, "dwi")
+
+            # Remove events files
+            events_files = sorted(glob(os.path.join(func_dir, "*_events.tsv")))
+            for events_file in events_files:
+                os.remove(events_file)
 
             # Split out noise scans from all multi-echo BOLD files.
             me_bolds = sorted(glob(os.path.join(func_dir, "*echo-*_bold.nii.gz")))
@@ -107,7 +93,7 @@ if __name__ == "__main__":
                 scans_df.loc[i_row, "filename"] = noise_fname
 
             # Copy first echo of multi-echo field maps without echo entity.
-            me_fmaps = sorted(glob(os.path.join(fmap_dir, "*_acq-func*_echo-1*epi.*")))
+            me_fmaps = sorted(glob(os.path.join(fmap_dir, "*_acq-func+meepi*_echo-1*epi.*")))
             for me_fmap in me_fmaps:
                 out_fmap = me_fmap.replace("_echo-1_", "_").replace("_acq-func+meepi", "_acq-func")
                 if os.path.isfile(out_fmap):
@@ -123,6 +109,51 @@ if __name__ == "__main__":
                         0
                     ]
                     scans_df.loc[i_row, "filename"] = out_fmap_fname
+
+            # Remove part-phase bvec and bval field map files
+            part_phase_bvecs = sorted(glob(os.path.join(fmap_dir, "*_part-phase*.bvec")))
+            for part_phase_bvec in part_phase_bvecs:
+                os.remove(part_phase_bvec)
+            part_phase_bvals = sorted(glob(os.path.join(fmap_dir, "*_part-phase*.bval")))
+            for part_phase_bval in part_phase_bvals:
+                os.remove(part_phase_bval)
+
+            # Remove part-phase bvec and bval DWI files
+            part_phase_bvecs = sorted(glob(os.path.join(dwi_dir, "*_part-phase*.bvec")))
+            for part_phase_bvec in part_phase_bvecs:
+                os.remove(part_phase_bvec)
+            part_phase_bvals = sorted(glob(os.path.join(dwi_dir, "*_part-phase*.bval")))
+            for part_phase_bval in part_phase_bvals:
+                os.remove(part_phase_bval)
+
+            # Drop part entity from part-mag bvec and bval field map filenames
+            part_mag_bvecs = sorted(glob(os.path.join(fmap_dir, "*_part-mag*.bvec")))
+            for part_mag_bvec in part_mag_bvecs:
+                new_part_mag_bvec = part_mag_bvec.replace("_part-mag", "")
+                os.rename(part_mag_bvec, new_part_mag_bvec)
+            part_mag_bvals = sorted(glob(os.path.join(fmap_dir, "*_part-mag*.bval")))
+            for part_mag_bval in part_mag_bvals:
+                new_part_mag_bval = part_mag_bval.replace("_part-mag", "")
+                os.rename(part_mag_bval, new_part_mag_bval)
+
+            # Drop part entity from part-mag bvec and bval DWI filenames
+            part_mag_bvecs = sorted(glob(os.path.join(dwi_dir, "*_part-mag*.bvec")))
+            for part_mag_bvec in part_mag_bvecs:
+                new_part_mag_bvec = part_mag_bvec.replace("_part-mag", "")
+                os.rename(part_mag_bvec, new_part_mag_bvec)
+            part_mag_bvals = sorted(glob(os.path.join(dwi_dir, "*_part-mag*.bval")))
+            for part_mag_bval in part_mag_bvals:
+                new_part_mag_bval = part_mag_bval.replace("_part-mag", "")
+                os.rename(part_mag_bval, new_part_mag_bval)
+
+            # Add Units: arbitrary to all phase JSONs
+            phase_jsons = sorted(glob(os.path.join(session_dir, "*", "*part-phase*.json")))
+            for phase_json in phase_jsons:
+                with open(phase_json, "r") as f:
+                    data = json.load(f)
+                data["Units"] = "arbitrary"
+                with open(phase_json, "w") as f:
+                    json.dump(data, f, indent=4)
 
             # Save out the modified scans.tsv file.
             scans_df = scans_df.sort_values(by=["acq_time", "filename"])
