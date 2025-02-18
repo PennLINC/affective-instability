@@ -100,33 +100,31 @@ if __name__ == "__main__":
                         # Overwrite the two-volume m0scan file with the first volume.
                         first_img.to_filename(m0scan_file)
 
-                        # Add RepetitionTimePreparation to the m0scan JSON
-                        m0scan_json = m0scan_file.replace(".nii.gz", ".json")
-                        with open(m0scan_json, "r") as f:
-                            m0scan_metadata = json.load(f)
+                    # Add RepetitionTimePreparation to the m0scan JSON
+                    m0scan_json = m0scan_file.replace(".nii.gz", ".json")
+                    with open(m0scan_json, "r") as f:
+                        m0scan_metadata = json.load(f)
 
-                        m0scan_metadata["RepetitionTimePreparation"] = m0scan_metadata[
-                            "RepetitionTime"
-                        ]
+                    m0scan_metadata["RepetitionTimePreparation"] = m0scan_metadata["RepetitionTime"]
 
-                        # Copy the m0scan JSON file to the TDP scans.
-                        tdp1_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr1_TDP.json")
-                        with open(tdp1_json, "w") as f:
-                            json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
+                    # Copy the m0scan JSON file to the TDP scans.
+                    tdp1_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr1_TDP.json")
+                    with open(tdp1_json, "w") as f:
+                        json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
 
-                        tdp2_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr2_TDP.json")
-                        with open(tdp2_json, "w") as f:
-                            json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
+                    tdp2_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr2_TDP.json")
+                    with open(tdp2_json, "w") as f:
+                        json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
 
-                        # Add IntendedFor to the m0scan metadata
-                        # XXX: ASLPrep doesn't support BIDS-URIs yet.
-                        m0scan_metadata["IntendedFor"] = [
-                            m0scan_file.replace("_m0scan.", "_asl.").replace(
-                                os.path.join(dset_dir, sub_id) + "/", ""
-                            )
-                        ]
-                        with open(m0scan_json, "w") as f:
-                            json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
+                    # Add IntendedFor to the m0scan metadata
+                    # XXX: ASLPrep doesn't support BIDS-URIs yet.
+                    m0scan_metadata["IntendedFor"] = [
+                        m0scan_file.replace("_m0scan.", "_asl.").replace(
+                            os.path.join(dset_dir, sub_id) + "/", ""
+                        )
+                    ]
+                    with open(m0scan_json, "w") as f:
+                        json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
 
             # Patch hardcoded metadata into the asl.json files.
             asl_jsons = sorted(glob(os.path.join(perf_dir, "*_asl.json")))
