@@ -7,7 +7,7 @@ from glob import glob
 
 
 if __name__ == "__main__":
-    dset_dir = "/cbica/home/salot/datasets/pafin/dset/"
+    dset_dir = "/cbica/projects/pafin/dset"
     drop_keys = [
         "AcquisitionTime",
         "AcquisitionDateTime",

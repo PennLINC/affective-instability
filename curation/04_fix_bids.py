@@ -12,11 +12,7 @@ The necessary steps are:
 5.  Drop part-phase bvec and bval files from fmap and dwi directories.
 6.  Drop part entity from part-mag bvec and bval filenames in fmap and dwi directories.
 7.  Add "Units": "arbitrary" to all phase JSONs.
-
-TODO:
-
-1.  Add DatasetType to dataset_description.json.
-2.  Add multi-echo field maps to .bidsignore.
+8.  Add multi-echo field maps to .bidsignore.
 """
 
 import json
@@ -32,7 +28,7 @@ N_NOISE_VOLS = 3
 
 
 if __name__ == "__main__":
-    dset_dir = "/cbica/home/salot/datasets/pafin"
+    dset_dir = "/cbica/projects/pafin/dset"
     subject_dirs = sorted(glob(os.path.join(dset_dir, "sub-*")))
     for subject_dir in subject_dirs:
         sub_id = os.path.basename(subject_dir)
@@ -159,3 +155,8 @@ if __name__ == "__main__":
             scans_df = scans_df.sort_values(by=["acq_time", "filename"])
             os.remove(scans_file)
             scans_df.to_csv(scans_file, sep="\t", na_rep="n/a", index=False)
+
+    # Add multi-echo field maps to .bidsignore.
+    bidsignore_file = os.path.join(dset_dir, ".bidsignore")
+    with open(bidsignore_file, "a") as f:
+        f.write("\n*_acq-func+meepi*epi.*\n")

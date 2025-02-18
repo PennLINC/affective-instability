@@ -3,11 +3,12 @@
 
 This will do the following:
 
-1. Remove IntendedFor and B0FieldIdentifier fields from multi-echo field maps.
-2. Add IntendedFor and B0FieldIdentifier fields to single-echo field maps.
-3. Add B0FieldIdentifier (medic) and B0FieldSource (pepolar) fields to BOLD scans.
-4. Add IntendedFor and B0FieldIdentifier fields to DWI field maps.
-5. Add B0FieldIdentifier (topupdwi) and B0FieldSource (topupdwi) fields to DWI scans.
+1.  Remove IntendedFor and B0FieldIdentifier fields from multi-echo field maps.
+2.  Add IntendedFor and B0FieldIdentifier fields to single-echo field maps.
+3.  Add B0FieldIdentifier (medic) and B0FieldSource (pepolar) fields to BOLD scans.
+4.  Add IntendedFor and B0FieldIdentifier fields to DWI field maps.
+5.  Add B0FieldIdentifier (topupdwi) and B0FieldSource (topupdwi) fields to DWI scans.
+    -   QSIPrep doesn't use these yet.
 
 This script ignores cases where there are multiple field maps.
 We will need more advanced logic for that (e.g., based on ShimSettings or acquisition time).
@@ -26,7 +27,7 @@ from glob import glob
 
 
 if __name__ == "__main__":
-    dset_dir = "/Users/taylor/Documents/datasets/pafin/dset/"
+    dset_dir = "/cbica/projects/pafin/dset"
     subject_dirs = sorted(glob(os.path.join(dset_dir, "sub-*")))
     for subject_dir in subject_dirs:
         subject = os.path.basename(subject_dir)
@@ -41,8 +42,8 @@ if __name__ == "__main__":
 
             # Remove intendedfor-related fields from multi-echo field maps.
             me_fmap_jsons = sorted(
-                glob(os.path.join(fmap_dir, "*_acq-func*_echo-*_sbref.json"))
-                + glob(os.path.join(fmap_dir, "*_acq-func*_echo-*_epi.json"))
+                glob(os.path.join(fmap_dir, "*_acq-func+meepi*_echo-*_sbref.json"))
+                + glob(os.path.join(fmap_dir, "*_acq-func+meepi*_echo-*_epi.json"))
             )
             for me_fmap_json in me_fmap_jsons:
                 with open(me_fmap_json, "r") as fo:
@@ -116,9 +117,7 @@ if __name__ == "__main__":
 
                 target_files = sorted(glob(os.path.join(dmri_dir, "*dwi.nii.gz")))
                 target_jsons = [f.replace(".nii.gz", ".json") for f in target_files]
-                json_metadata["IntendedFor"] = [
-                    "bids::" + tf.replace(dset_dir, "") for tf in target_files
-                ]
+                json_metadata["IntendedFor"] = [tf.replace(dset_dir, "") for tf in target_files]
                 b0fieldname = f"topupdwi{run}"
                 json_metadata["B0FieldIdentifier"] = [b0fieldname]
 

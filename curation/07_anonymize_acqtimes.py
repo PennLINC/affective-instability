@@ -18,7 +18,7 @@ from dateutil import parser
 
 
 if __name__ == "__main__":
-    dset_dir = "/cbica/home/salot/datasets/pafin/dset"
+    dset_dir = "/cbica/projects/pafin/dset"
 
     bl_dt = parser.parse("1800-01-01")
 

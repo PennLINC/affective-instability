@@ -8,7 +8,7 @@ from bidsphysio.dcm2bids import dcm2bidsphysio
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/home/salot/datasets/pafin"
+    in_dir = "/cbica/projects/pafin/dset"
 
     physio_dicoms = sorted(
         glob(
