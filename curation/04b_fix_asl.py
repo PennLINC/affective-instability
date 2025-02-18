@@ -66,7 +66,10 @@ if __name__ == "__main__":
                 m0scan_files = sorted(glob(os.path.join(perf_dir, "*_m0scan.nii.gz")))
                 for m0scan_file in m0scan_files:
                     img = nb.load(m0scan_file)
-                    n_vols = img.shape[3]
+                    n_vols = 1
+                    if img.ndim == 4:
+                        n_vols = img.shape[3]
+
                     if n_vols == 1:
                         print(f"M0scan has only one volume: {m0scan_file}")
                     else:
