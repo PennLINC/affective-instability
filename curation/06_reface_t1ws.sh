@@ -12,3 +12,15 @@ do
         -overwrite \
         -prefix "${t1w_file}"
 done
+
+t2w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T2w.nii.gz)
+for t2w_file in $t2w_files
+do
+    echo "$t2w_file"
+    @afni_refacer_run \
+        -input "${t2w_file}" \
+        -mode_reface \
+        -no_images \
+        -overwrite \
+        -prefix "${t2w_file}"
+done

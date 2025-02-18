@@ -62,8 +62,7 @@ if __name__ == "__main__":
                     json.dump(json_metadata, fo, sort_keys=True, indent=4)
 
             # Add intendedfor-related fields to single-echo field maps.
-            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func_*_epi.json")))
-            se_fmap_jsons = [f for f in se_fmap_jsons if "echo-" not in f]
+            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func_*epi.json")))
             for ap_fmap_json in se_fmap_jsons:
                 pa_fmap_json = ap_fmap_json.replace("_dir-AP_", "_dir-PA_")
                 with open(ap_fmap_json, "r") as fo:
@@ -117,7 +116,9 @@ if __name__ == "__main__":
 
                 target_files = sorted(glob(os.path.join(dmri_dir, "*dwi.nii.gz")))
                 target_jsons = [f.replace(".nii.gz", ".json") for f in target_files]
-                json_metadata["IntendedFor"] = [tf.replace(dset_dir, "") for tf in target_files]
+                json_metadata["IntendedFor"] = [
+                    tf.replace(os.path.join(dset_dir, subject), "") for tf in target_files
+                ]
                 b0fieldname = f"topupdwi{run}"
                 json_metadata["B0FieldIdentifier"] = [b0fieldname]
 
