@@ -80,7 +80,9 @@ if __name__ == "__main__":
                 target_jsons = [f.replace(".nii.gz", ".json") for f in target_files]
                 ap_metadata["B0FieldIdentifier"] = [b0fieldname]
                 pa_metadata["B0FieldIdentifier"] = [b0fieldname]
-                target_filenames = ["bids::" + tf.replace(dset_dir, "") for tf in target_files]
+                target_filenames = [
+                    "bids::" + tf.replace(dset_dir + "/", "") for tf in target_files
+                ]
                 ap_metadata["IntendedFor"] = target_filenames
                 pa_metadata["IntendedFor"] = target_filenames
 
@@ -117,7 +119,7 @@ if __name__ == "__main__":
                 target_files = sorted(glob(os.path.join(dmri_dir, "*dwi.nii.gz")))
                 target_jsons = [f.replace(".nii.gz", ".json") for f in target_files]
                 json_metadata["IntendedFor"] = [
-                    tf.replace(os.path.join(dset_dir, subject), "") for tf in target_files
+                    tf.replace(os.path.join(dset_dir, subject) + "/", "") for tf in target_files
                 ]
                 b0fieldname = f"topupdwi{run}"
                 json_metadata["B0FieldIdentifier"] = [b0fieldname]
