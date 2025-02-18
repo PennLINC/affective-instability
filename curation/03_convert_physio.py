@@ -8,19 +8,21 @@ from bidsphysio.dcm2bids import dcm2bidsphysio
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/projects/pafin/dset"
+    in_dir = "/cbica/projects/pafin"
 
     physio_dicoms = sorted(
         glob(
             os.path.join(
                 in_dir,
-                "sourcedata/*_*/CAMRIS^Satterthwaite/*func*_PhysioLog*/*.dcm",
+                "sourcedata/imaging/scitran/bbl/PAFIN_844353",
+                "*_*/CAMRIS^Satterthwaite/*func*_PhysioLog*/*.dcm",
             )
         )
     )
     for physio_dicom in physio_dicoms:
-        subpath = physio_dicom.split("sourcedata/")[1]
-        subject_id, session_id = subpath.split("/")[0].split("_")
+        subpath = physio_dicom.split("PAFIN_844353/")[1]
+        subject_id = subpath.split("/")[0].split("_")[0]
+        session_id = "1"
         out_dir = os.path.join(in_dir, f"dset/sub-{subject_id}/ses-{session_id}/func")
         fname = os.path.basename(physio_dicom)
         print(fname)
