@@ -1,7 +1,7 @@
 #!/bin/bash
 unset LD_LIBRARY_PATH
 
-subjects="24697_13151"
+subjects="24053_13187"
 token=$(</cbica/projects/pafin/tokens/flywheel.txt)
 ~/bin/glibc-2.34/lib/ld-linux-x86-64.so.2 ~/bin/linux_amd64/fw login "$token"
 cd "/cbica/projects/pafin/sourcedata/imaging" || exit
