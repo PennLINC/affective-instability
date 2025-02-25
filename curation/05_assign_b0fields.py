@@ -62,7 +62,7 @@ if __name__ == "__main__":
                     json.dump(json_metadata, fo, sort_keys=True, indent=4)
 
             # Add intendedfor-related fields to single-echo field maps.
-            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func_*epi.json")))
+            se_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-func_*part-mag*epi.json")))
             for ap_fmap_json in se_fmap_jsons:
                 pa_fmap_json = ap_fmap_json.replace("_dir-AP_", "_dir-PA_")
                 with open(ap_fmap_json, "r") as fo:
@@ -110,7 +110,7 @@ if __name__ == "__main__":
                         json.dump(target_metadata, fo, sort_keys=True, indent=4)
 
             # Add intendedfor-related fields to dwi field maps.
-            dwi_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-dwi*_epi.json")))
+            dwi_fmap_jsons = sorted(glob(os.path.join(fmap_dir, "*acq-dwi_*part-mag*epi.json")))
             for dwi_fmap_json in dwi_fmap_jsons:
                 run = dwi_fmap_json.split("_run-")[1].split("_")[0]
                 with open(dwi_fmap_json, "r") as fo:
