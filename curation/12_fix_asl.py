@@ -100,14 +100,19 @@ if __name__ == "__main__":
 
                 m0scan_metadata["RepetitionTimePreparation"] = m0scan_metadata["RepetitionTime"]
 
-                # Copy the m0scan JSON file to the TDP scans.
+                # Copy the m0scan JSON file to the TDP scans, with some modifications.
                 tdp1_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr1_TDP.json")
+                tdp1_metadata = m0scan_metadata.copy()
+                tdp1_metadata["SaturationPulseTime"] = 5
                 with open(tdp1_json, "w") as f:
-                    json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
+                    json.dump(tdp1_metadata, f, indent=4, sort_keys=True)
 
                 tdp2_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr2_TDP.json")
+                tdp2_metadata = m0scan_metadata.copy()
+       	       	tdp2_metadata["SaturationPulseTime"] = 5
+                tdp2_metadata["InversionTime"] = 1.978
                 with open(tdp2_json, "w") as f:
-                    json.dump(m0scan_metadata, f, indent=4, sort_keys=True)
+                    json.dump(tdp2_metadata, f, indent=4, sort_keys=True)
 
                 # Add IntendedFor to the m0scan metadata
                 # XXX: ASLPrep doesn't support BIDS-URIs yet.

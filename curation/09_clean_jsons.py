@@ -22,10 +22,13 @@ if __name__ == "__main__":
         with open(json_file, "r") as fo:
             json_data = json.load(fo)
 
+        file_drop_keys = drop_keys[:]
+        if "fmap" not in json_file:
+            file_drop_keys += ["EchoTime1", "EchoTime2"]
+
         for drop_key in drop_keys:
             if drop_key in json_data.keys():
                 json_data.pop(drop_key)
 
-        os.remove(json_file)
         with open(json_file, "w") as fo:
             json.dump(json_data, fo, indent=4, sort_keys=True)
