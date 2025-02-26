@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
         # Assumes sessions are named 01, 02, etc.
         scans_files = sorted(glob(os.path.join(subject_dir, "ses-*/*_scans.tsv")))
-        if not os.path.exists(scans_files):
+        if len(scans_files) == 0:
             print(f"\tNo scans files found for {sub_id}")
             continue
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
             ses_acqtime = str(ses_start).replace(" ", "T")
 
             if ses_name not in sessions_df["session_id"].values:
-                next_row = sessions_df.shape[0]
+                next_row = sessions_df.shape[0] - 1
                 sessions_df.loc[next_row, "session_id"] = ses_name
 
             sessions_df.loc[sessions_df["session_id"] == ses_name, "acq_time"] = ses_acqtime
