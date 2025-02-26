@@ -12,6 +12,8 @@ if __name__ == "__main__":
         "AcquisitionTime",
         "AcquisitionDateTime",
         "CogAtlasID",
+        "EchoTime1",
+        "EchoTime2",
         "InstitutionAddress",
         "TaskName",
         "ImageComments",
@@ -21,10 +23,6 @@ if __name__ == "__main__":
     for json_file in json_files:
         with open(json_file, "r") as fo:
             json_data = json.load(fo)
-
-        file_drop_keys = drop_keys[:]
-        if "fmap" not in json_file:
-            file_drop_keys += ["EchoTime1", "EchoTime2"]
 
         for drop_key in drop_keys:
             if drop_key in json_data.keys():
