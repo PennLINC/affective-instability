@@ -9,7 +9,6 @@
 
 mamba activate curation
 
-bash 03_run_heudiconv.sh
 python 04_convert_physio.py
 python 05_copy_events.py
 bash 06_chmod.sh
