@@ -50,11 +50,6 @@ if __name__ == "__main__":
         for session_dir in session_dirs:
             ses_id = os.path.basename(session_dir)
 
-            # Load scans file
-            scans_file = os.path.join(session_dir, f"{sub_id}_{ses_id}_scans.tsv")
-            assert os.path.isfile(scans_file), f"Scans file DNE: {scans_file}"
-            scans_df = pd.read_table(scans_file)
-
             perf_dir = os.path.join(session_dir, "perf")
             anat_dir = os.path.join(session_dir, "anat")
 
@@ -76,19 +71,6 @@ if __name__ == "__main__":
                     tdp2_file = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr2_TDP.nii.gz")
                     second_img = img.slicer[..., 1]
                     second_img.to_filename(tdp2_file)
-
-                    # Add new files to the scans.tsv file.
-                    m0scan_fname = os.path.join("perf", os.path.basename(m0scan_file))
-
-                    i_row = len(scans_df.index)
-                    tdp1_fname = os.path.join("anat", os.path.basename(tdp1_file))
-                    scans_df.loc[i_row] = scans_df.loc[scans_df["filename"] == m0scan_fname].iloc[0]
-                    scans_df.loc[i_row, "filename"] = tdp1_fname
-
-                    i_row = len(scans_df.index)
-                    tdp2_fname = os.path.join("anat", os.path.basename(tdp2_file))
-                    scans_df.loc[i_row] = scans_df.loc[scans_df["filename"] == m0scan_fname].iloc[0]
-                    scans_df.loc[i_row, "filename"] = tdp2_fname
 
                     # Overwrite the two-volume m0scan file with the first volume.
                     first_img.to_filename(m0scan_file)
@@ -144,10 +126,6 @@ if __name__ == "__main__":
 
                 aslcontext_file = asl_json.replace("asl.json", "aslcontext.tsv")
                 ASLCONTEXT.to_csv(aslcontext_file, sep="\t", na_rep="n/a", index=False)
-
-            # Save out the modified scans.tsv file.
-            scans_df = scans_df.sort_values(by=["acq_time", "filename"])
-            scans_df.to_csv(scans_file, sep="\t", na_rep="n/a", index=False)
 
     # Add cbf and TDP scans to .bidsignore.
     bidsignore_file = os.path.join(dset_dir, ".bidsignore")
