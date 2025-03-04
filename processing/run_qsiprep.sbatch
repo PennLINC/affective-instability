@@ -48,7 +48,8 @@ cmd="apptainer run --cleanenv \
       --fs-license-file /license.txt \
       --skip-bids-validation \
       --denoise-method dwidenoise \
-      --output-resolution 1.7"
+      --output-resolution 1.7 \
+      --subject-anatomical-reference sessionwise"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
