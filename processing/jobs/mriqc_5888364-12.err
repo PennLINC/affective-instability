@@ -1,5 +1,0 @@
-/opt/conda/lib/python3.11/site-packages/mriqc/qc/diffusion.py:220: ExtremeValueWarning: CC mask is too small (0 voxels)
-  warn(f'CC mask is too small ({nvox_cc} voxels)', ExtremeValueWarning, stacklevel=1)
-/opt/conda/lib/python3.11/site-packages/mriqc/qc/anatomical.py:399: RuntimeWarning: invalid value encountered in log
-  (img[framemask == 0] / b_max) * np.log((img[framemask == 0] + 1e-16) / b_max)
-/var/spool/slurmd/job5888364/slurm_script: line 55: /cbica/projects/pafin/code/jobs/mriqc.5888364.tsv: No such file or directory
