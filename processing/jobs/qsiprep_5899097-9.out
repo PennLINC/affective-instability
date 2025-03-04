@@ -1,0 +1,315 @@
+/cbica/projects/pafin/code/processing
+2115fmn011
+Tue Mar  4 11:11:33 EST 2025
+Running task 9
+Commandline: apptainer run --cleanenv       -B /cbica/projects/pafin/dset:/data       -B /cbica/projects/pafin/derivatives:/deriv       -B /cbica/comp_space/pafin/pafin-qsiprep:/work       -B /cbica/projects/pafin/tokens/freesurfer_license.txt:/license.txt       /cbica/projects/pafin/apptainer/qsiprep-1.0.0.sif       /data       /deriv/qsiprep       participant       --participant-label 24683       -w /work/       --omp-nthreads 20       --nprocs 20       --mem 39000       --fs-license-file /license.txt       --skip-bids-validation       --denoise-method dwidenoise       --output-resolution 1.7       --subject-anatomical-reference sessionwise
+250304-11:11:59,188 nipype.workflow IMPORTANT:
+	 Running QSIPrep version 1.0.1.dev0+gee9aa2e.d20250115
+
+         License NOTICE ##################################################
+         QSIPrep 1.0.1.dev0+gee9aa2e.d20250115
+         Copyright The PennLINC Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software is also distributed as a Docker container image.
+         The bootstrapping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+250304-11:11:59,295 nipype.workflow IMPORTANT:
+	 Building QSIPrep's workflow:
+           * BIDS dataset path: /data.
+           * Participant list: ['24683'].
+           * Run identifier: 20250304-111139_f47d1769-4ae8-43bb-ad4f-6e077ba329fa.
+250304-11:11:59,472 nipype.workflow IMPORTANT:
+	 Collected data:
+dwi:
+- /data/sub-24683/ses-1/dwi/sub-24683_ses-1_dir-AP_run-01_part-mag_dwi.nii.gz
+flair: []
+fmap:
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-dwi_dir-PA_run-01_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-dwi_dir-PA_run-01_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-1_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-1_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-2_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-2_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-3_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-3_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-4_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-4_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-5_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-AP_run-01_echo-5_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-1_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-1_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-2_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-2_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-3_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-3_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-4_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-4_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-5_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func+meepi_dir-PA_run-01_echo-5_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func_dir-AP_run-01_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func_dir-AP_run-01_part-phase_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func_dir-PA_run-01_part-mag_epi.nii.gz
+- /data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-func_dir-PA_run-01_part-phase_epi.nii.gz
+roi: []
+sbref: []
+t1w:
+- /data/sub-24683/ses-1/anat/sub-24683_ses-1_T1w.nii.gz
+- /data/sub-24683/ses-1/anat/sub-24683_ses-1_rec-norm_T1w.nii.gz
+t2w: []
+
+250304-11:11:59,506 nipype.workflow INFO:
+	 Running nonlinear normalization to template
+250304-11:11:59,538 nipype.workflow INFO:
+	 Combining all DWI files within each available session and acquisition:
+250304-11:11:59,539 nipype.workflow INFO:
+	 	- 1 scans in session 1/acquisition None
+250304-11:11:59,586 nipype.workflow INFO:
+	 [{'dwi_series': ['/data/sub-24683/ses-1/dwi/sub-24683_ses-1_dir-AP_run-01_part-mag_dwi.nii.gz'], 'fieldmap_info': {'suffix': 'epi', 'epi': ['/data/sub-24683/ses-1/fmap/sub-24683_ses-1_acq-dwi_dir-PA_run-01_part-mag_epi.nii.gz']}, 'dwi_series_pedir': 'j-', 'concatenated_bids_name': 'sub-24683_ses-1_dir-AP_run-01_part-mag'}]
+250304-11:11:59,877 nipype.workflow INFO:
+	 Phase file found for /data/sub-24683/ses-1/dwi/sub-24683_ses-1_dir-AP_run-01_part-mag_dwi.nii.gz
+250304-11:11:59,880 nipype.workflow INFO:
+	 Automatically using 3, 3, 3 window for dwidenoise
+250304-11:11:59,895 nipype.workflow INFO:
+	 Using 20 threads in eddy
+250304-11:11:59,915 nipype.workflow INFO:
+	 Using single-stage SDC, TOPUP-only
+250304-11:12:04,504 nipype.workflow INFO:
+	 QSIPrep workflow graph with 280 nodes built successfully.
+250304-11:12:23,991 nipype.workflow IMPORTANT:
+	 QSIPrep started!
+250304-11:12:28,166 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.noise_images" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/noise_images".
+250304-11:12:28,171 nipype.workflow INFO:
+	 [Node] Executing "noise_images" <nipype.interfaces.utility.base.Merge>
+250304-11:12:28,174 nipype.workflow INFO:
+	 [Node] Finished "noise_images", elapsed time 0.000235s.
+250304-11:12:28,178 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.bias_images" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/bias_images".
+250304-11:12:28,181 nipype.workflow INFO:
+	 [Node] Executing "bias_images" <nipype.interfaces.utility.base.Merge>
+250304-11:12:28,181 nipype.workflow INFO:
+	 [Node] Finished "bias_images", elapsed time 0.000157s.
+250304-11:12:31,705 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.bidssrc" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/bidssrc".
+250304-11:12:31,713 nipype.workflow INFO:
+	 [Node] Executing "bidssrc" <qsiprep.interfaces.bids.BIDSDataGrabber>
+250304-11:12:31,715 nipype.interface INFO:
+	 No T2w images found for subject sub-<undefined>, but no problem because --anat-modality T1w was selected.
+250304-11:12:31,715 nipype.interface WARNING:
+	 No 'flair' images found for sub-<undefined>
+250304-11:12:31,715 nipype.interface WARNING:
+	 No 'sbref' images found for sub-<undefined>
+250304-11:12:31,715 nipype.interface WARNING:
+	 No 'roi' images found for sub-<undefined>
+250304-11:12:31,716 nipype.workflow INFO:
+	 [Node] Finished "bidssrc", elapsed time 0.000636s.
+250304-11:12:31,732 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.get_template_image" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/get_template_image".
+250304-11:12:31,739 nipype.workflow INFO:
+	 [Node] Executing "get_template_image" <qsiprep.interfaces.anatomical.GetTemplate>
+250304-11:12:31,819 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.output_grid_wf.voxel_size_chooser" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/output_grid_wf/voxel_size_chooser".
+250304-11:12:31,824 nipype.workflow INFO:
+	 [Node] Executing "voxel_size_chooser" <qsiprep.interfaces.anatomical.VoxelSizeChooser>
+250304-11:12:31,826 nipype.workflow INFO:
+	 [Node] Finished "voxel_size_chooser", elapsed time 0.000124s.
+250304-11:12:31,856 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conform_dwis01" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conform_dwis01".
+250304-11:12:31,862 nipype.workflow INFO:
+	 [Node] Executing "conform_dwis01" <qsiprep.interfaces.images.ConformDwi>
+250304-11:12:31,905 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conform_phase1" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conform_phase1".
+250304-11:12:31,914 nipype.workflow INFO:
+	 [Node] Executing "conform_phase1" <qsiprep.interfaces.images.ConformDwi>
+250304-11:12:31,961 nipype.workflow INFO:
+	 [Node] Finished "get_template_image", elapsed time 0.219535s.
+250304-11:12:31,976 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_finalize_ses_1_dir_AP_run_01_part_mag_wf.merged_sidecar" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_finalize_ses_1_dir_AP_run_01_part_mag_wf/merged_sidecar".
+250304-11:12:31,981 nipype.interface INFO:
+	 Not applying reorientation to /data/sub-24683/ses-1/dwi/sub-24683_ses-1_dir-AP_run-01_part-mag_dwi.nii.gz: already in LAS
+250304-11:12:31,982 nipype.workflow INFO:
+	 [Node] Finished "conform_dwis01", elapsed time 0.117372s.
+250304-11:12:32,102 nipype.workflow INFO:
+	 [Node] Executing "merged_sidecar" <qsiprep.interfaces.bids.DerivativesSidecar>
+250304-11:12:32,106 nipype.workflow INFO:
+	 [Node] Finished "merged_sidecar", elapsed time 0.001381s.
+250304-11:12:32,120 nipype.interface INFO:
+	 Not applying reorientation to /data/sub-24683/ses-1/dwi/sub-24683_ses-1_dir-AP_run-01_part-phase_dwi.nii.gz: already in LAS
+250304-11:12:32,121 nipype.workflow INFO:
+	 [Node] Finished "conform_phase1", elapsed time 0.206036s.
+250304-11:12:32,697 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.reorient_mask_to_lps" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/reorient_mask_to_lps".
+250304-11:12:32,697 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conformed_raw_images" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conformed_raw_images".
+250304-11:12:32,698 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conformation_reports" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conformation_reports".
+250304-11:12:32,699 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conformed_bvecs" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conformed_bvecs".
+250304-11:12:32,702 nipype.workflow INFO:
+	 [Node] Executing "conformed_raw_images" <nipype.interfaces.utility.base.Merge>
+250304-11:12:32,702 nipype.workflow INFO:
+	 [Node] Executing "conformation_reports" <nipype.interfaces.utility.base.Merge>
+250304-11:12:32,703 nipype.workflow INFO:
+	 [Node] Finished "conformed_raw_images", elapsed time 0.000181s.
+250304-11:12:32,703 nipype.workflow INFO:
+	 [Node] Finished "conformation_reports", elapsed time 0.000187s.
+250304-11:12:32,704 nipype.workflow INFO:
+	 [Node] Executing "conformed_bvecs" <nipype.interfaces.utility.base.Merge>
+250304-11:12:32,705 nipype.workflow INFO:
+	 [Node] Finished "conformed_bvecs", elapsed time 0.000172s.
+250304-11:12:32,715 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.anat_template_wf.template_dimensions" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_template_wf/template_dimensions".
+250304-11:12:32,735 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.mask_template" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/mask_template".
+250304-11:12:32,828 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conformed_bvals" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conformed_bvals".
+250304-11:12:32,832 nipype.workflow INFO:
+	 [Node] Executing "conformed_bvals" <nipype.interfaces.utility.base.Merge>
+250304-11:12:32,833 nipype.workflow INFO:
+	 [Node] Finished "conformed_bvals", elapsed time 0.000178s.
+250304-11:12:32,852 nipype.workflow INFO:
+	 [Node] Executing "reorient_mask_to_lps" <nipype.interfaces.afni.utils.Resample>
+250304-11:12:33,329 nipype.workflow INFO:
+	 [Node] Finished "reorient_mask_to_lps", elapsed time 0.47624s.
+250304-11:12:36,204 nipype.workflow INFO:
+	 [Node] Executing "template_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+250304-11:12:36,434 nipype.workflow INFO:
+	 [Node] Executing "mask_template" <nipype.interfaces.afni.utils.Calc>
+250304-11:12:36,523 nipype.workflow INFO:
+	 [Node] Finished "template_dimensions", elapsed time 0.316548s.
+250304-11:12:37,843 nipype.workflow INFO:
+	 [Node] Finished "mask_template", elapsed time 1.407116s.
+250304-11:12:38,914 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.phase_to_radians" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/phase_to_radians".
+250304-11:12:38,919 nipype.workflow INFO:
+	 [Node] Executing "phase_to_radians" <qsiprep.interfaces.dwi_merge.PhaseToRad>
+250304-11:12:58,792 nipype.workflow INFO:
+	 [Node] Finished "phase_to_radians", elapsed time 19.872586s.
+250304-11:13:00,437 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.anat_derivatives_wf.t1_name" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_derivatives_wf/t1_name".
+250304-11:13:00,445 nipype.workflow INFO:
+	 [Node] Executing "t1_name" <nipype.interfaces.utility.wrappers.Function>
+250304-11:13:00,446 nipype.workflow INFO:
+	 [Node] Finished "t1_name", elapsed time 0.000568s.
+250304-11:13:00,585 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.reorient_brain_to_lps" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/reorient_brain_to_lps".
+250304-11:13:00,585 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform0" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_template_wf/anat_conform/mapflow/_anat_conform0".
+250304-11:13:00,586 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform1" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_template_wf/anat_conform/mapflow/_anat_conform1".
+250304-11:13:00,589 nipype.workflow INFO:
+	 [Node] Executing "reorient_brain_to_lps" <nipype.interfaces.afni.utils.Resample>
+250304-11:13:00,589 nipype.workflow INFO:
+	 [Node] Executing "_anat_conform1" <qsiprep.interfaces.images.Conform>
+250304-11:13:00,589 nipype.workflow INFO:
+	 [Node] Executing "_anat_conform0" <qsiprep.interfaces.images.Conform>
+250304-11:13:01,115 nipype.workflow INFO:
+	 [Node] Finished "reorient_brain_to_lps", elapsed time 0.52524s.
+250304-11:13:01,413 nipype.workflow INFO:
+	 [Node] Finished "_anat_conform1", elapsed time 0.822405s.
+250304-11:13:01,463 nipype.workflow INFO:
+	 [Node] Finished "_anat_conform0", elapsed time 0.872366s.
+250304-11:13:02,441 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.output_grid_wf.autobox_template" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/output_grid_wf/autobox_template".
+250304-11:13:02,445 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform0" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_template_wf/anat_conform/mapflow/_anat_conform0".
+250304-11:13:02,446 nipype.workflow INFO:
+	 [Node] Executing "autobox_template" <nipype.interfaces.afni.utils.Autobox>
+250304-11:13:02,446 nipype.workflow INFO:
+	 [Node] Cached "_anat_conform0" - collecting precomputed outputs
+250304-11:13:02,447 nipype.workflow INFO:
+	 [Node] "_anat_conform0" found cached.
+250304-11:13:02,447 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform1" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/anat_template_wf/anat_conform/mapflow/_anat_conform1".
+250304-11:13:02,448 nipype.workflow INFO:
+	 [Node] Cached "_anat_conform1" - collecting precomputed outputs
+250304-11:13:02,448 nipype.workflow INFO:
+	 [Node] "_anat_conform1" found cached.
+250304-11:13:03,340 nipype.workflow INFO:
+	 [Node] Finished "autobox_template", elapsed time 0.893455s.
+250304-11:13:04,473 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.raw_merge" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/raw_merge".
+250304-11:13:04,478 nipype.workflow INFO:
+	 [Node] Executing "raw_merge" <qsiprep.interfaces.nilearn.Merge>
+250304-11:13:19,939 nipype.workflow INFO:
+	 [Node] Finished "raw_merge", elapsed time 15.45651s.
+250304-11:13:20,464 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.combine_complex" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/combine_complex".
+250304-11:13:20,475 nipype.workflow INFO:
+	 [Node] Executing "combine_complex" <qsiprep.interfaces.mrtrix.PolarToComplex>
+250304-11:14:42,871 nipype.workflow INFO:
+	 [Node] Finished "combine_complex", elapsed time 82.385784s.
+250304-11:14:44,566 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.test_pre_hmc_connect" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/test_pre_hmc_connect".
+250304-11:14:44,568 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.output_grid_wf.deoblique_autobox" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/output_grid_wf/deoblique_autobox".
+250304-11:14:44,575 nipype.workflow INFO:
+	 [Node] Executing "deoblique_autobox" <nipype.interfaces.afni.preprocess.Warp>
+250304-11:14:44,600 nipype.workflow INFO:
+	 [Node] Executing "test_pre_hmc_connect" <qsiprep.interfaces.utils.TestInput>
+250304-11:14:44,601 nipype.workflow INFO:
+	 [Node] Finished "test_pre_hmc_connect", elapsed time 4.6e-05s.
+250304-11:14:44,601 nipype.workflow WARNING:
+	 Storing result file without outputs
+250304-11:14:45,493 nipype.workflow INFO:
+	 [Node] Finished "deoblique_autobox", elapsed time 0.917101s.
+250304-11:14:46,592 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.denoiser" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/denoiser".
+250304-11:14:46,597 nipype.workflow INFO:
+	 [Node] Executing "denoiser" <qsiprep.interfaces.mrtrix.DWIDenoise>
+250304-11:16:16,829 nipype.interface INFO:
+	 Generating denoising visual report
+250304-11:17:11,621 nipype.workflow INFO:
+	 [Node] Finished "denoiser", elapsed time 144.857178s.
+250304-11:17:12,989 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.merge_confounds" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/merge_confounds".
+250304-11:17:12,989 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.anat_preproc_wf.output_grid_wf.resample_to_voxel_size" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/anat_preproc_wf/output_grid_wf/resample_to_voxel_size".
+250304-11:17:12,996 nipype.workflow INFO:
+	 [Node] Executing "resample_to_voxel_size" <nipype.interfaces.afni.utils.Resample>
+250304-11:17:13,15 nipype.workflow INFO:
+	 [Node] Executing "merge_confounds" <nipype.interfaces.utility.base.Merge>
+250304-11:17:13,16 nipype.workflow INFO:
+	 [Node] Finished "merge_confounds", elapsed time 0.000171s.
+250304-11:17:13,241 nipype.workflow INFO:
+	 [Node] Finished "resample_to_voxel_size", elapsed time 0.244182s.
+250304-11:17:14,770 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.split_complex" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/split_complex".
+250304-11:17:14,775 nipype.workflow INFO:
+	 [Node] Executing "split_complex" <qsiprep.interfaces.mrtrix.ComplexToMagnitude>
+250304-11:18:03,971 nipype.workflow INFO:
+	 [Node] Finished "split_complex", elapsed time 49.195454s.
+250304-11:18:04,807 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.conformed_images" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/conformed_images".
+250304-11:18:04,811 nipype.workflow INFO:
+	 [Node] Executing "conformed_images" <nipype.interfaces.utility.base.Merge>
+250304-11:18:04,812 nipype.workflow INFO:
+	 [Node] Finished "conformed_images", elapsed time 0.000181s.
+250304-11:18:05,229 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf.hstack_confounds" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/dwi_denoise_ses_1_dir_AP_run_01_part_mag_dwi_wf/hstack_confounds".
+250304-11:18:05,233 nipype.workflow INFO:
+	 [Node] Executing "hstack_confounds" <qsiprep.interfaces.dwi_merge.StackConfounds>
+250304-11:18:05,243 nipype.workflow INFO:
+	 [Node] Finished "hstack_confounds", elapsed time 0.009046s.
+250304-11:18:06,810 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.denoising_confounds" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/denoising_confounds".
+250304-11:18:07,208 nipype.workflow INFO:
+	 [Node] Executing "denoising_confounds" <nipype.interfaces.utility.base.Merge>
+250304-11:18:07,209 nipype.workflow INFO:
+	 [Node] Finished "denoising_confounds", elapsed time 0.000171s.
+250304-11:18:09,207 nipype.workflow INFO:
+	 [Node] Setting-up "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.merge_dwis" in "/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/merge_dwis".
+250304-11:18:09,219 nipype.workflow INFO:
+	 [Node] Executing "merge_dwis" <qsiprep.interfaces.dwi_merge.MergeDWIs>
+250304-11:18:09,219 nipype.workflow WARNING:
+	 [Node] Error on "qsiprep_1_0_wf.sub_24683_ses_1_wf.dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf.pre_hmc_wf.merge_and_denoise_wf.merge_dwis" (/work/qsiprep_1_0_wf/sub_24683_ses_1_wf/dwi_preproc_ses_1_dir_AP_run_01_part_mag_wf/pre_hmc_wf/merge_and_denoise_wf/merge_dwis)

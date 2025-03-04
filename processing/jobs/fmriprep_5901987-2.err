@@ -1,0 +1,613 @@
+2025-03-04 14:02:52,213 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:03:04,924 [ WARNING] WARNING: `sentry_sdk.Hub` is deprecated and will be removed in a future major release. Please consult our 1.x to 2.x migration guide for details on how to migrate `Hub` usage to the new API: https://docs.sentry.io/platforms/python/migration/1.x-to-2.x
+2025-03-04 14:03:05,249 [ WARNING] WARNING: sentry_sdk.configure_scope is deprecated and will be removed in the next major version. Please consult our migration guide to learn how to migrate to the new API: https://docs.sentry.io/platforms/python/migration/1.x-to-2.x#scope-configuring
+2025-03-04 14:03:16,870 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:03:17,243 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:03:17,348 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:03:18,830 [IMPORTANT] Running fMRIPrep version 24.1.1
+
+         License NOTICE ##################################################
+         fMRIPrep 24.1.1
+         Copyright The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software is also distributed as a Docker container image.
+         The bootstrapping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+2025-03-04 14:03:20,905 [IMPORTANT] Building fMRIPrep's workflow:
+           * BIDS dataset path: /data.
+           * Participant list: ['24053'].
+           * Run identifier: 20250304-140252_8ac8563a-8850-4c14-86e7-13b2895a2c2b.
+           * Output spaces: func T1w MNI152NLin6Asym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /out/sourcedata/freesurfer.
+2025-03-04 14:03:21,924 [    INFO] ANAT Stage 1: Adding template workflow
+2025-03-04 14:03:22,221 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:03:22,222 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:03:22,471 [    INFO] ANAT Stage 2: Preparing brain extraction workflow
+2025-03-04 14:03:22,581 [    INFO] ANAT Stage 3: Preparing segmentation workflow
+2025-03-04 14:03:22,586 [    INFO] ANAT Stage 4: Preparing normalization workflow for ['MNI152NLin6Asym', 'MNI152NLin2009cAsym']
+2025-03-04 14:03:22,598 [    INFO] ANAT Stage 5: Preparing surface reconstruction workflow
+2025-03-04 14:03:22,621 [    INFO] ANAT Stage 6: Preparing mask refinement workflow
+2025-03-04 14:03:22,624 [    INFO] ANAT Stage 7: Creating T2w template
+2025-03-04 14:03:22,629 [    INFO] ANAT Stage 8: Creating GIFTI surfaces for ['white', 'pial', 'midthickness', 'sphere_reg', 'sphere']
+2025-03-04 14:03:22,649 [    INFO] ANAT Stage 8: Creating GIFTI metrics for ['thickness', 'sulc']
+2025-03-04 14:03:22,657 [    INFO] ANAT Stage 8a: Creating cortical ribbon mask
+2025-03-04 14:03:22,661 [    INFO] ANAT Stage 9: Creating fsLR registration sphere
+2025-03-04 14:03:22,666 [    INFO] ANAT Stage 10: Creating MSM-Sulc registration sphere
+2025-03-04 14:03:23,623 [    INFO] B0 field inhomogeneity map will be estimated with the following 1 estimator(s): [<EstimatorType.PEPOLAR: 2>].
+2025-03-04 14:03:23,676 [    INFO] Setting-up fieldmap "funcpepolar01" (EstimatorType.PEPOLAR) with <sub-24053_ses-1_acq-func_dir-AP_run-01_part-mag_epi.nii.gz, sub-24053_ses-1_acq-func_dir-PA_run-01_part-mag_epi.nii.gz>
+2025-03-04 14:03:23,868 [    INFO] Using single-band reference file(s) sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-2_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-3_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-4_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-5_part-mag_sbref.nii.gz.
+2025-03-04 14:03:23,969 [    INFO] Stage 1: Adding HMC boldref workflow
+2025-03-04 14:03:23,978 [    INFO] Stage 2: Adding motion correction workflow
+2025-03-04 14:03:23,988 [    INFO] Stage 3: Adding coregistration boldref workflow
+2025-03-04 14:03:24,055 [ WARNING] WARNING: niworkflows.interfaces.nibabel.BinaryDilation is deprecated in favor of
+niworkflows.interfaces.morphology.BinaryDilation. Please validate that
+interface for your use case and switch.
+
+2025-03-04 14:03:24,960 [IMPORTANT] BOLD series will be slice-timing corrected to an offset of 0.798s.
+2025-03-04 14:03:24,965 [IMPORTANT] Generating T2* map and optimally combined ME-EPI time series.
+2025-03-04 14:03:25,701 [    INFO] Using single-band reference file(s) sub-24053_ses-1_task-rat_dir-PA_run-01_echo-1_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-2_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-3_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-4_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-5_part-mag_sbref.nii.gz.
+2025-03-04 14:03:25,780 [    INFO] Stage 1: Adding HMC boldref workflow
+2025-03-04 14:03:25,788 [    INFO] Stage 2: Adding motion correction workflow
+2025-03-04 14:03:25,793 [    INFO] Stage 3: Adding coregistration boldref workflow
+2025-03-04 14:03:25,843 [ WARNING] WARNING: niworkflows.interfaces.nibabel.BinaryDilation is deprecated in favor of
+niworkflows.interfaces.morphology.BinaryDilation. Please validate that
+interface for your use case and switch.
+
+2025-03-04 14:03:26,522 [IMPORTANT] BOLD series will be slice-timing corrected to an offset of 0.798s.
+2025-03-04 14:03:26,526 [IMPORTANT] Generating T2* map and optimally combined ME-EPI time series.
+2025-03-04 14:03:29,700 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:03:29,965 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:03:30,046 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:03:30,811 [    INFO] fMRIPrep workflow graph with 857 nodes built successfully.
+2025-03-04 14:03:34,646 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:03:34,726 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:03:45,098 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:03:45,331 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:03:45,411 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:03:48,768 [ WARNING] WARNING: sentry_sdk.configure_scope is deprecated and will be removed in the next major version. Please consult our migration guide to learn how to migrate to the new API: https://docs.sentry.io/platforms/python/migration/1.x-to-2.x#scope-configuring
+2025-03-04 14:03:49,773 [IMPORTANT] fMRIPrep started!
+2025-03-04 14:03:51,018 [ WARNING] Some nodes exceed the total amount of memory available (39.00GB).
+2025-03-04 14:03:59,666 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.full_wm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/full_wm".
+2025-03-04 14:03:59,673 [    INFO] [Node] Executing "full_wm" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:03:59,832 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.lap_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/lap_tmpl".
+2025-03-04 14:03:59,839 [    INFO] [Node] Executing "lap_tmpl" <nipype.interfaces.ants.utils.ImageMath>
+2025-03-04 14:03:59,961 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.fmap_preproc_wf.out_merge_fmap_id" in "/work/fmriprep_24_1_wf/sub_24053_wf/fmap_preproc_wf/out_merge_fmap_id".
+2025-03-04 14:03:59,966 [    INFO] [Node] Executing "out_merge_fmap_id" <nipype.interfaces.utility.base.Merge>
+2025-03-04 14:03:59,975 [    INFO] [Node] Finished "out_merge_fmap_id", elapsed time 0.000251s.
+2025-03-04 14:03:59,976 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.res_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/res_tmpl".
+2025-03-04 14:03:59,978 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.fmap_preproc_wf.out_merge_method" in "/work/fmriprep_24_1_wf/sub_24053_wf/fmap_preproc_wf/out_merge_method".
+2025-03-04 14:03:59,981 [    INFO] [Node] Executing "res_tmpl" <niworkflows.interfaces.nibabel.RegridToZooms>
+2025-03-04 14:03:59,981 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.val_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/val_bold".
+2025-03-04 14:03:59,983 [    INFO] [Node] Executing "out_merge_method" <nipype.interfaces.utility.base.Merge>
+2025-03-04 14:03:59,983 [    INFO] [Node] Finished "out_merge_method", elapsed time 0.000174s.
+2025-03-04 14:03:59,986 [    INFO] [Node] Executing "val_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:00,009 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.get_dummy" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/get_dummy".
+2025-03-04 14:04:00,014 [    INFO] [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+2025-03-04 14:04:00,054 [    INFO] [Node] Finished "val_bold", elapsed time 0.062167s.
+2025-03-04 14:04:00,114 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:00,114 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:00,181 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.val_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/val_bold".
+2025-03-04 14:04:00,186 [    INFO] [Node] Executing "val_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:00,203 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.get_dummy" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/get_dummy".
+2025-03-04 14:04:00,208 [    INFO] [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+2025-03-04 14:04:00,249 [    INFO] [Node] Finished "val_bold", elapsed time 0.061833s.
+2025-03-04 14:04:00,299 [    INFO] [Node] Finished "full_wm", elapsed time 0.618231s.
+2025-03-04 14:04:00,335 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bidssrc" in "/work/fmriprep_24_1_wf/sub_24053_wf/bidssrc".
+2025-03-04 14:04:00,378 [    INFO] [Node] Executing "bidssrc" <niworkflows.interfaces.bids.BIDSDataGrabber>
+2025-03-04 14:04:00,381 [    INFO] No "flair" images found for sub-24053
+2025-03-04 14:04:00,381 [    INFO] No "roi" images found for sub-24053
+2025-03-04 14:04:00,381 [    INFO] No "pet" images found for sub-24053
+2025-03-04 14:04:00,381 [    INFO] No "asl" images found for sub-24053
+2025-03-04 14:04:00,382 [    INFO] [Node] Finished "bidssrc", elapsed time 0.000778s.
+2025-03-04 14:04:01,207 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.select_MNI6_tpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/select_MNI6_tpl".
+2025-03-04 14:04:01,222 [    INFO] [Node] Executing "select_MNI6_tpl" <smriprep.interfaces.templateflow.TemplateFlowSelect>
+2025-03-04 14:04:01,268 [    INFO] [Node] Finished "select_MNI6_tpl", elapsed time 0.042957s.
+2025-03-04 14:04:01,347 [    INFO] [Node] Finished "res_tmpl", elapsed time 1.3603290000000001s.
+2025-03-04 14:04:01,425 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_fmapreg_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_fmapreg_wf/sources".
+2025-03-04 14:04:01,430 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,433 [    INFO] [Node] Finished "sources", elapsed time 0.000314s.
+2025-03-04 14:04:01,451 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_boldmask_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_boldmask_wf/sources".
+2025-03-04 14:04:01,484 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_wf/sources".
+2025-03-04 14:04:01,492 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.ds_bold_native_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/ds_bold_native_wf/sources".
+2025-03-04 14:04:01,495 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,495 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,497 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,498 [    INFO] [Node] Finished "sources", elapsed time 0.000305s.
+2025-03-04 14:04:01,498 [    INFO] [Node] Finished "sources", elapsed time 0.000312s.
+2025-03-04 14:04:01,500 [    INFO] [Node] Finished "sources", elapsed time 0.000431s.
+2025-03-04 14:04:01,508 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_boldref_wf/sources".
+2025-03-04 14:04:01,514 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,516 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_wf/sources".
+2025-03-04 14:04:01,517 [    INFO] [Node] Finished "sources", elapsed time 0.000299s.
+2025-03-04 14:04:01,520 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,521 [    INFO] [Node] Finished "sources", elapsed time 0.0002s.
+2025-03-04 14:04:01,667 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_boldref_wf/sources".
+2025-03-04 14:04:01,672 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,675 [    INFO] [Node] Finished "sources", elapsed time 0.000309s.
+2025-03-04 14:04:01,731 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_boldmask_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_boldmask_wf/sources".
+2025-03-04 14:04:01,739 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,742 [    INFO] [Node] Finished "sources", elapsed time 0.000229s.
+2025-03-04 14:04:01,748 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_fmapreg_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_fmapreg_wf/sources".
+2025-03-04 14:04:01,752 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:01,753 [    INFO] [Node] Finished "sources", elapsed time 0.000215s.
+2025-03-04 14:04:02,068 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/bold_source".
+2025-03-04 14:04:02,069 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/bold_source".
+2025-03-04 14:04:02,070 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/bold_source".
+2025-03-04 14:04:02,070 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/bold_source".
+2025-03-04 14:04:02,070 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/bold_source".
+2025-03-04 14:04:02,073 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:02,074 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:02,074 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:02,074 [    INFO] [Node] Finished "bold_source", elapsed time 0.000277s.
+2025-03-04 14:04:02,075 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:02,075 [    INFO] [Node] Finished "bold_source", elapsed time 0.000217s.
+2025-03-04 14:04:02,075 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:02,079 [    INFO] [Node] Finished "bold_source", elapsed time 0.000287s.
+2025-03-04 14:04:02,079 [    INFO] [Node] Finished "bold_source", elapsed time 0.000289s.
+2025-03-04 14:04:02,079 [    INFO] [Node] Finished "bold_source", elapsed time 0.000394s.
+2025-03-04 14:04:02,939 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.ds_bold_native_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/ds_bold_native_wf/sources".
+2025-03-04 14:04:02,944 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:04:02,947 [    INFO] [Node] Finished "sources", elapsed time 0.000366s.
+2025-03-04 14:04:03,163 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/bold_source".
+2025-03-04 14:04:03,164 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/bold_source".
+2025-03-04 14:04:03,164 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/bold_source".
+2025-03-04 14:04:03,164 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/bold_source".
+2025-03-04 14:04:03,165 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/bold_source".
+2025-03-04 14:04:03,168 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:03,168 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:03,168 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:03,169 [    INFO] [Node] Finished "bold_source", elapsed time 0.000301s.
+2025-03-04 14:04:03,169 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:03,169 [    INFO] [Node] Finished "bold_source", elapsed time 0.000335s.
+2025-03-04 14:04:03,169 [    INFO] [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:04:03,169 [    INFO] [Node] Finished "bold_source", elapsed time 0.000385s.
+2025-03-04 14:04:03,170 [    INFO] [Node] Finished "bold_source", elapsed time 0.000336s.
+2025-03-04 14:04:03,170 [    INFO] [Node] Finished "bold_source", elapsed time 0.000335s.
+2025-03-04 14:04:03,538 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bids_info" in "/work/fmriprep_24_1_wf/sub_24053_wf/bids_info".
+2025-03-04 14:04:03,542 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.anat_template_wf.anat_ref_dimensions" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/anat_ref_dimensions".
+2025-03-04 14:04:03,542 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.t2w_template_wf.anat_ref_dimensions" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/anat_ref_dimensions".
+2025-03-04 14:04:03,547 [    INFO] [Node] Executing "anat_ref_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+2025-03-04 14:04:03,548 [    INFO] [Node] Executing "anat_ref_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+2025-03-04 14:04:03,550 [    INFO] [Node] Executing "bids_info" <niworkflows.interfaces.bids.BIDSInfo>
+2025-03-04 14:04:03,560 [    INFO] [Node] Finished "bids_info", elapsed time 0.00766s.
+2025-03-04 14:04:03,710 [    INFO] [Node] Finished "anat_ref_dimensions", elapsed time 0.161551s.
+2025-03-04 14:04:03,731 [    INFO] [Node] Finished "anat_ref_dimensions", elapsed time 0.183697s.
+2025-03-04 14:04:03,837 [    INFO] [Node] Finished "get_dummy", elapsed time 3.817578s.
+2025-03-04 14:04:05,074 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/validate_bold".
+2025-03-04 14:04:05,078 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,078 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/validate_bold".
+2025-03-04 14:04:05,078 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/validate_bold".
+2025-03-04 14:04:05,082 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/validate_bold".
+2025-03-04 14:04:05,082 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,083 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,087 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,140 [    INFO] [Node] Finished "validate_bold", elapsed time 0.061436s.
+2025-03-04 14:04:05,145 [    INFO] [Node] Finished "validate_bold", elapsed time 0.061915s.
+2025-03-04 14:04:05,147 [    INFO] [Node] Finished "validate_bold", elapsed time 0.063512s.
+2025-03-04 14:04:05,148 [    INFO] [Node] Finished "validate_bold", elapsed time 0.060645s.
+2025-03-04 14:04:05,169 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/validate_bold".
+2025-03-04 14:04:05,175 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,237 [    INFO] [Node] Finished "validate_bold", elapsed time 0.061031s.
+2025-03-04 14:04:05,299 [    INFO] [Node] Finished "get_dummy", elapsed time 5.083212s.
+2025-03-04 14:04:05,478 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.gen_avg" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg".
+2025-03-04 14:04:05,491 [    INFO] [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+2025-03-04 14:04:05,589 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/validate_bold".
+2025-03-04 14:04:05,589 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/validate_bold".
+2025-03-04 14:04:05,590 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/validate_bold".
+2025-03-04 14:04:05,593 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,594 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,595 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,654 [    INFO] [Node] Finished "validate_bold", elapsed time 0.06068s.
+2025-03-04 14:04:05,656 [    INFO] [Node] Finished "validate_bold", elapsed time 0.060384s.
+2025-03-04 14:04:05,658 [    INFO] [Node] Finished "validate_bold", elapsed time 0.062779s.
+2025-03-04 14:04:05,708 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/validate_bold".
+2025-03-04 14:04:05,708 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/validate_bold".
+2025-03-04 14:04:05,712 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,713 [    INFO] [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+2025-03-04 14:04:05,774 [    INFO] [Node] Finished "validate_bold", elapsed time 0.061407s.
+2025-03-04 14:04:05,776 [    INFO] [Node] Finished "validate_bold", elapsed time 0.062808s.
+2025-03-04 14:04:06,625 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.fs_isrunning" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/fs_isrunning".
+2025-03-04 14:04:06,626 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.ds_t1w_mask_wf.raw_sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/ds_t1w_mask_wf/raw_sources".
+2025-03-04 14:04:06,626 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.ds_ribbon_mask_wf.raw_sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/ds_ribbon_mask_wf/raw_sources".
+2025-03-04 14:04:06,633 [    INFO] [Node] Executing "fs_isrunning" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:04:06,634 [    INFO] [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:04:06,635 [    INFO] [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:04:06,635 [    INFO] [Node] Finished "fs_isrunning", elapsed time 0.000716s.
+2025-03-04 14:04:06,636 [    INFO] [Node] Finished "raw_sources", elapsed time 0.0005s.
+2025-03-04 14:04:06,636 [    INFO] [Node] Finished "raw_sources", elapsed time 0.000433s.
+2025-03-04 14:04:07,293 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.gen_avg" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg".
+2025-03-04 14:04:07,308 [    INFO] [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+2025-03-04 14:04:08,714 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:08,715 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:08,898 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:08,900 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:08,943 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:08,945 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:09,091 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:09,093 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:09,121 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:09,124 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:09,155 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:09,199 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:09,263 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/slice_timing_correction".
+2025-03-04 14:04:09,271 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:09,312 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/slice_timing_correction".
+2025-03-04 14:04:09,319 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:09,539 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:09,579 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:09,658 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/slice_timing_correction".
+2025-03-04 14:04:09,664 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:09,694 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/slice_timing_correction".
+2025-03-04 14:04:09,706 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:10,099 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:10,100 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:10,114 [    INFO] stderr 2025-03-04T14:04:10.114458:++ 3dvolreg: AFNI version=AFNI_24.3.01 (Oct  9 2024) [64-bit]
+2025-03-04 14:04:10,114 [    INFO] stderr 2025-03-04T14:04:10.114458:++ Authored by: RW Cox
+2025-03-04 14:04:10,121 [    INFO] stderr 2025-03-04T14:04:10.121709:** AFNI converts NIFTI_datatype=512 (UINT16) in file /work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_bold_sliced.nii.gz to FLOAT32
+2025-03-04 14:04:10,121 [    INFO] stderr 2025-03-04T14:04:10.121709:     Warnings of this type will be muted for this session.
+2025-03-04 14:04:10,121 [    INFO] stderr 2025-03-04T14:04:10.121709:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+2025-03-04 14:04:10,125 [    INFO] stderr 2025-03-04T14:04:10.125898:++ Coarse del was 10, replaced with 7
+2025-03-04 14:04:10,572 [    INFO] [Node] Finished "lap_tmpl", elapsed time 10.359322s.
+2025-03-04 14:04:10,637 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:10,640 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:10,881 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:10,882 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:10,883 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:10,884 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:10,900 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:11,013 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/slice_timing_correction".
+2025-03-04 14:04:11,031 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:11,136 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:11,136 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:11,247 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/slice_timing_correction".
+2025-03-04 14:04:11,247 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/slice_timing_correction".
+2025-03-04 14:04:11,254 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:11,254 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:11,264 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.mrg_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/mrg_tmpl".
+2025-03-04 14:04:11,291 [    INFO] [Node] Executing "mrg_tmpl" <nipype.interfaces.utility.base.Merge>
+2025-03-04 14:04:11,292 [    INFO] [Node] Finished "mrg_tmpl", elapsed time 0.000174s.
+2025-03-04 14:04:12,241 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:12,244 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:12,255 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:04:12,257 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:04:12,694 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:12,716 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:04:12,898 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/slice_timing_correction".
+2025-03-04 14:04:12,915 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:12,919 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/slice_timing_correction".
+2025-03-04 14:04:12,926 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:04:13,423 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:13,424 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:04:13,429 [    INFO] stderr 2025-03-04T14:04:13.428987:++ 3dvolreg: AFNI version=AFNI_24.3.01 (Oct  9 2024) [64-bit]
+2025-03-04 14:04:13,429 [    INFO] stderr 2025-03-04T14:04:13.428987:++ Authored by: RW Cox
+2025-03-04 14:04:13,429 [    INFO] stderr 2025-03-04T14:04:13.429646:** AFNI converts NIFTI_datatype=512 (UINT16) in file /work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg/sub-24053_ses-1_task-rat_dir-PA_run-01_echo-1_part-mag_bold_sliced.nii.gz to FLOAT32
+2025-03-04 14:04:13,429 [    INFO] stderr 2025-03-04T14:04:13.429646:     Warnings of this type will be muted for this session.
+2025-03-04 14:04:13,429 [    INFO] stderr 2025-03-04T14:04:13.429646:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+2025-03-04 14:04:13,430 [    INFO] stderr 2025-03-04T14:04:13.429995:++ Coarse del was 10, replaced with 7
+2025-03-04 14:05:13,896 [    INFO] stderr 2025-03-04T14:05:13.896724:++ Max displacement in automask = 0.26 (mm) at sub-brick 18
+2025-03-04 14:05:13,896 [    INFO] stderr 2025-03-04T14:05:13.896724:++ Max delta displ  in automask = 0.13 (mm) at sub-brick 13
+2025-03-04 14:05:18,959 [    INFO] [Node] Finished "gen_avg", elapsed time 73.467252s.
+2025-03-04 14:05:19,212 [    INFO] stderr 2025-03-04T14:05:19.211948:++ Max displacement in automask = 0.30 (mm) at sub-brick 18
+2025-03-04 14:05:19,212 [    INFO] stderr 2025-03-04T14:05:19.212166:++ Max delta displ  in automask = 0.08 (mm) at sub-brick 12
+2025-03-04 14:05:19,253 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.fmapref_buffer" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/fmapref_buffer".
+2025-03-04 14:05:19,261 [    INFO] [Node] Executing "fmapref_buffer" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:05:19,262 [    INFO] [Node] Finished "fmapref_buffer", elapsed time 0.000616s.
+2025-03-04 14:05:19,313 [ WARNING] Changing /out/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_part-mag_desc-hmc_boldref.nii.gz dtype from uint16 to float32
+2025-03-04 14:05:19,753 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:19,753 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:19,973 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 70.265958s.
+2025-03-04 14:05:20,261 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:20,261 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:20,457 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 70.792116s.
+2025-03-04 14:05:20,746 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:20,746 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:20,864 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 71.544905s.
+2025-03-04 14:05:21,226 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:21,226 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:21,269 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/copy_xform".
+2025-03-04 14:05:21,269 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/copy_xform".
+2025-03-04 14:05:21,269 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/copy_xform".
+2025-03-04 14:05:21,322 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.mcflirt" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/mcflirt".
+2025-03-04 14:05:21,332 [    INFO] [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+2025-03-04 14:05:21,505 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 70.472611s.
+2025-03-04 14:05:22,638 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_coreg_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_coreg_boldref_wf/sources".
+2025-03-04 14:05:22,643 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:05:22,644 [    INFO] [Node] Finished "sources", elapsed time 0.000187s.
+2025-03-04 14:05:22,706 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:22,708 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:22,711 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:22,713 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:22,735 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:22,735 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:22,759 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:22,761 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:22,930 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 73.658402s.
+2025-03-04 14:05:22,967 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:22,968 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:23,034 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:23,085 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:23,100 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:23,158 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:23,269 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/copy_xform".
+2025-03-04 14:05:23,420 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/copy_xform".
+2025-03-04 14:05:24,224 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:24,226 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:24,448 [    INFO] [Node] Finished "gen_avg", elapsed time 77.139593s.
+2025-03-04 14:05:24,491 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:24,593 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/slice_timing_correction".
+2025-03-04 14:05:24,604 [    INFO] [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+2025-03-04 14:05:25,260 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.fmapref_buffer" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/fmapref_buffer".
+2025-03-04 14:05:25,277 [    INFO] [Node] Executing "fmapref_buffer" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:05:25,278 [    INFO] [Node] Finished "fmapref_buffer", elapsed time 0.000712s.
+2025-03-04 14:05:25,328 [ WARNING] Changing /out/sub-24053/ses-1/func/sub-24053_ses-1_task-rat_dir-PA_run-01_part-mag_desc-hmc_boldref.nii.gz dtype from uint16 to float32
+2025-03-04 14:05:25,810 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.mcflirt" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/mcflirt".
+2025-03-04 14:05:25,815 [    INFO] [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+2025-03-04 14:05:26,041 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:26,048 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:26,194 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:26,198 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:26,418 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:26,532 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:26,572 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:26,658 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:27,264 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_coreg_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_coreg_boldref_wf/sources".
+2025-03-04 14:05:27,280 [    INFO] [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+2025-03-04 14:05:27,281 [    INFO] [Node] Finished "sources", elapsed time 0.000234s.
+2025-03-04 14:05:50,547 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:50,547 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:50,666 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 99.411423s.
+2025-03-04 14:05:50,937 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:50,937 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:51,055 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 99.800189s.
+2025-03-04 14:05:51,257 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/copy_xform".
+2025-03-04 14:05:51,257 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/copy_xform".
+2025-03-04 14:05:51,262 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:51,263 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:53,040 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:53,040 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:53,171 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 100.245012s.
+2025-03-04 14:05:53,578 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:53,579 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:05:53,743 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 100.827149s.
+2025-03-04 14:05:55,281 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/copy_xform".
+2025-03-04 14:05:55,281 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/copy_xform".
+2025-03-04 14:05:55,293 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:05:56,721 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:05:56,723 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:05:56,967 [ WARNING] WARNING: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+2025-03-04 14:05:57,078 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:06:09,485 [    INFO] [Node] Finished "copy_xform", elapsed time 46.32603s.
+2025-03-04 14:06:09,723 [    INFO] [Node] Finished "copy_xform", elapsed time 46.636488s.
+2025-03-04 14:06:10,166 [    INFO] [Node] Finished "copy_xform", elapsed time 47.064188s.
+2025-03-04 14:06:13,283 [    INFO] [Node] Finished "copy_xform", elapsed time 46.624337s.
+2025-03-04 14:06:13,324 [    INFO] [Node] Finished "copy_xform", elapsed time 46.750983s.
+2025-03-04 14:07:00,683 [    INFO] [Node] Finished "copy_xform", elapsed time 69.419483s.
+2025-03-04 14:07:01,290 [    INFO] [Node] Finished "copy_xform", elapsed time 70.026467s.
+2025-03-04 14:07:04,100 [    INFO] [Node] Finished "copy_xform", elapsed time 68.805336s.
+2025-03-04 14:07:04,850 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:07:04,850 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:07:04,963 [    INFO] [Node] Finished "slice_timing_correction", elapsed time 100.358317s.
+2025-03-04 14:07:05,301 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/copy_xform".
+2025-03-04 14:07:05,306 [    INFO] [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:07:06,006 [    INFO] [Node] Finished "copy_xform", elapsed time 68.926581s.
+2025-03-04 14:08:14,068 [    INFO] [Node] Finished "copy_xform", elapsed time 68.761125s.
+2025-03-04 14:09:00,219 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:09:00,219 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:09:00,442 [    INFO] [Node] Finished "mcflirt", elapsed time 219.108759s.
+2025-03-04 14:09:01,782 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.normalize_motion" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/normalize_motion".
+2025-03-04 14:09:01,859 [    INFO] [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+2025-03-04 14:09:01,863 [    INFO] [Node] Finished "normalize_motion", elapsed time 0.003772s.
+2025-03-04 14:09:03,485 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_confounds_wf.fdisp" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_confounds_wf/fdisp".
+2025-03-04 14:09:03,755 [    INFO] [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+2025-03-04 14:09:03,759 [    INFO] [Node] Finished "fdisp", elapsed time 0.002833s.
+2025-03-04 14:10:47,209 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:10:47,209 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:10:47,530 [    INFO] [Node] Finished "mcflirt", elapsed time 321.714106s.
+2025-03-04 14:10:49,690 [    INFO] [Node] Setting-up "_denoise0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/denoise/mapflow/_denoise0".
+2025-03-04 14:10:49,693 [    INFO] [Node] Executing "_denoise0" <nipype.interfaces.ants.segmentation.DenoiseImage>
+2025-03-04 14:10:49,787 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:10:49,788 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:24,548 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:24,548 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:24,667 [    INFO] [Node] Finished "_denoise0", elapsed time 34.748137s.
+2025-03-04 14:11:25,691 [    INFO] [Node] Setting-up "_denoise0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/denoise/mapflow/_denoise0".
+2025-03-04 14:11:25,694 [    INFO] [Node] Executing "_denoise0" <nipype.interfaces.ants.segmentation.DenoiseImage>
+2025-03-04 14:11:25,788 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:25,788 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:59,211 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:59,211 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:11:59,324 [    INFO] [Node] Finished "_denoise0", elapsed time 33.422232s.
+2025-03-04 14:11:59,698 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.normalize_motion" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/normalize_motion".
+2025-03-04 14:11:59,703 [    INFO] [Node] Setting-up "_anat_conform0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/anat_conform/mapflow/_anat_conform0".
+2025-03-04 14:11:59,704 [    INFO] [Node] Setting-up "_anat_conform0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/anat_conform/mapflow/_anat_conform0".
+2025-03-04 14:11:59,706 [    INFO] [Node] Executing "_anat_conform0" <niworkflows.interfaces.images.Conform>
+2025-03-04 14:11:59,708 [    INFO] [Node] Executing "_anat_conform0" <niworkflows.interfaces.images.Conform>
+2025-03-04 14:11:59,720 [    INFO] [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+2025-03-04 14:11:59,725 [    INFO] [Node] Finished "normalize_motion", elapsed time 0.004476s.
+2025-03-04 14:11:59,752 [    INFO] [Node] Finished "_anat_conform0", elapsed time 0.043986s.
+2025-03-04 14:11:59,758 [    INFO] [Node] Finished "_anat_conform0", elapsed time 0.051415s.
+2025-03-04 14:12:01,695 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/init_aff".
+2025-03-04 14:12:01,701 [    INFO] [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+2025-03-04 14:12:01,795 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:01,795 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:21,534 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:21,534 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:21,676 [    INFO] [Node] Finished "init_aff", elapsed time 19.653801s.
+2025-03-04 14:12:23,751 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.fsl2itk" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/fsl2itk".
+2025-03-04 14:12:23,793 [    INFO] [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+2025-03-04 14:12:23,794 [ WARNING] Multithreading is deprecated. Remove the num_threads input.
+2025-03-04 14:12:24,057 [    INFO] [Node] Finished "fsl2itk", elapsed time 0.263168s.
+2025-03-04 14:12:25,701 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/init_aff".
+2025-03-04 14:12:25,709 [    INFO] [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+2025-03-04 14:12:25,808 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:25,808 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:45,672 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:45,673 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:45,820 [    INFO] [Node] Finished "init_aff", elapsed time 19.768549s.
+2025-03-04 14:12:47,740 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.fsl2itk" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/fsl2itk".
+2025-03-04 14:12:47,802 [    INFO] [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+2025-03-04 14:12:47,803 [ WARNING] Multithreading is deprecated. Remove the num_threads input.
+2025-03-04 14:12:48,174 [    INFO] [Node] Finished "fsl2itk", elapsed time 0.371s.
+2025-03-04 14:12:49,707 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.anat_template_wf.get1st" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/get1st".
+2025-03-04 14:12:49,707 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.t2w_template_wf.get1st" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/get1st".
+2025-03-04 14:12:49,712 [    INFO] [Node] Executing "get1st" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:12:49,714 [    INFO] [Node] Finished "get1st", elapsed time 0.001251s.
+2025-03-04 14:12:49,715 [    INFO] [Node] Executing "get1st" <nipype.interfaces.utility.base.Select>
+2025-03-04 14:12:49,716 [    INFO] [Node] Finished "get1st", elapsed time 0.0009s.
+2025-03-04 14:12:50,043 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_confounds_wf.fdisp" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_confounds_wf/fdisp".
+2025-03-04 14:12:50,051 [    INFO] [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+2025-03-04 14:12:50,056 [    INFO] [Node] Finished "fdisp", elapsed time 0.004127s.
+2025-03-04 14:12:51,704 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/norm".
+2025-03-04 14:12:51,713 [    INFO] [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+2025-03-04 14:12:51,809 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:51,809 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:52,411 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:52,411 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:52,562 [    INFO] [Node] Finished "norm", elapsed time 0.55598s.
+2025-03-04 14:12:53,716 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/norm".
+2025-03-04 14:12:53,723 [    INFO] [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+2025-03-04 14:12:53,819 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:53,819 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:54,397 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:54,397 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:54,509 [    INFO] [Node] Finished "norm", elapsed time 0.576033s.
+2025-03-04 14:12:55,928 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+2025-03-04 14:12:55,929 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+2025-03-04 14:12:55,934 [    INFO] [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+2025-03-04 14:12:55,937 [    INFO] [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+2025-03-04 14:12:56,031 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,031 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,031 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,032 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,566 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,566 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,626 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,627 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:56,809 [    INFO] [Node] Finished "map_brainmask", elapsed time 0.620581s.
+2025-03-04 14:12:56,920 [    INFO] [Node] Finished "map_brainmask", elapsed time 0.635744s.
+2025-03-04 14:12:57,721 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.fov_check" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/fov_check".
+2025-03-04 14:12:57,725 [    INFO] [Node] Executing "fov_check" <nipype.interfaces.utility.wrappers.Function>
+2025-03-04 14:12:57,747 [    INFO] [Node] Setting-up "_truncate_images0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/truncate_images/mapflow/_truncate_images0".
+2025-03-04 14:12:57,750 [    INFO] [Node] Executing "_truncate_images0" <nipype.interfaces.ants.utils.ImageMath>
+2025-03-04 14:12:57,772 [ WARNING] WARNING: Niworkflows will be deprecating reporting in favor of a standalone library "nireports".
+2025-03-04 14:12:57,847 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:57,847 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:58,045 [ WARNING] WARNING: Niworkflows will be deprecating visualizations in favor of a standalone library "nireports".
+2025-03-04 14:12:58,055 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.recon_config" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/recon_config".
+2025-03-04 14:12:58,061 [    INFO] [Node] Executing "recon_config" <niworkflows.interfaces.freesurfer.FSDetectInputs>
+2025-03-04 14:12:58,111 [    INFO] [Node] Finished "fov_check", elapsed time 0.385206s.
+2025-03-04 14:12:58,162 [    INFO] [Node] Finished "recon_config", elapsed time 0.100467s.
+2025-03-04 14:12:59,722 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+2025-03-04 14:12:59,727 [    INFO] [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+2025-03-04 14:12:59,746 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+2025-03-04 14:12:59,751 [    INFO] [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+2025-03-04 14:12:59,846 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:12:59,846 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:01,375 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:01,375 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:03,600 [    INFO] [Node] Finished "_truncate_images0", elapsed time 5.62206s.
+2025-03-04 14:13:05,820 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:05,820 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:06,108 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:06,108 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:06,136 [    INFO] [Node] Finished "n4_correct", elapsed time 6.40805s.
+2025-03-04 14:13:06,360 [    INFO] [Node] Finished "n4_correct", elapsed time 6.346974s.
+2025-03-04 14:13:07,739 [    INFO] [Node] Setting-up "_inu_n40" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/inu_n4/mapflow/_inu_n40".
+2025-03-04 14:13:07,743 [    INFO] [Node] Executing "_inu_n40" <nipype.interfaces.ants.segmentation.N4BiasFieldCorrection>
+2025-03-04 14:13:22,570 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:22,570 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:13:25,174 [    INFO] [Node] Finished "_inu_n40", elapsed time 17.430289s.
+2025-03-04 14:13:25,736 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.autorecon1" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/autorecon1".
+2025-03-04 14:13:25,743 [    INFO] [Node] Executing "autorecon1" <smriprep.interfaces.freesurfer.ReconAll>
+2025-03-04 14:24:12,228 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:12,228 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:12,348 [    INFO] [Node] Finished "autorecon1", elapsed time 646.603652s.
+2025-03-04 14:24:12,683 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.lap_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/lap_target".
+2025-03-04 14:24:12,684 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.fsnative2t1w_xfm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/fsnative2t1w_xfm".
+2025-03-04 14:24:12,685 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+2025-03-04 14:24:12,686 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+2025-03-04 14:24:12,687 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.res_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/res_target".
+2025-03-04 14:24:12,688 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.unwarp_wf.rotime" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/unwarp_wf/rotime".
+2025-03-04 14:24:12,688 [    INFO] [Node] Executing "lap_target" <nipype.interfaces.ants.utils.ImageMath>
+2025-03-04 14:24:12,689 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.unwarp_wf.rotime" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/unwarp_wf/rotime".
+2025-03-04 14:24:12,690 [    INFO] [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+2025-03-04 14:24:12,690 [    INFO] [Node] Executing "fsnative2t1w_xfm" <niworkflows.interfaces.freesurfer.PatchedRobustRegister>
+2025-03-04 14:24:12,690 [    INFO] [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+2025-03-04 14:24:12,691 [    INFO] [Node] Executing "res_target" <niworkflows.interfaces.nibabel.RegridToZooms>
+2025-03-04 14:24:12,696 [    INFO] [Node] Executing "rotime" <sdcflows.interfaces.epi.GetReadoutTime>
+2025-03-04 14:24:12,697 [    INFO] [Node] Executing "rotime" <sdcflows.interfaces.epi.GetReadoutTime>
+2025-03-04 14:24:12,700 [    INFO] [Node] Finished "rotime", elapsed time 0.003584s.
+2025-03-04 14:24:12,700 [    INFO] [Node] Finished "rotime", elapsed time 0.002723s.
+2025-03-04 14:24:12,833 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:12,833 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:13,884 [    INFO] [Node] Finished "res_target", elapsed time 1.191883s.
+2025-03-04 14:24:14,289 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:14,290 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:14,290 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:14,290 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:14,513 [    INFO] [Node] Finished "skullstrip_first_pass", elapsed time 1.822279s.
+2025-03-04 14:24:14,549 [    INFO] [Node] Finished "skullstrip_first_pass", elapsed time 1.858557s.
+2025-03-04 14:24:14,696 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+2025-03-04 14:24:14,700 [    INFO] [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+2025-03-04 14:24:14,736 [ WARNING] WARNING: `np.bool8` is a deprecated alias for `np.bool_`.  (Deprecated NumPy 1.24)
+2025-03-04 14:24:14,736 [ WARNING] WARNING: `np.bool8` is a deprecated alias for `np.bool_`.  (Deprecated NumPy 1.24)
+2025-03-04 14:24:15,346 [    INFO] [Node] Finished "first_dilate", elapsed time 0.645789s.
+2025-03-04 14:24:16,698 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_mask".
+2025-03-04 14:24:16,699 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+2025-03-04 14:24:16,703 [    INFO] [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+2025-03-04 14:24:16,703 [    INFO] [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+2025-03-04 14:24:16,711 [ WARNING] WARNING: `np.bool8` is a deprecated alias for `np.bool_`.  (Deprecated NumPy 1.24)
+2025-03-04 14:24:16,711 [ WARNING] WARNING: `np.bool8` is a deprecated alias for `np.bool_`.  (Deprecated NumPy 1.24)
+2025-03-04 14:24:16,806 [    INFO] [Node] Finished "first_mask", elapsed time 0.102434s.
+2025-03-04 14:24:17,290 [    INFO] [Node] Finished "first_dilate", elapsed time 0.586437s.
+2025-03-04 14:24:18,697 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/unifize".
+2025-03-04 14:24:18,701 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_mask".
+2025-03-04 14:24:18,706 [    INFO] [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+2025-03-04 14:24:18,707 [    INFO] [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+2025-03-04 14:24:18,809 [    INFO] [Node] Finished "first_mask", elapsed time 0.102496s.
+2025-03-04 14:24:20,694 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/unifize".
+2025-03-04 14:24:20,705 [    INFO] [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+2025-03-04 14:24:21,872 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:21,872 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:24:24,094 [    INFO] [Node] Finished "lap_target", elapsed time 11.086631s.
+2025-03-04 14:24:24,689 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.mrg_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/mrg_target".
+2025-03-04 14:24:24,716 [    INFO] [Node] Executing "mrg_target" <nipype.interfaces.utility.base.Merge>
+2025-03-04 14:24:24,717 [    INFO] [Node] Finished "mrg_target", elapsed time 0.000168s.
+2025-03-04 14:25:03,935 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:25:03,936 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:25:04,079 [    INFO] [Node] Finished "fsnative2t1w_xfm", elapsed time 51.38798s.
+2025-03-04 14:25:04,742 [ WARNING] WARNING: Reference space not set
+2025-03-04 14:32:40,641 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:40,641 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:40,756 [    INFO] [Node] Finished "unifize", elapsed time 502.048179s.
+2025-03-04 14:32:41,283 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.fixhdr_unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/fixhdr_unifize".
+2025-03-04 14:32:41,287 [    INFO] [Node] Executing "fixhdr_unifize" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:32:41,403 [    INFO] [Node] Finished "fixhdr_unifize", elapsed time 0.115341s.
+2025-03-04 14:32:43,323 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_second_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_second_pass".
+2025-03-04 14:32:43,328 [    INFO] [Node] Executing "skullstrip_second_pass" <nipype.interfaces.afni.preprocess.Automask>
+2025-03-04 14:32:43,754 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:43,754 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:43,830 [    INFO] [Node] Finished "skullstrip_second_pass", elapsed time 0.50097s.
+2025-03-04 14:32:45,289 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.fixhdr_skullstrip2" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/fixhdr_skullstrip2".
+2025-03-04 14:32:45,294 [    INFO] [Node] Executing "fixhdr_skullstrip2" <niworkflows.interfaces.header.CopyXForm>
+2025-03-04 14:32:45,338 [    INFO] [Node] Finished "fixhdr_skullstrip2", elapsed time 0.043784s.
+2025-03-04 14:32:45,645 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:45,645 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:32:45,800 [    INFO] [Node] Finished "unifize", elapsed time 505.094147s.
+2025-03-04 14:32:47,292 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/init_aff".
+2025-03-04 14:32:47,303 [    INFO] [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+2025-03-04 14:33:01,137 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:33:01,137 [ WARNING] WARNING: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+2025-03-04 14:33:01,218 [    INFO] [Node] Finished "init_aff", elapsed time 13.914219s.
+2025-03-04 14:33:03,299 [    INFO] [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/norm".
+2025-03-04 14:33:03,308 [    INFO] [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>

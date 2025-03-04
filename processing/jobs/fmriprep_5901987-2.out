@@ -1,0 +1,856 @@
+/cbica/projects/pafin/code/processing
+211affn004
+Tue Mar  4 14:02:46 EST 2025
+Running task 2
+Commandline: apptainer run --home /cbica/projects/pafin --cleanenv --containall --writable-tmpfs       -B /cbica/projects/pafin/dset:/data       -B /cbica/projects/pafin/derivatives/fmriprep:/out       -B /cbica/comp_space/pafin/pafin-fmriprep:/work       -B /cbica/projects/pafin/code:/code       -B /cbica/projects/pafin/tokens/freesurfer_license.txt:/license.txt       /cbica/projects/pafin/apptainer/fmriprep-24.1.1.sif       /data       /out       participant       --participant-label 24053       -w /work       --omp-nthreads 20       --nprocs 20       --mem_mb 39000       --output-spaces func T1w MNI152NLin6Asym:res-2       --output-layout bids       --me-output-echos       --project-goodvoxels       --cifti-output 91k       --bids-filter-file /code/processing/filter.json       --fs-license-file /license.txt       --skip_bids_validation       --level full
+250304-14:03:18,830 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 24.1.1
+
+         License NOTICE ##################################################
+         fMRIPrep 24.1.1
+         Copyright The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software is also distributed as a Docker container image.
+         The bootstrapping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+250304-14:03:20,905 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /data.
+           * Participant list: ['24053'].
+           * Run identifier: 20250304-140252_8ac8563a-8850-4c14-86e7-13b2895a2c2b.
+           * Output spaces: func T1w MNI152NLin6Asym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /out/sourcedata/freesurfer.
+250304-14:03:21,924 nipype.workflow INFO:
+	 ANAT Stage 1: Adding template workflow
+250304-14:03:22,471 nipype.workflow INFO:
+	 ANAT Stage 2: Preparing brain extraction workflow
+250304-14:03:22,581 nipype.workflow INFO:
+	 ANAT Stage 3: Preparing segmentation workflow
+250304-14:03:22,586 nipype.workflow INFO:
+	 ANAT Stage 4: Preparing normalization workflow for ['MNI152NLin6Asym', 'MNI152NLin2009cAsym']
+250304-14:03:22,598 nipype.workflow INFO:
+	 ANAT Stage 5: Preparing surface reconstruction workflow
+250304-14:03:22,621 nipype.workflow INFO:
+	 ANAT Stage 6: Preparing mask refinement workflow
+250304-14:03:22,624 nipype.workflow INFO:
+	 ANAT Stage 7: Creating T2w template
+250304-14:03:22,629 nipype.workflow INFO:
+	 ANAT Stage 8: Creating GIFTI surfaces for ['white', 'pial', 'midthickness', 'sphere_reg', 'sphere']
+250304-14:03:22,649 nipype.workflow INFO:
+	 ANAT Stage 8: Creating GIFTI metrics for ['thickness', 'sulc']
+250304-14:03:22,657 nipype.workflow INFO:
+	 ANAT Stage 8a: Creating cortical ribbon mask
+250304-14:03:22,661 nipype.workflow INFO:
+	 ANAT Stage 9: Creating fsLR registration sphere
+250304-14:03:22,666 nipype.workflow INFO:
+	 ANAT Stage 10: Creating MSM-Sulc registration sphere
+250304-14:03:23,623 nipype.workflow INFO:
+	 B0 field inhomogeneity map will be estimated with the following 1 estimator(s): [<EstimatorType.PEPOLAR: 2>].
+250304-14:03:23,676 nipype.workflow INFO:
+	 Setting-up fieldmap "funcpepolar01" (EstimatorType.PEPOLAR) with <sub-24053_ses-1_acq-func_dir-AP_run-01_part-mag_epi.nii.gz, sub-24053_ses-1_acq-func_dir-PA_run-01_part-mag_epi.nii.gz>
+250304-14:03:23,868 nipype.workflow INFO:
+	 Using single-band reference file(s) sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-2_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-3_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-4_part-mag_sbref.nii.gz,sub-24053_ses-1_task-bao_dir-AP_run-01_echo-5_part-mag_sbref.nii.gz.
+250304-14:03:23,969 nipype.workflow INFO:
+	 Stage 1: Adding HMC boldref workflow
+250304-14:03:23,978 nipype.workflow INFO:
+	 Stage 2: Adding motion correction workflow
+250304-14:03:23,988 nipype.workflow INFO:
+	 Stage 3: Adding coregistration boldref workflow
+250304-14:03:24,960 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.798s.
+250304-14:03:24,965 nipype.workflow IMPORTANT:
+	 Generating T2* map and optimally combined ME-EPI time series.
+250304-14:03:25,701 nipype.workflow INFO:
+	 Using single-band reference file(s) sub-24053_ses-1_task-rat_dir-PA_run-01_echo-1_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-2_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-3_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-4_part-mag_sbref.nii.gz,sub-24053_ses-1_task-rat_dir-PA_run-01_echo-5_part-mag_sbref.nii.gz.
+250304-14:03:25,780 nipype.workflow INFO:
+	 Stage 1: Adding HMC boldref workflow
+250304-14:03:25,788 nipype.workflow INFO:
+	 Stage 2: Adding motion correction workflow
+250304-14:03:25,793 nipype.workflow INFO:
+	 Stage 3: Adding coregistration boldref workflow
+250304-14:03:26,522 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.798s.
+250304-14:03:26,526 nipype.workflow IMPORTANT:
+	 Generating T2* map and optimally combined ME-EPI time series.
+250304-14:03:30,811 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 857 nodes built successfully.
+250304-14:03:49,773 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+250304-14:03:51,18 nipype.workflow WARNING:
+	 Some nodes exceed the total amount of memory available (39.00GB).
+250304-14:03:59,666 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.full_wm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/full_wm".
+250304-14:03:59,673 nipype.workflow INFO:
+	 [Node] Executing "full_wm" <nipype.interfaces.utility.wrappers.Function>
+250304-14:03:59,832 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.lap_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/lap_tmpl".
+250304-14:03:59,839 nipype.workflow INFO:
+	 [Node] Executing "lap_tmpl" <nipype.interfaces.ants.utils.ImageMath>
+250304-14:03:59,961 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.fmap_preproc_wf.out_merge_fmap_id" in "/work/fmriprep_24_1_wf/sub_24053_wf/fmap_preproc_wf/out_merge_fmap_id".
+250304-14:03:59,966 nipype.workflow INFO:
+	 [Node] Executing "out_merge_fmap_id" <nipype.interfaces.utility.base.Merge>
+250304-14:03:59,975 nipype.workflow INFO:
+	 [Node] Finished "out_merge_fmap_id", elapsed time 0.000251s.
+250304-14:03:59,976 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.res_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/res_tmpl".
+250304-14:03:59,978 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.fmap_preproc_wf.out_merge_method" in "/work/fmriprep_24_1_wf/sub_24053_wf/fmap_preproc_wf/out_merge_method".
+250304-14:03:59,981 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.val_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/val_bold".
+250304-14:03:59,981 nipype.workflow INFO:
+	 [Node] Executing "res_tmpl" <niworkflows.interfaces.nibabel.RegridToZooms>
+250304-14:03:59,983 nipype.workflow INFO:
+	 [Node] Executing "out_merge_method" <nipype.interfaces.utility.base.Merge>
+250304-14:03:59,983 nipype.workflow INFO:
+	 [Node] Finished "out_merge_method", elapsed time 0.000174s.
+250304-14:03:59,986 nipype.workflow INFO:
+	 [Node] Executing "val_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:00,9 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.get_dummy" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/get_dummy".
+250304-14:04:00,14 nipype.workflow INFO:
+	 [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+250304-14:04:00,54 nipype.workflow INFO:
+	 [Node] Finished "val_bold", elapsed time 0.062167s.
+250304-14:04:00,181 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.val_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/val_bold".
+250304-14:04:00,186 nipype.workflow INFO:
+	 [Node] Executing "val_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:00,203 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.get_dummy" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/get_dummy".
+250304-14:04:00,208 nipype.workflow INFO:
+	 [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+250304-14:04:00,249 nipype.workflow INFO:
+	 [Node] Finished "val_bold", elapsed time 0.061833s.
+250304-14:04:00,299 nipype.workflow INFO:
+	 [Node] Finished "full_wm", elapsed time 0.618231s.
+250304-14:04:00,335 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bidssrc" in "/work/fmriprep_24_1_wf/sub_24053_wf/bidssrc".
+250304-14:04:00,378 nipype.workflow INFO:
+	 [Node] Executing "bidssrc" <niworkflows.interfaces.bids.BIDSDataGrabber>
+250304-14:04:00,381 nipype.interface INFO:
+	 No "flair" images found for sub-24053
+250304-14:04:00,381 nipype.interface INFO:
+	 No "roi" images found for sub-24053
+250304-14:04:00,381 nipype.interface INFO:
+	 No "pet" images found for sub-24053
+250304-14:04:00,381 nipype.interface INFO:
+	 No "asl" images found for sub-24053
+250304-14:04:00,382 nipype.workflow INFO:
+	 [Node] Finished "bidssrc", elapsed time 0.000778s.
+250304-14:04:01,207 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.select_MNI6_tpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/select_MNI6_tpl".
+250304-14:04:01,222 nipype.workflow INFO:
+	 [Node] Executing "select_MNI6_tpl" <smriprep.interfaces.templateflow.TemplateFlowSelect>
+250304-14:04:01,268 nipype.workflow INFO:
+	 [Node] Finished "select_MNI6_tpl", elapsed time 0.042957s.
+250304-14:04:01,347 nipype.workflow INFO:
+	 [Node] Finished "res_tmpl", elapsed time 1.3603290000000001s.
+250304-14:04:01,425 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_fmapreg_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_fmapreg_wf/sources".
+250304-14:04:01,430 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,433 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000314s.
+250304-14:04:01,451 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_boldmask_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_boldmask_wf/sources".
+250304-14:04:01,484 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_wf/sources".
+250304-14:04:01,492 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.ds_bold_native_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/ds_bold_native_wf/sources".
+250304-14:04:01,495 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,495 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,497 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,498 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000305s.
+250304-14:04:01,498 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000312s.
+250304-14:04:01,500 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000431s.
+250304-14:04:01,508 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_boldref_wf/sources".
+250304-14:04:01,514 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,516 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_wf/sources".
+250304-14:04:01,517 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000299s.
+250304-14:04:01,520 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,521 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.0002s.
+250304-14:04:01,667 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_hmc_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_hmc_boldref_wf/sources".
+250304-14:04:01,672 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,675 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000309s.
+250304-14:04:01,731 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_boldmask_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_boldmask_wf/sources".
+250304-14:04:01,739 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,742 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000229s.
+250304-14:04:01,748 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_fmapreg_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_fmapreg_wf/sources".
+250304-14:04:01,752 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:01,753 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000215s.
+250304-14:04:02,68 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/bold_source".
+250304-14:04:02,69 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/bold_source".
+250304-14:04:02,70 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/bold_source".
+250304-14:04:02,70 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/bold_source".
+250304-14:04:02,70 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/bold_source".
+250304-14:04:02,73 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:02,74 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:02,74 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:02,74 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000277s.
+250304-14:04:02,75 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:02,75 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000217s.
+250304-14:04:02,75 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:02,79 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000287s.
+250304-14:04:02,79 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000289s.
+250304-14:04:02,79 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000394s.
+250304-14:04:02,939 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.ds_bold_native_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/ds_bold_native_wf/sources".
+250304-14:04:02,944 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:04:02,947 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000366s.
+250304-14:04:03,163 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/bold_source".
+250304-14:04:03,164 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/bold_source".
+250304-14:04:03,164 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/bold_source".
+250304-14:04:03,164 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/bold_source".
+250304-14:04:03,165 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_source" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/bold_source".
+250304-14:04:03,168 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:03,168 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:03,168 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:03,169 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000301s.
+250304-14:04:03,169 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:03,169 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000335s.
+250304-14:04:03,169 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+250304-14:04:03,169 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000385s.
+250304-14:04:03,170 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000336s.
+250304-14:04:03,170 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000335s.
+250304-14:04:03,538 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bids_info" in "/work/fmriprep_24_1_wf/sub_24053_wf/bids_info".
+250304-14:04:03,542 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.anat_template_wf.anat_ref_dimensions" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/anat_ref_dimensions".
+250304-14:04:03,542 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.t2w_template_wf.anat_ref_dimensions" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/anat_ref_dimensions".
+250304-14:04:03,547 nipype.workflow INFO:
+	 [Node] Executing "anat_ref_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+250304-14:04:03,548 nipype.workflow INFO:
+	 [Node] Executing "anat_ref_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+250304-14:04:03,550 nipype.workflow INFO:
+	 [Node] Executing "bids_info" <niworkflows.interfaces.bids.BIDSInfo>
+250304-14:04:03,560 nipype.workflow INFO:
+	 [Node] Finished "bids_info", elapsed time 0.00766s.
+250304-14:04:03,710 nipype.workflow INFO:
+	 [Node] Finished "anat_ref_dimensions", elapsed time 0.161551s.
+250304-14:04:03,731 nipype.workflow INFO:
+	 [Node] Finished "anat_ref_dimensions", elapsed time 0.183697s.
+250304-14:04:03,837 nipype.workflow INFO:
+	 [Node] Finished "get_dummy", elapsed time 3.817578s.
+250304-14:04:05,74 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/validate_bold".
+250304-14:04:05,78 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,78 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/validate_bold".
+250304-14:04:05,78 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/validate_bold".
+250304-14:04:05,82 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/validate_bold".
+250304-14:04:05,82 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,83 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,87 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,140 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.061436s.
+250304-14:04:05,145 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.061915s.
+250304-14:04:05,147 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.063512s.
+250304-14:04:05,148 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.060645s.
+250304-14:04:05,169 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/validate_bold".
+250304-14:04:05,175 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,237 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.061031s.
+250304-14:04:05,299 nipype.workflow INFO:
+	 [Node] Finished "get_dummy", elapsed time 5.083212s.
+250304-14:04:05,478 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.gen_avg" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg".
+250304-14:04:05,491 nipype.workflow INFO:
+	 [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+250304-14:04:05,589 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_3/validate_bold".
+250304-14:04:05,589 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_2/validate_bold".
+250304-14:04:05,590 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_4/validate_bold".
+250304-14:04:05,593 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,594 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,595 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,654 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.06068s.
+250304-14:04:05,656 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.060384s.
+250304-14:04:05,658 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.062779s.
+250304-14:04:05,708 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_0/validate_bold".
+250304-14:04:05,708 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.validate_bold" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/_echoidx_1/validate_bold".
+250304-14:04:05,712 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,713 nipype.workflow INFO:
+	 [Node] Executing "validate_bold" <niworkflows.interfaces.header.ValidateImage>
+250304-14:04:05,774 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.061407s.
+250304-14:04:05,776 nipype.workflow INFO:
+	 [Node] Finished "validate_bold", elapsed time 0.062808s.
+250304-14:04:06,625 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.fs_isrunning" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/fs_isrunning".
+250304-14:04:06,626 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.ds_t1w_mask_wf.raw_sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/ds_t1w_mask_wf/raw_sources".
+250304-14:04:06,626 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.ds_ribbon_mask_wf.raw_sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/ds_ribbon_mask_wf/raw_sources".
+250304-14:04:06,633 nipype.workflow INFO:
+	 [Node] Executing "fs_isrunning" <nipype.interfaces.utility.wrappers.Function>
+250304-14:04:06,634 nipype.workflow INFO:
+	 [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+250304-14:04:06,635 nipype.workflow INFO:
+	 [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+250304-14:04:06,635 nipype.workflow INFO:
+	 [Node] Finished "fs_isrunning", elapsed time 0.000716s.
+250304-14:04:06,636 nipype.workflow INFO:
+	 [Node] Finished "raw_sources", elapsed time 0.0005s.
+250304-14:04:06,636 nipype.workflow INFO:
+	 [Node] Finished "raw_sources", elapsed time 0.000433s.
+250304-14:04:07,293 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.hmc_boldref_wf.gen_avg" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg".
+250304-14:04:07,308 nipype.workflow INFO:
+	 [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+250304-14:04:09,263 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/slice_timing_correction".
+250304-14:04:09,271 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:09,312 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/slice_timing_correction".
+250304-14:04:09,319 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:09,658 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/slice_timing_correction".
+250304-14:04:09,664 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:09,694 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/slice_timing_correction".
+250304-14:04:09,706 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:10,114 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.114458:++ 3dvolreg: AFNI version=AFNI_24.3.01 (Oct  9 2024) [64-bit]
+250304-14:04:10,114 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.114458:++ Authored by: RW Cox
+250304-14:04:10,121 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.121709:** AFNI converts NIFTI_datatype=512 (UINT16) in file /work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_bold_sliced.nii.gz to FLOAT32
+250304-14:04:10,121 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.121709:     Warnings of this type will be muted for this session.
+250304-14:04:10,121 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.121709:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+250304-14:04:10,125 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:10.125898:++ Coarse del was 10, replaced with 7
+250304-14:04:10,572 nipype.workflow INFO:
+	 [Node] Finished "lap_tmpl", elapsed time 10.359322s.
+250304-14:04:11,13 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/slice_timing_correction".
+250304-14:04:11,31 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:11,247 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/slice_timing_correction".
+250304-14:04:11,247 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/slice_timing_correction".
+250304-14:04:11,254 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:11,254 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:11,264 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.mrg_tmpl" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/mrg_tmpl".
+250304-14:04:11,291 nipype.workflow INFO:
+	 [Node] Executing "mrg_tmpl" <nipype.interfaces.utility.base.Merge>
+250304-14:04:11,292 nipype.workflow INFO:
+	 [Node] Finished "mrg_tmpl", elapsed time 0.000174s.
+250304-14:04:12,898 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/slice_timing_correction".
+250304-14:04:12,915 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:12,919 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/slice_timing_correction".
+250304-14:04:12,926 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:04:13,429 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.428987:++ 3dvolreg: AFNI version=AFNI_24.3.01 (Oct  9 2024) [64-bit]
+250304-14:04:13,429 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.428987:++ Authored by: RW Cox
+250304-14:04:13,429 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.429646:** AFNI converts NIFTI_datatype=512 (UINT16) in file /work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/hmc_boldref_wf/gen_avg/sub-24053_ses-1_task-rat_dir-PA_run-01_echo-1_part-mag_bold_sliced.nii.gz to FLOAT32
+250304-14:04:13,429 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.429646:     Warnings of this type will be muted for this session.
+250304-14:04:13,429 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.429646:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+250304-14:04:13,430 nipype.interface INFO:
+	 stderr 2025-03-04T14:04:13.429995:++ Coarse del was 10, replaced with 7
+250304-14:05:13,896 nipype.interface INFO:
+	 stderr 2025-03-04T14:05:13.896724:++ Max displacement in automask = 0.26 (mm) at sub-brick 18
+250304-14:05:13,896 nipype.interface INFO:
+	 stderr 2025-03-04T14:05:13.896724:++ Max delta displ  in automask = 0.13 (mm) at sub-brick 13
+250304-14:05:18,959 nipype.workflow INFO:
+	 [Node] Finished "gen_avg", elapsed time 73.467252s.
+250304-14:05:19,212 nipype.interface INFO:
+	 stderr 2025-03-04T14:05:19.211948:++ Max displacement in automask = 0.30 (mm) at sub-brick 18
+250304-14:05:19,212 nipype.interface INFO:
+	 stderr 2025-03-04T14:05:19.212166:++ Max delta displ  in automask = 0.08 (mm) at sub-brick 12
+250304-14:05:19,253 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.fmapref_buffer" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/fmapref_buffer".
+250304-14:05:19,261 nipype.workflow INFO:
+	 [Node] Executing "fmapref_buffer" <nipype.interfaces.utility.wrappers.Function>
+250304-14:05:19,262 nipype.workflow INFO:
+	 [Node] Finished "fmapref_buffer", elapsed time 0.000616s.
+250304-14:05:19,313 nipype.interface WARNING:
+	 Changing /out/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_part-mag_desc-hmc_boldref.nii.gz dtype from uint16 to float32
+250304-14:05:19,973 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 70.265958s.
+250304-14:05:20,457 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 70.792116s.
+250304-14:05:20,864 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 71.544905s.
+250304-14:05:21,269 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/copy_xform".
+250304-14:05:21,269 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/copy_xform".
+250304-14:05:21,269 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/copy_xform".
+250304-14:05:21,322 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.mcflirt" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/mcflirt".
+250304-14:05:21,332 nipype.workflow INFO:
+	 [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+250304-14:05:21,505 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 70.472611s.
+250304-14:05:22,638 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_coreg_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_coreg_boldref_wf/sources".
+250304-14:05:22,643 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:05:22,644 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000187s.
+250304-14:05:22,930 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 73.658402s.
+250304-14:05:23,85 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:23,100 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:23,158 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:23,269 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/copy_xform".
+250304-14:05:23,420 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/copy_xform".
+250304-14:05:24,448 nipype.workflow INFO:
+	 [Node] Finished "gen_avg", elapsed time 77.139593s.
+250304-14:05:24,593 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.slice_timing_correction" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/slice_timing_correction".
+250304-14:05:24,604 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+250304-14:05:25,260 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.fmapref_buffer" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/fmapref_buffer".
+250304-14:05:25,277 nipype.workflow INFO:
+	 [Node] Executing "fmapref_buffer" <nipype.interfaces.utility.wrappers.Function>
+250304-14:05:25,278 nipype.workflow INFO:
+	 [Node] Finished "fmapref_buffer", elapsed time 0.000712s.
+250304-14:05:25,328 nipype.interface WARNING:
+	 Changing /out/sub-24053/ses-1/func/sub-24053_ses-1_task-rat_dir-PA_run-01_part-mag_desc-hmc_boldref.nii.gz dtype from uint16 to float32
+250304-14:05:25,810 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.mcflirt" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/mcflirt".
+250304-14:05:25,815 nipype.workflow INFO:
+	 [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+250304-14:05:26,572 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:26,658 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:27,264 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.ds_coreg_boldref_wf.sources" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/ds_coreg_boldref_wf/sources".
+250304-14:05:27,280 nipype.workflow INFO:
+	 [Node] Executing "sources" <fmriprep.interfaces.bids.BIDSURI>
+250304-14:05:27,281 nipype.workflow INFO:
+	 [Node] Finished "sources", elapsed time 0.000234s.
+250304-14:05:50,666 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 99.411423s.
+250304-14:05:51,55 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 99.800189s.
+250304-14:05:51,257 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_1/copy_xform".
+250304-14:05:51,257 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_0/copy_xform".
+250304-14:05:51,262 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:51,263 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:53,171 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 100.245012s.
+250304-14:05:53,743 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 100.827149s.
+250304-14:05:55,281 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_3/copy_xform".
+250304-14:05:55,281 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_2/copy_xform".
+250304-14:05:55,293 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:05:57,78 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:06:09,485 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 46.32603s.
+250304-14:06:09,723 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 46.636488s.
+250304-14:06:10,166 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 47.064188s.
+250304-14:06:13,283 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 46.624337s.
+250304-14:06:13,324 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 46.750983s.
+250304-14:07:00,683 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 69.419483s.
+250304-14:07:01,290 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 70.026467s.
+250304-14:07:04,100 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 68.805336s.
+250304-14:07:04,963 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 100.358317s.
+250304-14:07:05,301 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_native_wf.bold_stc_wf.copy_xform" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_native_wf/bold_stc_wf/_echoidx_4/copy_xform".
+250304-14:07:05,306 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+250304-14:07:06,6 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 68.926581s.
+250304-14:08:14,68 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 68.761125s.
+250304-14:09:00,442 nipype.workflow INFO:
+	 [Node] Finished "mcflirt", elapsed time 219.108759s.
+250304-14:09:01,782 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.normalize_motion" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/normalize_motion".
+250304-14:09:01,859 nipype.workflow INFO:
+	 [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+250304-14:09:01,863 nipype.workflow INFO:
+	 [Node] Finished "normalize_motion", elapsed time 0.003772s.
+250304-14:09:03,485 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_confounds_wf.fdisp" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_confounds_wf/fdisp".
+250304-14:09:03,755 nipype.workflow INFO:
+	 [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+250304-14:09:03,759 nipype.workflow INFO:
+	 [Node] Finished "fdisp", elapsed time 0.002833s.
+250304-14:10:47,530 nipype.workflow INFO:
+	 [Node] Finished "mcflirt", elapsed time 321.714106s.
+250304-14:10:49,690 nipype.workflow INFO:
+	 [Node] Setting-up "_denoise0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/denoise/mapflow/_denoise0".
+250304-14:10:49,693 nipype.workflow INFO:
+	 [Node] Executing "_denoise0" <nipype.interfaces.ants.segmentation.DenoiseImage>
+250304-14:11:24,667 nipype.workflow INFO:
+	 [Node] Finished "_denoise0", elapsed time 34.748137s.
+250304-14:11:25,691 nipype.workflow INFO:
+	 [Node] Setting-up "_denoise0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/denoise/mapflow/_denoise0".
+250304-14:11:25,694 nipype.workflow INFO:
+	 [Node] Executing "_denoise0" <nipype.interfaces.ants.segmentation.DenoiseImage>
+250304-14:11:59,324 nipype.workflow INFO:
+	 [Node] Finished "_denoise0", elapsed time 33.422232s.
+250304-14:11:59,698 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.normalize_motion" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/normalize_motion".
+250304-14:11:59,703 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/anat_conform/mapflow/_anat_conform0".
+250304-14:11:59,704 nipype.workflow INFO:
+	 [Node] Setting-up "_anat_conform0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/anat_conform/mapflow/_anat_conform0".
+250304-14:11:59,706 nipype.workflow INFO:
+	 [Node] Executing "_anat_conform0" <niworkflows.interfaces.images.Conform>
+250304-14:11:59,708 nipype.workflow INFO:
+	 [Node] Executing "_anat_conform0" <niworkflows.interfaces.images.Conform>
+250304-14:11:59,720 nipype.workflow INFO:
+	 [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+250304-14:11:59,725 nipype.workflow INFO:
+	 [Node] Finished "normalize_motion", elapsed time 0.004476s.
+250304-14:11:59,752 nipype.workflow INFO:
+	 [Node] Finished "_anat_conform0", elapsed time 0.043986s.
+250304-14:11:59,758 nipype.workflow INFO:
+	 [Node] Finished "_anat_conform0", elapsed time 0.051415s.
+250304-14:12:01,695 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/init_aff".
+250304-14:12:01,701 nipype.workflow INFO:
+	 [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+250304-14:12:21,676 nipype.workflow INFO:
+	 [Node] Finished "init_aff", elapsed time 19.653801s.
+250304-14:12:23,751 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.fsl2itk" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/fsl2itk".
+250304-14:12:23,793 nipype.workflow INFO:
+	 [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+250304-14:12:23,794 nipype.interface WARNING:
+	 Multithreading is deprecated. Remove the num_threads input.
+250304-14:12:24,57 nipype.workflow INFO:
+	 [Node] Finished "fsl2itk", elapsed time 0.263168s.
+250304-14:12:25,701 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/init_aff".
+250304-14:12:25,709 nipype.workflow INFO:
+	 [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+250304-14:12:45,820 nipype.workflow INFO:
+	 [Node] Finished "init_aff", elapsed time 19.768549s.
+250304-14:12:47,740 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.bold_hmc_wf.fsl2itk" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/bold_hmc_wf/fsl2itk".
+250304-14:12:47,802 nipype.workflow INFO:
+	 [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+250304-14:12:47,803 nipype.interface WARNING:
+	 Multithreading is deprecated. Remove the num_threads input.
+250304-14:12:48,174 nipype.workflow INFO:
+	 [Node] Finished "fsl2itk", elapsed time 0.371s.
+250304-14:12:49,707 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.anat_template_wf.get1st" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/anat_template_wf/get1st".
+250304-14:12:49,707 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.t2w_template_wf.get1st" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/t2w_template_wf/get1st".
+250304-14:12:49,712 nipype.workflow INFO:
+	 [Node] Executing "get1st" <nipype.interfaces.utility.base.Select>
+250304-14:12:49,714 nipype.workflow INFO:
+	 [Node] Finished "get1st", elapsed time 0.001251s.
+250304-14:12:49,715 nipype.workflow INFO:
+	 [Node] Executing "get1st" <nipype.interfaces.utility.base.Select>
+250304-14:12:49,716 nipype.workflow INFO:
+	 [Node] Finished "get1st", elapsed time 0.0009s.
+250304-14:12:50,43 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_confounds_wf.fdisp" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_confounds_wf/fdisp".
+250304-14:12:50,51 nipype.workflow INFO:
+	 [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+250304-14:12:50,56 nipype.workflow INFO:
+	 [Node] Finished "fdisp", elapsed time 0.004127s.
+250304-14:12:51,704 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/norm".
+250304-14:12:51,713 nipype.workflow INFO:
+	 [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+250304-14:12:52,562 nipype.workflow INFO:
+	 [Node] Finished "norm", elapsed time 0.55598s.
+250304-14:12:53,716 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/norm".
+250304-14:12:53,723 nipype.workflow INFO:
+	 [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+250304-14:12:54,509 nipype.workflow INFO:
+	 [Node] Finished "norm", elapsed time 0.576033s.
+250304-14:12:55,928 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+250304-14:12:55,929 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+250304-14:12:55,934 nipype.workflow INFO:
+	 [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+250304-14:12:55,937 nipype.workflow INFO:
+	 [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+250304-14:12:56,809 nipype.workflow INFO:
+	 [Node] Finished "map_brainmask", elapsed time 0.620581s.
+250304-14:12:56,920 nipype.workflow INFO:
+	 [Node] Finished "map_brainmask", elapsed time 0.635744s.
+250304-14:12:57,721 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.fov_check" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/fov_check".
+250304-14:12:57,725 nipype.workflow INFO:
+	 [Node] Executing "fov_check" <nipype.interfaces.utility.wrappers.Function>
+250304-14:12:57,747 nipype.workflow INFO:
+	 [Node] Setting-up "_truncate_images0" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/truncate_images/mapflow/_truncate_images0".
+250304-14:12:57,750 nipype.workflow INFO:
+	 [Node] Executing "_truncate_images0" <nipype.interfaces.ants.utils.ImageMath>
+250304-14:12:58,55 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.recon_config" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/recon_config".
+250304-14:12:58,61 nipype.workflow INFO:
+	 [Node] Executing "recon_config" <niworkflows.interfaces.freesurfer.FSDetectInputs>
+250304-14:12:58,111 nipype.workflow INFO:
+	 [Node] Finished "fov_check", elapsed time 0.385206s.
+250304-14:12:58,162 nipype.workflow INFO:
+	 [Node] Finished "recon_config", elapsed time 0.100467s.
+250304-14:12:59,722 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+250304-14:12:59,727 nipype.workflow INFO:
+	 [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+250304-14:12:59,746 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+250304-14:12:59,751 nipype.workflow INFO:
+	 [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+250304-14:13:03,600 nipype.workflow INFO:
+	 [Node] Finished "_truncate_images0", elapsed time 5.62206s.
+250304-14:13:06,136 nipype.workflow INFO:
+	 [Node] Finished "n4_correct", elapsed time 6.40805s.
+250304-14:13:06,360 nipype.workflow INFO:
+	 [Node] Finished "n4_correct", elapsed time 6.346974s.
+250304-14:13:07,739 nipype.workflow INFO:
+	 [Node] Setting-up "_inu_n40" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/inu_n4/mapflow/_inu_n40".
+250304-14:13:07,743 nipype.workflow INFO:
+	 [Node] Executing "_inu_n40" <nipype.interfaces.ants.segmentation.N4BiasFieldCorrection>
+250304-14:13:25,174 nipype.workflow INFO:
+	 [Node] Finished "_inu_n40", elapsed time 17.430289s.
+250304-14:13:25,736 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.autorecon1" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/autorecon1".
+250304-14:13:25,743 nipype.workflow INFO:
+	 [Node] Executing "autorecon1" <smriprep.interfaces.freesurfer.ReconAll>
+250304-14:24:12,348 nipype.workflow INFO:
+	 [Node] Finished "autorecon1", elapsed time 646.603652s.
+250304-14:24:12,683 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.lap_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/lap_target".
+250304-14:24:12,684 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.surface_recon_wf.fsnative2t1w_xfm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/surface_recon_wf/fsnative2t1w_xfm".
+250304-14:24:12,685 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+250304-14:24:12,686 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+250304-14:24:12,687 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.res_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/res_target".
+250304-14:24:12,688 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.unwarp_wf.rotime" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/unwarp_wf/rotime".
+250304-14:24:12,688 nipype.workflow INFO:
+	 [Node] Executing "lap_target" <nipype.interfaces.ants.utils.ImageMath>
+250304-14:24:12,689 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.unwarp_wf.rotime" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/unwarp_wf/rotime".
+250304-14:24:12,690 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+250304-14:24:12,690 nipype.workflow INFO:
+	 [Node] Executing "fsnative2t1w_xfm" <niworkflows.interfaces.freesurfer.PatchedRobustRegister>
+250304-14:24:12,690 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+250304-14:24:12,691 nipype.workflow INFO:
+	 [Node] Executing "res_target" <niworkflows.interfaces.nibabel.RegridToZooms>
+250304-14:24:12,696 nipype.workflow INFO:
+	 [Node] Executing "rotime" <sdcflows.interfaces.epi.GetReadoutTime>
+250304-14:24:12,697 nipype.workflow INFO:
+	 [Node] Executing "rotime" <sdcflows.interfaces.epi.GetReadoutTime>
+250304-14:24:12,700 nipype.workflow INFO:
+	 [Node] Finished "rotime", elapsed time 0.003584s.
+250304-14:24:12,700 nipype.workflow INFO:
+	 [Node] Finished "rotime", elapsed time 0.002723s.
+250304-14:24:13,884 nipype.workflow INFO:
+	 [Node] Finished "res_target", elapsed time 1.191883s.
+250304-14:24:14,513 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_first_pass", elapsed time 1.822279s.
+250304-14:24:14,549 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_first_pass", elapsed time 1.858557s.
+250304-14:24:14,696 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+250304-14:24:14,700 nipype.workflow INFO:
+	 [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+250304-14:24:15,346 nipype.workflow INFO:
+	 [Node] Finished "first_dilate", elapsed time 0.645789s.
+250304-14:24:16,698 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_mask".
+250304-14:24:16,699 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+250304-14:24:16,703 nipype.workflow INFO:
+	 [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+250304-14:24:16,703 nipype.workflow INFO:
+	 [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+250304-14:24:16,806 nipype.workflow INFO:
+	 [Node] Finished "first_mask", elapsed time 0.102434s.
+250304-14:24:17,290 nipype.workflow INFO:
+	 [Node] Finished "first_dilate", elapsed time 0.586437s.
+250304-14:24:18,697 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/unifize".
+250304-14:24:18,701 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/first_mask".
+250304-14:24:18,706 nipype.workflow INFO:
+	 [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+250304-14:24:18,707 nipype.workflow INFO:
+	 [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+250304-14:24:18,809 nipype.workflow INFO:
+	 [Node] Finished "first_mask", elapsed time 0.102496s.
+250304-14:24:20,694 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_bao_dir_AP_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/unifize".
+250304-14:24:20,705 nipype.workflow INFO:
+	 [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+250304-14:24:24,94 nipype.workflow INFO:
+	 [Node] Finished "lap_target", elapsed time 11.086631s.
+250304-14:24:24,689 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.mrg_target" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/mrg_target".
+250304-14:24:24,716 nipype.workflow INFO:
+	 [Node] Executing "mrg_target" <nipype.interfaces.utility.base.Merge>
+250304-14:24:24,717 nipype.workflow INFO:
+	 [Node] Finished "mrg_target", elapsed time 0.000168s.
+250304-14:25:04,79 nipype.workflow INFO:
+	 [Node] Finished "fsnative2t1w_xfm", elapsed time 51.38798s.
+250304-14:32:40,756 nipype.workflow INFO:
+	 [Node] Finished "unifize", elapsed time 502.048179s.
+250304-14:32:41,283 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.fixhdr_unifize" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/fixhdr_unifize".
+250304-14:32:41,287 nipype.workflow INFO:
+	 [Node] Executing "fixhdr_unifize" <niworkflows.interfaces.header.CopyXForm>
+250304-14:32:41,403 nipype.workflow INFO:
+	 [Node] Finished "fixhdr_unifize", elapsed time 0.115341s.
+250304-14:32:43,323 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.skullstrip_second_pass" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/skullstrip_second_pass".
+250304-14:32:43,328 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_second_pass" <nipype.interfaces.afni.preprocess.Automask>
+250304-14:32:43,830 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_second_pass", elapsed time 0.50097s.
+250304-14:32:45,289 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf.bold_fit_wf.enhance_and_skullstrip_bold_wf.fixhdr_skullstrip2" in "/work/fmriprep_24_1_wf/sub_24053_wf/bold_ses_1_task_rat_dir_PA_run_01_echo_1_part_mag_wf/bold_fit_wf/enhance_and_skullstrip_bold_wf/fixhdr_skullstrip2".
+250304-14:32:45,294 nipype.workflow INFO:
+	 [Node] Executing "fixhdr_skullstrip2" <niworkflows.interfaces.header.CopyXForm>
+250304-14:32:45,338 nipype.workflow INFO:
+	 [Node] Finished "fixhdr_skullstrip2", elapsed time 0.043784s.
+250304-14:32:45,800 nipype.workflow INFO:
+	 [Node] Finished "unifize", elapsed time 505.094147s.
+250304-14:32:47,292 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.init_aff" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/init_aff".
+250304-14:32:47,303 nipype.workflow INFO:
+	 [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+250304-14:33:01,218 nipype.workflow INFO:
+	 [Node] Finished "init_aff", elapsed time 13.914219s.
+250304-14:33:03,299 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_24_1_wf.sub_24053_wf.anat_fit_wf.brain_extraction_wf.norm" in "/work/fmriprep_24_1_wf/sub_24053_wf/anat_fit_wf/brain_extraction_wf/norm".
+250304-14:33:03,308 nipype.workflow INFO:
+	 [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>

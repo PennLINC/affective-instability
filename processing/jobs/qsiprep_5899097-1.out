@@ -1,0 +1,68 @@
+/cbica/projects/pafin/code/processing
+2119fmn006
+Tue Mar  4 11:06:08 EST 2025
+Running task 1
+Commandline: apptainer run --cleanenv       -B /cbica/projects/pafin/dset:/data       -B /cbica/projects/pafin/derivatives:/deriv       -B /cbica/comp_space/pafin/pafin-qsiprep:/work       -B /cbica/projects/pafin/tokens/freesurfer_license.txt:/license.txt       /cbica/projects/pafin/apptainer/qsiprep-1.0.0.sif       /data       /deriv/qsiprep       participant       --participant-label PILOT01       -w /work/       --omp-nthreads 20       --nprocs 20       --mem 39000       --fs-license-file /license.txt       --skip-bids-validation       --denoise-method dwidenoise       --output-resolution 1.7       --subject-anatomical-reference sessionwise
+250304-11:06:20,373 nipype.workflow WARNING:
+	 Subject PILOT01 had no sessions, but --subject-anatomical-reference was set to "sessionwise". Outputs will NOT appear in a session directory for PILOT01.
+250304-11:06:42,800 nipype.workflow IMPORTANT:
+	 Running QSIPrep version 1.0.1.dev0+gee9aa2e.d20250115
+
+         License NOTICE ##################################################
+         QSIPrep 1.0.1.dev0+gee9aa2e.d20250115
+         Copyright The PennLINC Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software is also distributed as a Docker container image.
+         The bootstrapping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+250304-11:06:42,865 nipype.workflow IMPORTANT:
+	 Building QSIPrep's workflow:
+           * BIDS dataset path: /data.
+           * Participant list: ['PILOT01'].
+           * Run identifier: 20250304-110617_d5bbdce5-13f5-4982-ae4e-c9f5c1627a74.
+250304-11:06:43,193 nipype.workflow IMPORTANT:
+	 Collected data:
+dwi: []
+flair: []
+fmap:
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-1_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-1_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-2_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-2_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-3_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-3_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-4_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-4_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-5_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-AP_run-01_echo-5_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-1_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-1_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-2_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-2_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-3_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-3_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-4_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-4_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-5_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func+meepi_dir-PA_run-01_echo-5_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func_dir-AP_run-01_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func_dir-AP_run-01_part-phase_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func_dir-PA_run-01_part-mag_epi.nii.gz
+- /data/sub-PILOT01/ses-1/fmap/sub-PILOT01_ses-1_acq-func_dir-PA_run-01_part-phase_epi.nii.gz
+roi: []
+sbref: []
+t1w:
+- /data/sub-PILOT01/ses-1/anat/sub-PILOT01_ses-1_T1w.nii.gz
+- /data/sub-PILOT01/ses-1/anat/sub-PILOT01_ses-1_rec-norm_T1w.nii.gz
+t2w: []
+

@@ -44,7 +44,7 @@ cmd="apptainer run --cleanenv \
       -w /work/ \
       --omp-nthreads ${SLURM_CPUS_PER_TASK} \
       --nprocs ${SLURM_CPUS_PER_TASK} \
-      --mem_mb 39000 \
+      --mem 39000 \
       --fs-license-file /license.txt \
       --skip-bids-validation \
       --denoise-method dwidenoise \

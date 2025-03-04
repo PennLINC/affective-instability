@@ -30,7 +30,7 @@ FS_LICENSE="/cbica/projects/pafin/tokens/freesurfer_license.txt"
 # Parse the participants.tsv file and extract one subject ID from the line corresponding to this SLURM task.
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv )
 
-cmd="apptainer run --cleanenv \
+cmd="apptainer run --home $HOME --cleanenv --containall --writable-tmpfs \
       -B ${BIDS_DIR}:/data \
       -B ${DERIVS_DIR}:/out \
       -B ${SCRATCH_DIR}:/work \
