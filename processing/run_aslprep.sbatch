@@ -16,20 +16,17 @@ set -e
 
 #==============Shell script==============#
 # Location of the *reduced* BIDS dataset
+CODE_DIR="/cbica/projects/pafin/code/processing"
 BIDS_DIR="/cbica/projects/pafin/dset"
 SCRATCH_DIR="/cbica/comp_space/pafin/pafin-aslprep"
 DERIVS_DIR="/cbica/projects/pafin/derivatives"
 mkdir -p ${SCRATCH_DIR}
-mkdir -p ${DERIVS_DIR}
 
 # Make sure FS_LICENSE is defined in the container.
 FS_LICENSE="/cbica/projects/pafin/tokens/freesurfer_license.txt"
 
 # Parse the participants.tsv file and extract one subject ID from the line corresponding to this SLURM task.
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv )
-
-# Compose the command line
-mem_gb=$(echo "${SLURM_MEM_PER_CPU} * ${SLURM_CPUS_PER_TASK}" | bc -l)
 
 cmd="apptainer run --cleanenv \
       -B ${BIDS_DIR}:/data \
