@@ -74,11 +74,11 @@ if __name__ == "__main__":
 
             mag_filename = os.path.basename(mag_file)
             concat_mag_file = os.path.join(temp_dir, mag_filename)
-            # rec entity comes after dir entity
+            # rec entity comes before dir entity
             mag_fileparts = mag_filename.split("_")
             idx = [i for i, p in enumerate(mag_fileparts) if p.startswith("dir-")][0]
-            # insert rec entity after dir entity
-            mag_fileparts.insert(idx + 1, "rec-nordic")
+            # insert rec entity before dir entity
+            mag_fileparts.insert(idx, "rec-nordic")
             out_mag_filename = "_".join(mag_fileparts)
             concat_mag_file = os.path.join(temp_dir, out_mag_filename)
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             )
             assert os.path.isfile(concat_mag_file)
 
-        nordic_template = os.path.join(code_dir, "17_run_nordic.m")
+        nordic_template = os.path.join(code_dir, "curation", "17_run_nordic.m")
         with open(nordic_template, "r") as fo:
             base_nordic_script = fo.read()
 

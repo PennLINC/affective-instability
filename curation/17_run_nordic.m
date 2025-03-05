@@ -20,10 +20,11 @@ ARG.DIROUT = '{{ out_dir }}';
 
 fn_magn_in = '{{ mag_file }}';
 fn_phase_in = '{{ phase_file }}';
-fn_out = '{{ out_prefix }}'
+fn_out = '{{ out_prefix }}';
+disp(fn_out);
 
 % Add the NORDIC code
-% Using https://github.com/nipreps/NORDIC_Raw/blob/6c5d9c754879c8d582349bf8a25dd432e2785220/NIFTI_NORDIC.m
+% Using https://github.com/nipreps/NORDIC_Raw/blob/c3a00f94fb79e7cc3f7d451f2cfb5a57602777c3/NIFTI_NORDIC.m
 addpath('/cbica/projects/pafin/NORDIC_Raw')
 
 % Call NORDIC on the input files
