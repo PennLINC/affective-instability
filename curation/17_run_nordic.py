@@ -88,6 +88,10 @@ def run_nordic(mag_file, temp_dir):
         concat_mag_file = os.path.join(temp_dir, out_mag_filename)
 
         out_nordic_mag_file = os.path.join(out_dir, out_mag_filename)
+        if os.path.isfile(out_nordic_mag_file):
+            print("File exists.")
+            return
+
         n_noise_volumes_mag = prepare_images(
             bold_file=mag_file,
             out_file=concat_mag_file,
@@ -205,9 +209,6 @@ if __name__ == "__main__":
     in_dir = "/cbica/projects/pafin/dset"
     temp_dir = "/cbica/comp_space/pafin/NORDIC"
     os.makedirs(temp_dir, exist_ok=True)
-
-    row_number = int(sys.argv[1])
-    with open("files_to_nordic.txt", "r") as fo:
-        mag_file = fo.readlines()[row_number].strip()
+    mag_file = sys.argv[1]
 
     run_nordic(mag_file, temp_dir)

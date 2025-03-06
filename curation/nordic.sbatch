@@ -1,22 +1,25 @@
 #!/bin/bash
-#SBATCH --job-name=fmriprep
+#SBATCH --job-name=nordic
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=0-280
+#SBATCH --array=1-19
 #SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=20gb
+#SBATCH --mem-per-cpu=40gb
 #SBATCH --time=2:00:00
 # Outputs ----------------------------------
-#SBATCH --output=/cbica/projects/pafin/code/processing/jobs/fmriprep_%A-%a.out
-#SBATCH --error=/cbica/projects/pafin/code/processing/jobs/fmriprep_%A-%a.err
+#SBATCH --output=/cbica/projects/pafin/code/curation/jobs/nordic_%A-%a.out
+#SBATCH --error=/cbica/projects/pafin/code/curation/jobs/nordic_%A-%a.err
 # ------------------------------------------
+
+/cbica/projects/pafin/.bashrc
+
+mamba activate curation
 
 pwd; hostname; date
 set -e
 
 #==============Shell script==============#
 # Location of the *reduced* BIDS dataset
-BIDS_DIR="/cbica/projects/pafin/dset"
 CODE_DIR="/cbica/projects/pafin/code"
 
 # Select the file to process from the files_to_nordic.txt file
