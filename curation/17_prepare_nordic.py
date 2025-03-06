@@ -1,14 +1,11 @@
 """Prepare data for NORDIC."""
 
 import os
-import subprocess
 from glob import glob
-
-import nibabel as nb
 
 
 def list_files(in_dir):
-    """List files in the input directory to process."""
+    """List files in the input directory to run NORDIC on."""
     mag_files = sorted(
         glob(
             os.path.join(
@@ -34,6 +31,18 @@ def list_files(in_dir):
 
 
 if __name__ == "__main__":
+    """List files to run NORDIC on.
+
+    This script writes out a file (files_to_nordic.txt) that lists each magnitude BOLD file without
+    a NORDIC-denoised counterpart.
+
+    Since CUBIC's MATLAB license limits the number of jobs that can be run at once,
+    I run this script once to generate the list of files to run NORDIC on, then submit a job
+    to run NORDIC on each file in the list.
+    Once that finishes, some of the sub-jobs will have failed because of the license,
+    so I run this script again to generate a new list of files to run NORDIC on, and so on,
+    until all files have been processed.
+    """
     code_dir = "/cbica/projects/pafin/code"
     in_dir = "/cbica/projects/pafin/dset"
     mag_files_to_process = list_files(in_dir)

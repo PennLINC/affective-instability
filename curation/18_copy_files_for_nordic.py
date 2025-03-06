@@ -1,4 +1,9 @@
-"""Copy associated files for NORDIC-denoised BOLD runs."""
+"""Copy associated files for NORDIC-denoised BOLD runs.
+
+This includes SBRef NIfTIs, SBRef JSONs, and BOLD JSONs.
+It also modifies the BOLD JSONs to set a NORDIC-specific B0FieldIdentifier and B0FieldSource,
+and adds the NORDIC-denoised BOLD files to the IntendedFor field in fmap JSONs.
+"""
 
 import json
 import os

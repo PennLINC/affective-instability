@@ -2,7 +2,6 @@
 
 import os
 import subprocess
-from glob import glob
 
 import nibabel as nb
 import numpy as np
@@ -38,32 +37,6 @@ def prepare_images(bold_file, out_file, norf_file=None):
     return n_noise_volumes
 
 
-def list_files(in_dir):
-    """List files in the input directory to process."""
-    mag_files = sorted(
-        glob(
-            os.path.join(
-                in_dir,
-                "sub-*",
-                "ses-*",
-                "func",
-                "sub-*_bold.nii.gz",
-            ),
-        ),
-    )
-    # Don't include phase files
-    mag_files = [mf for mf in mag_files if "part-phase" not in mf]
-
-    nordic_mag_files = [mf.replace("_rec-nordic", "") for mf in mag_files if "_rec-nordic" in mf]
-
-    # Don't include NORDIC-denoised files
-    mag_files = [mf for mf in mag_files if "_rec-nordic" not in mf]
-
-    mag_files_to_process = [mf for mf in mag_files if mf not in nordic_mag_files]
-
-    return mag_files_to_process
-
-
 def run_nordic(mag_file, temp_dir):
     """Run NORDIC on the files to process."""
     print(f"Processing {os.path.basename(mag_file)}")
@@ -79,17 +52,11 @@ def run_nordic(mag_file, temp_dir):
 
         mag_filename = os.path.basename(mag_file)
         concat_mag_file = os.path.join(temp_dir, mag_filename)
-        # rec entity comes before dir entity
-        mag_fileparts = mag_filename.split("_")
-        idx = [i for i, p in enumerate(mag_fileparts) if p.startswith("dir-")][0]
-        # insert rec entity before dir entity
-        mag_fileparts.insert(idx, "rec-nordic")
-        out_mag_filename = "_".join(mag_fileparts)
-        concat_mag_file = os.path.join(temp_dir, out_mag_filename)
-
+        out_mag_filename = _add_rec_entity(mag_filename)
         out_nordic_mag_file = os.path.join(out_dir, out_mag_filename)
+
         if os.path.isfile(out_nordic_mag_file):
-            print("File exists.")
+            print(f"NORDIC-denoised file exists: {out_nordic_mag_file}")
             return
 
         n_noise_volumes_mag = prepare_images(
@@ -119,16 +86,15 @@ def run_nordic(mag_file, temp_dir):
             )
 
     else:
+        # Just concatenate the magnitude file
         is_complex = False
         concat_mag_file = os.path.join(temp_dir, os.path.basename(mag_file))
 
-        # rec entity comes before dir entity
-        mag_fileparts = mag_filename.split("_")
-        idx = [i for i, p in enumerate(mag_fileparts) if p.startswith("dir-")][0]
-        # insert rec entity before dir entity
-        mag_fileparts.insert(idx, "rec-nordic")
-        out_mag_filename = "_".join(mag_fileparts)
+        out_mag_filename = _add_rec_entity(os.path.basename(mag_file))
         out_nordic_mag_file = os.path.join(out_dir, out_mag_filename)
+        if os.path.isfile(out_nordic_mag_file):
+            print(f"NORDIC-denoised file exists: {out_nordic_mag_file}")
+            return
 
         n_noise_volumes_mag = prepare_images(
             bold_file=mag_file,
@@ -200,6 +166,21 @@ def run_nordic(mag_file, temp_dir):
         nordic_phase_img = nb.load(nordic_phase_file)
         nordic_phase_img = nordic_phase_img.slicer[..., :-n_noise_volumes_mag]
         nordic_phase_img.to_filename(out_nordic_phase_file)
+
+
+def _add_rec_entity(filename):
+    """Add the rec entity to the filename.
+
+    This function assumes that the BOLD file has a dir entity.
+    If you don't include a dir entity in your BIDS filenames, you'll need to
+    modify this function.
+
+    It could probably be done more elegantly with pyBIDS, but this is easier.
+    """
+    fileparts = filename.split("_")
+    idx = [i for i, p in enumerate(fileparts) if p.startswith("dir-")][0]
+    fileparts.insert(idx, "rec-nordic")
+    return "_".join(fileparts)
 
 
 if __name__ == "__main__":
