@@ -8,23 +8,20 @@
 #SBATCH --time=100:00:00
 #SBATCH --partition=long
 # Outputs ----------------------------------
-#SBATCH --output=/cbica/home/salot/datasets/pafin/code/jobs/xcpd_%A-%a.out
-#SBATCH --error=/cbica/home/salot/datasets/pafin/code/jobs/xcpd_%A-%a.err
+#SBATCH --output=/cbica/projects/pafin/code/jobs/xcpd_%A-%a.out
+#SBATCH --error=/cbica/projects/pafin/code/jobs/xcpd_%A-%a.err
 # ------------------------------------------
 
 pwd; hostname; date
 set -e
 
 #==============Shell script==============#
-#Load the software needed
-xcp_d_ver=0.10.0rc3
-
 # Location of the *reduced* BIDS dataset
-BIDS_DIR="/cbica/home/salot/datasets/pafin/dset"
-INPUT_DIR="/cbica/home/salot/datasets/pafin/derivatives/fmriprep"
-CODE_DIR="/cbica/home/salot/datasets/pafin/code"
-SCRATCH_DIR="/cbica/comp_space/salot/pafin-xcp_d"
-DERIVS_DIR="/cbica/home/salot/datasets/pafin/derivatives/xcp_d"
+BIDS_DIR="/cbica/projects/pafin/dset"
+INPUT_DIR="/cbica/projects/pafin/derivatives/fmriprep"
+CODE_DIR="/cbica/projects/pafin/code"
+SCRATCH_DIR="/cbica/comp_space/pafin/pafin-xcp_d"
+DERIVS_DIR="/cbica/projects/pafin/derivatives/xcp_d"
 mkdir -p ${SCRATCH_DIR}
 mkdir -p ${DERIVS_DIR}
 
@@ -40,7 +37,7 @@ cmd="apptainer run --cleanenv \
     -B ${DERIVS_DIR}:/out \
     -B ${SCRATCH_DIR}:/work \
     -B ${FS_LICENSE}:/license.txt \
-    /cbica/home/salot/apptainer/xcp_d_${xcp_d_ver}.sif \
+    /cbica/home/salot/apptainer/xcp_d-0.10.6.sif \
     /data \
     /out \
     participant \
@@ -50,8 +47,7 @@ cmd="apptainer run --cleanenv \
     --nprocs ${SLURM_CPUS_PER_TASK} \
     --mem-gb 79 \
     --mode linc \
-    --fs-license-file /license.txt"
-
+    --dummy-scans auto"
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
 echo Commandline: "$cmd"
