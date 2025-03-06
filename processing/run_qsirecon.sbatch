@@ -29,6 +29,7 @@ FS_LICENSE="/cbica/projects/pafin/tokens/freesurfer_license.txt"
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv )
 
 cmd="apptainer run --cleanenv \
+      -B ${CODE_DIR}:/code \
       -B ${DERIV_DIR}:/data \
       -B ${SCRATCH_DIR}:/work \
       -B ${FS_LICENSE}:/license.txt \
@@ -40,11 +41,12 @@ cmd="apptainer run --cleanenv \
       -w /work/ \
       --omp-nthreads ${SLURM_CPUS_PER_TASK} \
       --nprocs ${SLURM_CPUS_PER_TASK} \
-      --mem 39000 \
+      --mem 79000 \
       --fs-license-file /license.txt \
       --fs-subjects-dir /data/fmriprep/sourcedata/freesurfer \
       --output-resolution 1.7 \
-      --recon-spec amico_noddi"
+      --recon-spec /code/ABCD_Recon.yml \
+      --report-output-level session"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
