@@ -20,12 +20,14 @@ def list_files(in_dir):
     # Don't include phase files
     mag_files = [mf for mf in mag_files if "part-phase" not in mf]
 
-    nordic_mag_files = [mf.replace("_rec-nordic", "") for mf in mag_files if "_rec-nordic" in mf]
+    mag_files_with_nordic = [
+        mf.replace("_rec-nordic", "") for mf in mag_files if "_rec-nordic" in mf
+    ]
 
     # Don't include NORDIC-denoised files
     mag_files = [mf for mf in mag_files if "_rec-nordic" not in mf]
 
-    mag_files_to_process = [mf for mf in mag_files if mf not in nordic_mag_files]
+    mag_files_to_process = [mf for mf in mag_files if mf not in mag_files_with_nordic]
 
     return mag_files_to_process
 
