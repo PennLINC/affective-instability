@@ -16,12 +16,18 @@ if __name__ == "__main__":
         subject_id = subject_folder.split("_")[0]
         print(subject_id)
         session_id = "1"
-        search = os.path.join(subject_dir, "CAMRIS^Satterthwaite/*func*_PhysioLog*")
+        search = os.path.join(subject_dir, "CAMRIS^Satterthwait*/*func*_PhysioLog*")
         physio_dirs = sorted(glob(search))
         physio_folders = [os.path.basename(physio_dir) for physio_dir in physio_dirs]
+        if not physio_dirs:
+            print(f'No physio found with pattern {os.path.join(subject_dir, "CAMRIS^Satterthwait*/*func*_PhysioLog*")}')
+        else:
+            print("\t" + "\n\t".join(physio_dirs))
+
         run_types = sorted(set([f.split("_PhysioLog")[0] for f in physio_folders]))
+        print("\n".join(run_types))
         for run_type in run_types:
-            search2 = os.path.join(subject_dir, "CAMRIS^Satterthwaite", run_type + "_PhysioLog*")
+            search2 = os.path.join(subject_dir, "CAMRIS^Satterthwait*", run_type + "_PhysioLog*")
             run_dirs = sorted(glob(search2))
             for i_run, run_dir in enumerate(run_dirs):
                 run_num = i_run + 1
