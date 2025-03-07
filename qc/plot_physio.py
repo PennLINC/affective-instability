@@ -23,7 +23,7 @@ def plot_physio(cardiac_files, subject):
 
     fig, axes = plt.subplots(figsize=(16, 16), nrows=len(cardiac_files), sharex=True)
 
-    max_time = 0
+    min_time, max_time = 0, 0
     for i, cardiac_file in enumerate(cardiac_files):
         task = cardiac_file.split("task-")[1].split("_")[0]
         respiratory_file = cardiac_file.replace("cardiac_", "respiratory_")
@@ -32,7 +32,7 @@ def plot_physio(cardiac_files, subject):
 
         cardiac_data = np.loadtxt(cardiac_file)
         respiratory_data = np.loadtxt(respiratory_file)
-        print(cardiac_data.shape)
+
         with open(cardiac_json, "r") as fo:
             cardiac_metadata = json.load(fo)
 
@@ -43,25 +43,30 @@ def plot_physio(cardiac_files, subject):
         respiratory_fs = respiratory_metadata["SamplingFrequency"]
         title = f"Subject {subject} Task {task}"
         print(title)
-        print(cardiac_metadata["StartTime"])
-        print(respiratory_metadata["StartTime"])
-        cardiac_time = (np.arange(0, cardiac_data.size) / cardiac_fs) - cardiac_metadata[
+        cardiac_time = (np.arange(0, cardiac_data.size) / cardiac_fs) + cardiac_metadata[
             "StartTime"
         ]
+        cardiac_data = (cardiac_data - np.nanmean(cardiac_data)) / np.nanstd(cardiac_data)
+        axes[i].plot(cardiac_time, cardiac_data - 5, label="cardiac")
+        max_time = max(max(cardiac_time), max_time)
+        min_time = min(min(cardiac_time), min_time)
+
         respiratory_time = (
             np.arange(0, respiratory_data.size) / respiratory_fs
-        ) - respiratory_metadata["StartTime"]
-        cardiac_data = (cardiac_data - np.nanmean(cardiac_data)) / np.nanstd(cardiac_data)
+        ) + respiratory_metadata["StartTime"]
         respiratory_data = (respiratory_data - np.nanmean(respiratory_data)) / np.nanstd(
             respiratory_data
         )
-        max_time = max(max(respiratory_time), max_time)
-        axes[i].plot(cardiac_time, cardiac_data - 5, label="cardiac")
         axes[i].plot(respiratory_time, respiratory_data + 5, label="respiratory")
+        axes[i].axvline(0, label="scan start", color="black")
+
+        max_time = max(max(respiratory_time), max_time)
+        min_time = min(min(respiratory_time), min_time)
         axes[i].legend()
         axes[i].set_title(title, fontsize=30)
 
-    axes[i].set_xlim(0, max_time)
+    axes[i].set_xlim(min_time, max_time)
+    axes[i].set_xlabel("Time (s)")
 
     fig.tight_layout()
     fig.savefig(f"../figures/{subject}_physio.png")
