@@ -26,42 +26,51 @@ def plot_physio(cardiac_files, subject):
     min_time, max_time = 0, 0
     for i, cardiac_file in enumerate(cardiac_files):
         task = cardiac_file.split("task-")[1].split("_")[0]
-        respiratory_file = cardiac_file.replace("cardiac_", "respiratory_")
-        cardiac_json = cardiac_file.replace(".tsv.gz", ".json")
-        respiratory_json = respiratory_file.replace(".tsv.gz", ".json")
+        title = f"Subject {subject} Task {task}"
+        print(title)
 
         cardiac_data = np.loadtxt(cardiac_file)
-        respiratory_data = np.loadtxt(respiratory_file)
-
+        cardiac_json = cardiac_file.replace(".tsv.gz", ".json")
         with open(cardiac_json, "r") as fo:
             cardiac_metadata = json.load(fo)
 
-        with open(respiratory_json, "r") as fo:
-            respiratory_metadata = json.load(fo)
-
         cardiac_fs = cardiac_metadata["SamplingFrequency"]
-        respiratory_fs = respiratory_metadata["SamplingFrequency"]
-        title = f"Subject {subject} Task {task}"
-        print(title)
         cardiac_time = (np.arange(0, cardiac_data.size) / cardiac_fs) + cardiac_metadata[
             "StartTime"
         ]
-        cardiac_data = (cardiac_data - np.nanmean(cardiac_data)) / np.nanstd(cardiac_data)
-        axes[i].plot(cardiac_time, cardiac_data - 5, label="cardiac")
         max_time = max(max(cardiac_time), max_time)
         min_time = min(min(cardiac_time), min_time)
 
-        respiratory_time = (
-            np.arange(0, respiratory_data.size) / respiratory_fs
-        ) + respiratory_metadata["StartTime"]
-        respiratory_data = (respiratory_data - np.nanmean(respiratory_data)) / np.nanstd(
-            respiratory_data
-        )
-        axes[i].plot(respiratory_time, respiratory_data + 5, label="respiratory")
-        axes[i].axvline(0, label="scan start", color="black")
+        # Normalize the cardiac data
+        cardiac_data = (cardiac_data - np.nanmean(cardiac_data)) / np.nanstd(cardiac_data)
 
-        max_time = max(max(respiratory_time), max_time)
-        min_time = min(min(respiratory_time), min_time)
+        if "recording-respiratory" in cardiac_file:
+            # Actually a respiratory file
+            axes[i].plot(cardiac_time, cardiac_data, label="respiratory")
+        else:
+            axes[i].plot(cardiac_time, cardiac_data - 5, label="cardiac")
+
+            respiratory_file = cardiac_file.replace("cardiac_", "respiratory_")
+            respiratory_json = respiratory_file.replace(".tsv.gz", ".json")
+            respiratory_data = np.loadtxt(respiratory_file)
+
+            with open(respiratory_json, "r") as fo:
+                respiratory_metadata = json.load(fo)
+
+            respiratory_fs = respiratory_metadata["SamplingFrequency"]
+            respiratory_time = (
+                np.arange(0, respiratory_data.size) / respiratory_fs
+            ) + respiratory_metadata["StartTime"]
+            # Normalize the respiratory data
+            respiratory_data = (respiratory_data - np.nanmean(respiratory_data)) / np.nanstd(
+                respiratory_data
+            )
+            axes[i].plot(respiratory_time, respiratory_data + 5, label="respiratory")
+
+            max_time = max(max(respiratory_time), max_time)
+            min_time = min(min(respiratory_time), min_time)
+
+        axes[i].axvline(0, label="scan start", color="black")
         axes[i].legend()
         axes[i].set_title(title, fontsize=30)
 
@@ -85,6 +94,16 @@ if __name__ == "__main__":
             )
         )
         if not cardiac_files:
-            print(f"No physio for {subject}")
-            continue
+            # Pretend respiratory is cardiac
+            cardiac_files = sorted(
+                glob(
+                    os.path.join(
+                        dset_dir, subject, "ses-*", "func", "*_recording-respiratory_physio.tsv.gz"
+                    )
+                )
+            )
+            if not cardiac_files:
+                print(f"No physio for {subject}")
+                continue
+
         plot_physio(cardiac_files, subject)
