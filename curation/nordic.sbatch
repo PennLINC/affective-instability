@@ -2,7 +2,7 @@
 #SBATCH --job-name=nordic
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1-19
+#SBATCH --array=1-6
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=40gb
 #SBATCH --time=2:00:00
