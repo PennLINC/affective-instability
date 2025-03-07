@@ -79,4 +79,7 @@ if __name__ == "__main__":
                 )
             )
         )
+        if not cardiac_files:
+            print(f"No physio for {subject}")
+            continue
         plot_physio(cardiac_files, subject)
