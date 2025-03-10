@@ -8,7 +8,7 @@ from nilearn import image, plotting
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/projects/pafin/derivatives/qsirecon"
+    in_dir = "/cbica/projects/pafin/derivatives/qsirecon/derivatives"
     out_dir = "../figures"
 
     patterns = {
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     }
     for title, pattern in patterns.items():
         # Get all scalar maps
-        scalar_maps = sorted(glob(pattern))
+        scalar_maps = sorted(glob(os.path.join(in_dir, pattern)))
         print(f"{title}: {len(scalar_maps)}")
 
         mean_img = image.mean_img(scalar_maps)
@@ -31,13 +31,15 @@ if __name__ == "__main__":
             mean_img,
             display_mode="z",
             cut_coords=[-30, -20, -10, 0, 10, 20, 30, 40, 50, 60],
-            ax=axs[0],
+            axes=axs[0],
+            figure=fig,
         )
         plotting.plot_stat_map(
             sd_img,
             display_mode="z",
             cut_coords=[-30, -20, -10, 0, 10, 20, 30, 40, 50, 60],
-            ax=axs[1],
+            axes=axs[1],
+            figure=fig,
         )
         fig.suptitle(title)
         plt.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"))
