@@ -2,7 +2,7 @@
 #SBATCH --job-name=qsirecon
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=2-12
+#SBATCH --array=1-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=36:00:00
@@ -43,7 +43,6 @@ cmd="apptainer run --cleanenv \
       --nprocs ${SLURM_CPUS_PER_TASK} \
       --mem 79000 \
       --fs-license-file /license.txt \
-      --fs-subjects-dir /data/fmriprep/sourcedata/freesurfer \
       --output-resolution 1.7 \
       --recon-spec /code/ABCD_Recon.yml \
       --report-output-level session"

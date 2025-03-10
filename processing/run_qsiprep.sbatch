@@ -2,7 +2,7 @@
 #SBATCH --job-name=qsiprep
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=2-12
+#SBATCH --array=1-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=36:00:00
@@ -50,7 +50,9 @@ cmd="apptainer run --cleanenv \
       --skip-bids-validation \
       --denoise-method dwidenoise \
       --output-resolution 1.7 \
-      --subject-anatomical-reference sessionwise"
+      --subject-anatomical-reference sessionwise \
+      --hmc-model 3dSHORE \
+      --pepolar-method DRBUDDI"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
