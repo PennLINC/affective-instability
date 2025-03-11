@@ -4,17 +4,90 @@ import json
 import os
 from glob import glob
 
+import numpy as np
 import pandas as pd
-from tedana.workflows import ica_reclassify_workflow, tedana_workflow
+from nilearn import image, masking
+from scipy import stats
+from tedana.workflows import tedana_workflow
 
 
-if __name__ == "__main__":
-    raw_dir = "/cbica/project/pafin/dset"
-    fmriprep_dir = "/cbica/project/pafin/derivatives/fmriprep"
-    aroma_dir = "/cbica/project/pafin/derivatives/fmripost_aroma"
-    tedana_out_dir = "/cbica/project/pafin/derivatives/tedana"
-    tedana_aroma_out_dir = "/cbica/project/pafin/derivatives/tedana+aroma"
+def minimum_image_regression(
+    *,
+    data_optcom: np.ndarray,
+    mixing: np.ndarray,
+    mask: np.ndarray,
+    component_table: pd.DataFrame,
+):
+    """Perform minimum image regression (MIR) to remove T1-like effects from BOLD-like components.
 
+    Parameters
+    ----------
+    data_optcom : (S x T) array_like
+        Optimally combined time series data
+    mixing : (T x C) array_like
+        Mixing matrix for converting input data to component space, where ``C``
+        is components and ``T`` is the same as in ``data_optcom``
+    mask : niimg
+        Boolean mask array
+    component_table : (C x X) :obj:`pandas.DataFrame`
+        Component metric table. One row for each component, with a column for
+        each metric. The index should be the component number.
+
+    Notes
+    -----
+    Minimum image regression operates by constructing a amplitude-normalized form of the multi-echo
+    high Kappa (MEHK) time series from BOLD-like ICA components,
+    and then taking the voxel-wise minimum over time.
+    This "minimum map" serves as a voxel-wise estimate of the T1-like effect in the time series.
+    From this minimum map, a T1-like global signal (i.e., a 1D time series) is estimated.
+    The component time series in the mixing matrix are then corrected for the T1-like effect by
+    regressing out the global signal time series from each.
+    Finally, the multi-echo denoised (MEDN) and MEHK time series are reconstructed from the
+    corrected mixing matrix and are written out to new files.
+    """
+
+    # Get accepted and ignored components
+    # Tedana has removed the "ignored" classification,
+    # so we must separate "accepted" components based on the classification tag(s).
+    ignore_tags = ["low variance", "accept borderline"]
+    pattern = "|".join(ignore_tags)  # Create a pattern that matches any of the ignore tags
+
+    # Select rows where the 'classification_tags' column contains any of the ignore tags
+    ign = component_table[
+        component_table.classification_tags.str.contains(pattern, na=False, regex=True)
+    ].index.values
+
+    acc = component_table[component_table.classification == "accepted"].index.values
+    # Ignored components are classified as "accepted", so we need to remove them from the list
+    acc = sorted(np.setdiff1d(acc, ign))
+
+    # Compute temporal regression
+    data_optcom_z = stats.zscore(data_optcom, axis=-1)
+    # component parameter estimates
+    comp_pes = np.linalg.lstsq(mixing, data_optcom_z.T, rcond=None)[0].T
+
+    # Build time series of just BOLD-like components (i.e., MEHK) and save T1-like effect
+    mehk_ts = np.dot(comp_pes[:, acc], mixing[:, acc].T)
+    t1_map = mehk_ts.min(axis=-1)  # map of T1-like effect
+    t1_map -= t1_map.mean()
+    t1_img = masking.unmask(t1_map, mask)
+    t1_map = t1_map[:, np.newaxis]
+
+    # Find the global signal based on the T1-like effect
+    gs_ts = np.linalg.lstsq(t1_map, data_optcom_z, rcond=None)[0]
+    glsig_df = pd.DataFrame(data=gs_ts.T, columns=["mir_global_signal"])
+
+    # Orthogonalize mixing matrix w.r.t. T1-GS
+    mixing_not1gs = mixing.T - np.dot(np.linalg.lstsq(gs_ts.T, mixing, rcond=None)[0].T, gs_ts)
+    mixing_not1gs_z = stats.zscore(mixing_not1gs, axis=-1)
+    mixing_not1gs_z = np.vstack((np.atleast_2d(np.ones(max(gs_ts.shape))), gs_ts, mixing_not1gs_z))
+
+    # Write T1-corrected components and mixing matrix
+    mixing_df = pd.DataFrame(data=mixing_not1gs.T, columns=component_table["Component"].values)
+    return t1_img, glsig_df, mixing_df
+
+
+def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
     base_files = sorted(
         glob(
             os.path.join(
@@ -71,7 +144,7 @@ if __name__ == "__main__":
             )
             fmriprep_files.append(fmriprep_file)
 
-    tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func", prefix)
+    tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
     os.makedirs(tedana_run_out_dir, exist_ok=True)
 
     tedana_workflow(
@@ -84,95 +157,174 @@ if __name__ == "__main__":
         combmode="t2s",
         tree="minimal",
         mixm=mixing,
-    )
-
-    tedana_registry = os.path.join(
-        tedana_run_out_dir,
-        f"{prefix}_desc-tedana_registry.json",
-    )
-
-    # Now that tedana is done, we need to combine the classifications from tedana with the AROMA classifications
-    # and save the combined classifications to the derivatives folder
-    # Get the AROMA classifications
-    aroma_classifications = os.path.join(
-        aroma_dir,
-        subject,
-        "ses-1",
-        "func",
-        f"{mask_base}_part-mag_space-MNI152NLin6Asym_res-2_desc-aroma_metrics.tsv",
-    )
-    aroma_df = pd.read_table(aroma_classifications)
-
-    # Get the tedana classifications
-    tedana_classifications = os.path.join(
-        tedana_out_dir,
-        subject,
-        "ses-1",
-        "func",
-        f"{prefix}_desc-tedana_metrics.tsv",
-    )
-    tedana_df = pd.read_table(tedana_classifications)
-
-    assert (
-        aroma_df.shape[0] == tedana_df.shape[0]
-    ), "AROMA and tedana have different numbers of components"
-
-    # Combine the classifications
-    for i_row, aroma_row in aroma_df.iterrows():
-        aroma_clf = aroma_row["classification"]
-        aroma_rationale = aroma_row["rationale"]
-        tedana_clf = tedana_df.loc[i_row, "classification"]
-        tedana_rationale = tedana_df.loc[i_row, "rationale"]
-
-        if aroma_clf == "rejected":
-            tedana_clf = "rejected"
-            tedana_rationale += f" AROMA {aroma_rationale}"
-
-        tedana_df.iloc[i_row, "classification"] = tedana_clf
-        tedana_df.iloc[i_row, "rationale"] = tedana_rationale
-
-    # Save the combined classifications
-    tedana_aroma_run_out_dir = os.path.join(
-        tedana_aroma_out_dir,
-        subject,
-        "ses-1",
-        "func",
-        prefix,
-    )
-    os.makedirs(tedana_aroma_run_out_dir, exist_ok=True)
-
-    # Replace the old classifications with the new ones
-    combined_classifications = os.path.join(
-        tedana_aroma_run_out_dir,
-        f"{prefix}_desc-tedana+aroma_metrics.tsv",
-    )
-    tedana_df.to_csv(
-        combined_classifications,
-        sep="\t",
-        index=False,
-    )
-
-    # Now, run ica_reclassify
-    # XXX: Requires version that accepts ctab parameter
-    ica_reclassify_workflow(
-        registry=tedana_registry,
-        out_dir=tedana_aroma_run_out_dir,
+        gscontrol=["mir"],
         tedort=True,
-        prefix=prefix,
-        ctab=combined_classifications,
     )
 
-    # Use classifications and time series of components to create a confounds file
-    # for XCP-D
-    noise_components = tedana_df.loc[tedana_df["classification"] == "noise", "Component"].tolist()
-    confounds_file = os.path.join(
-        tedana_aroma_run_out_dir,
-        f"{prefix}_desc-confounds_timeseries.tsv",
+
+def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
+    import numpy as np
+
+    base_files = sorted(
+        glob(
+            os.path.join(
+                raw_dir,
+                "sub-*",
+                "ses-1",
+                "func",
+                "sub-*_ses-1_*_echo-1_part-mag_bold.nii.gz",
+            )
+        )
     )
-    orth_timeseries = os.path.join(
-        tedana_aroma_run_out_dir,
-        f"{prefix}_desc-ICAOrth_mixing.tsv",
-    )
-    confounds_df = pd.read_table(orth_timeseries)
-    confounds_df = confounds_df[noise_components]
-    confounds_df.to_csv(confounds_file, sep="\t", index=False)
+    for base_file in base_files:
+        base_filename = os.path.basename(base_file)
+        subject = base_filename.split("_")[0]
+        prefix = base_filename.split("_echo-1")[0]
+
+        tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
+        # Get the fMRIPrep brain mask
+        mask_base = base_filename.split("_echo-1")[0]
+
+        # Combine the classifications from tedana with the AROMA classifications
+        # and save the combined classifications to the derivatives folder
+        # Get the AROMA classifications
+        aroma_classifications = os.path.join(
+            aroma_dir,
+            subject,
+            "ses-1",
+            "func",
+            f"{mask_base}_part-mag_space-MNI152NLin6Asym_res-2_desc-aroma_metrics.tsv",
+        )
+        aroma_df = pd.read_table(aroma_classifications)
+
+        # Get the tedana classifications
+        tedana_classifications = os.path.join(
+            tedana_run_out_dir,
+            f"{prefix}_desc-tedana_metrics.tsv",
+        )
+        tedana_df = pd.read_table(tedana_classifications)
+
+        assert (
+            aroma_df.shape[0] == tedana_df.shape[0]
+        ), "AROMA and tedana have different numbers of components"
+
+        # Combine the classifications
+        for i_row, aroma_row in aroma_df.iterrows():
+            aroma_clf = aroma_row["classification"]
+            tedana_rationale = tedana_df.loc[i_row, "classification_tags"]
+
+            if aroma_clf == "rejected":
+                aroma_rationales = aroma_row["rationale"].split(";")
+                aroma_rationales = [
+                    f"AROMA {aroma_rationale}" for aroma_rationale in aroma_rationales
+                ]
+                aroma_rationale = ";".join(aroma_rationales)
+                tedana_rationale += f";{aroma_rationale}"
+                rationales = tedana_rationale.split(";")
+                rationales = [
+                    r for r in rationales if r not in ["low variance", "accept borderline"]
+                ]
+                tedana_rationale = ";".join(rationales)
+
+                tedana_df.iloc[i_row, "classification"] = "rejected"
+                tedana_df.iloc[i_row, "classification_tags"] = tedana_rationale
+
+        # Save the combined classifications
+        tedana_aroma_run_out_dir = os.path.join(
+            tedana_aroma_out_dir,
+            subject,
+            "ses-1",
+            "func",
+        )
+        os.makedirs(tedana_aroma_run_out_dir, exist_ok=True)
+
+        # Write out updated component table
+        combined_classifications = os.path.join(
+            tedana_aroma_run_out_dir,
+            f"{prefix}_desc-tedana+aroma_metrics.tsv",
+        )
+        tedana_df.to_csv(
+            combined_classifications,
+            sep="\t",
+            index=False,
+        )
+
+        # Load optimally combined data, mixing matrix, adaptive mask
+        optcom = os.path.join(
+            tedana_run_out_dir,
+            f"{prefix}_desc-optcom_bold.nii.gz",
+        )
+        mixing = os.path.join(
+            tedana_run_out_dir,
+            f"{prefix}_desc-ICA_mixing.tsv",
+        )
+        adaptive_mask = os.path.join(
+            tedana_run_out_dir,
+            f"{prefix}_desc-adaptiveGoodSignal_mask.nii.gz",
+        )
+        assert os.path.isfile(optcom), optcom
+        assert os.path.isfile(mixing), mixing
+        assert os.path.isfile(adaptive_mask), adaptive_mask
+
+        mixing_df = pd.read_table(mixing)
+        mixing_arr = mixing_df.to_numpy()
+
+        # Orthogonalize rejected components with respect to accepted components
+        comps_accepted = tedana_df.loc[tedana_df["classification"] == "accepted"].index.values
+        comps_rejected = tedana_df.loc[tedana_df["classification"] == "rejected"].index.values
+        acc_ts = mixing_arr[:, comps_accepted]
+        rej_ts = mixing_arr[:, comps_rejected]
+        betas = np.linalg.lstsq(acc_ts, rej_ts, rcond=None)[0]
+        pred_rej_ts = np.dot(acc_ts, betas)
+        resid = rej_ts - pred_rej_ts
+        mixing_arr[:, comps_rejected] = resid
+
+        # Write out orthogonalized mixing matrix
+        mixing_df = pd.DataFrame(columns=mixing_df.columns, data=mixing_arr)
+        mixing_df.to_csv(
+            os.path.join(
+                tedana_aroma_run_out_dir,
+                f"{prefix}_desc-ICAOrth_mixing.tsv",
+            ),
+            sep="\t",
+        )
+
+        # Perform minimum image regression on orthogonalized mixing matrix
+        mask_img = image.math_img("(img > 0).astype(int)", img=adaptive_mask)
+        optcom_arr = masking.apply_mask(optcom, mask_img).T
+        t1_img, glsig_df, mixing_df = minimum_image_regression(
+            data_optcom=optcom_arr,
+            mixing=mixing_arr,
+            mask=mask_img,
+            component_table=tedana_df,
+        )
+        t1_img.to_filename(os.path.join(tedana_aroma_run_out_dir, f"{prefix}_desc-t1_map.nii.gz"))
+        glsig_df.to_csv(
+            os.path.join(tedana_aroma_run_out_dir, f"{prefix}_desc-glsig_timeseries.tsv"),
+            sep="\t",
+            index=False,
+        )
+        mixing_df.to_csv(
+            os.path.join(tedana_aroma_run_out_dir, f"{prefix}_desc-ICAOrthMIR_mixing.tsv"),
+            sep="\t",
+        )
+        mixing_arr = mixing_df.to_numpy()
+        confounds_arr = mixing_arr[:, comps_accepted]
+        rej_columns = [mixing_df.columns[i] for i in comps_rejected]
+        confounds_df = pd.DataFrame(columns=rej_columns, data=confounds_arr)
+        confounds_df.to_csv(
+            os.path.join(tedana_aroma_run_out_dir, f"{prefix}_desc-confounds_timeseries.tsv"),
+            sep="\t",
+            index=False,
+        )
+
+
+if __name__ == "__main__":
+    raw_dir_ = "/cbica/project/pafin/dset"
+    fmriprep_dir_ = "/cbica/project/pafin/derivatives/fmriprep"
+    aroma_dir_ = "/cbica/project/pafin/derivatives/fmripost_aroma"
+    tedana_out_dir_ = "/cbica/project/pafin/derivatives/tedana"
+    tedana_aroma_out_dir_ = "/cbica/project/pafin/derivatives/tedana+aroma"
+
+    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, tedana_out_dir_)
+    run_tedana_aroma(raw_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)
