@@ -33,7 +33,7 @@ cmd="apptainer run --cleanenv \
       -B ${DERIV_DIR}:/data \
       -B ${SCRATCH_DIR}:/work \
       -B ${FS_LICENSE}:/license.txt \
-      /cbica/projects/pafin/apptainer/qsirecon-1.0.0.sif \
+      /cbica/projects/pafin/apptainer/qsirecon-1.0.1.sif \
       /data/qsiprep \
       /data/qsirecon \
       participant \
