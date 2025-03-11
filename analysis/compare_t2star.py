@@ -104,7 +104,11 @@ def collect_t2star_results(in_dir):
         nonordic_t2_arr = masking.apply_mask(nonordic_t2smap, nonordic_mask)
 
         corr = np.corrcoef(nordic_t2_arr, nonordic_t2_arr)[0, 1]
-        row = [fname] + [f.split("-")[1] for f in fileparts] + [corr, nordic_t2_arr.mean(), nonordic_t2_arr.mean()]
+        row = (
+            [fname]
+            + [f.split("-")[1] for f in fileparts]
+            + [corr, nordic_t2_arr.mean(), nonordic_t2_arr.mean()]
+        )
         rows.append(row)
 
     columns = (
@@ -118,6 +122,26 @@ def collect_t2star_results(in_dir):
     print(len(rows[0]))
     df = pd.DataFrame(rows, columns=columns)
     df.to_csv("../data/t2star_nordic_comparison.tsv", sep="\t", index=False)
+
+    # Plot the results
+    pal = sns.color_palette("crest", df.shape[0])
+    sns.set_style("whitegrid")
+    fig, ax = plt.subplots(figsize=(9, 9))
+    df2 = df.sort_values(by=["nonordic_t2_mean"])
+    df2["nonordic_t2_mean"] = df2["nonordic_t2_mean"] * 1000
+    df2["nordic_t2_mean"] = df2["nordic_t2_mean"] * 1000
+    df2 = df2.reset_index()
+    for i_row, row in df2.iterrows():
+        ax.plot((0, 1), (row["nonordic_t2_mean"], row["nordic_t2_mean"]), color=pal[i_row])
+        ax.scatter((0, 1), (row["nonordic_t2_mean"], row["nordic_t2_mean"]), color=pal[i_row])
+
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["None", "NORDIC"], fontsize=16)
+    ax.set_xlabel("Denoising", fontsize=24)
+    ax.set_ylabel("Mean T2* (ms)", fontsize=24)
+    ax.set_ylim(42.5, 57.5)
+    ax.grid(visible=False, axis="x")
+    fig.savefig("../figures/t2star_nordic_comparison.png")
 
 
 def plot_echo_wise_values(in_dir):
