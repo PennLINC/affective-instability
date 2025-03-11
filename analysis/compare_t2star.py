@@ -68,8 +68,11 @@ def collect_t2star_results(in_dir):
         fname = os.path.basename(nordic_mask)
         print(fname)
         fileparts = fname.split("_")
+        fileparts = [p for p in fileparts if "-" in p]
         fileparts = [p for p in fileparts if "part" not in p]
         fileparts = [p for p in fileparts if "desc" not in p]
+        fileparts = [p for p in fileparts if "acq" not in p]
+        fileparts = [p for p in fileparts if "rec" not in p]
 
         nonordic_mask = nordic_mask.replace("rec-nordic_", "")
 
@@ -101,11 +104,7 @@ def collect_t2star_results(in_dir):
         nonordic_t2_arr = masking.apply_mask(nonordic_t2smap, nonordic_mask)
 
         corr = np.corrcoef(nordic_t2_arr, nonordic_t2_arr)[0, 1]
-        row = (
-            [fname]
-            + [f.split("-")[1] for f in fileparts]
-            + [corr, nordic_t2_arr.mean(), nonordic_t2_arr.mean()]
-        )
+        row = [fname] + [f.split("-")[1] for f in fileparts] + [corr, nordic_t2_arr.mean(), nonordic_t2_arr.mean()]
         rows.append(row)
 
     columns = (
@@ -113,6 +112,10 @@ def collect_t2star_results(in_dir):
         + [f.split("-")[0] for f in fileparts]
         + ["pearson_correlation", "nordic_t2_mean", "nonordic_t2_mean"]
     )
+    print(columns)
+    print(rows[0])
+    print(len(rows))
+    print(len(rows[0]))
     df = pd.DataFrame(rows, columns=columns)
     df.to_csv("../data/t2star_nordic_comparison.tsv", sep="\t", index=False)
 
