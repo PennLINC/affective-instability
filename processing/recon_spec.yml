@@ -1,7 +1,7 @@
 name: PAFIN_Recon
 nodes:
 
-# Extrapolate to a HCP-YA scheme
+# Extrapolate to a DSI scheme
 -   action: 3dSHORE_reconstruction
     input: qsirecon
     name: extrapolate_dsi
