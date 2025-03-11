@@ -116,10 +116,6 @@ def collect_t2star_results(in_dir):
         + [f.split("-")[0] for f in fileparts]
         + ["pearson_correlation", "nordic_t2_mean", "nonordic_t2_mean"]
     )
-    print(columns)
-    print(rows[0])
-    print(len(rows))
-    print(len(rows[0]))
     df = pd.DataFrame(rows, columns=columns)
     df.to_csv("../data/t2star_nordic_comparison.tsv", sep="\t", index=False)
 

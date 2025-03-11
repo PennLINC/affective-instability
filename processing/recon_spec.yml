@@ -4,9 +4,9 @@ nodes:
 # Extrapolate to a HCP-YA scheme
 -   action: 3dSHORE_reconstruction
     input: qsirecon
-    name: extrapolate_hcp
+    name: extrapolate_dsi
     parameters:
-        extrapolate_scheme: HCP
+        extrapolate_scheme: DSIQ5
         lambdaL: 1.0e-08
         lambdaN: 1.0e-08
         radial_order: 8
@@ -14,11 +14,11 @@ nodes:
         write_fibgz: false
         write_mif: false
     software: Dipy
-    qsirecon_suffix: extrapolateHCP
+    qsirecon_suffix: extrapolateDSIQ5
 
 # NODDI with WM parameters
 -   action: fit_noddi
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: fit_noddi_wm
     parameters:
         dIso: 0.003
@@ -29,7 +29,7 @@ nodes:
 
 # NODDI with GM parameters
 -   action: fit_noddi
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: fit_noddi_gm
     parameters:
         dIso: 0.003
@@ -40,7 +40,7 @@ nodes:
 
 # DIPY diffusion kurtosis modeling
 -   action: DKI_reconstruction
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: dipy_dki
     parameters:
         write_fibgz: false
@@ -50,7 +50,7 @@ nodes:
 
 # TORTOISE MAPMRI w/ small b-val tensor fit
 -   action: estimate
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: tortoise_dtmapmri
     parameters:
         big_delta: null
@@ -66,7 +66,7 @@ nodes:
 
 # Fit the GQI model to the data
 -   action: reconstruction
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: dsistudio_gqi
     parameters:
         method: gqi
@@ -90,7 +90,7 @@ nodes:
 # Do MSMT on all shells
 -   action: csd
     software: MRTrix3
-    input: extrapolate_hcp
+    input: extrapolate_dsi
     name: msmt_csd
     parameters:
         fod:
