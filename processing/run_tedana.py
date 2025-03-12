@@ -88,21 +88,24 @@ def minimum_image_regression(
 
 
 def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
-    base_files = sorted(
-        glob(
-            os.path.join(
-                raw_dir,
-                "sub-*",
-                "ses-1",
-                "func",
-                "sub-*_ses-1_*_echo-1_part-mag_bold.nii.gz",
-            )
-        )
+    print("TEDANA")
+
+    base_search = os.path.join(
+        raw_dir,
+        "sub-*",
+        "ses-1",
+        "func",
+        "sub-*_ses-1_*_echo-1_part-mag_bold.nii.gz",
     )
+    base_files = sorted(glob(base_search))
+    if not base_files:
+        raise FileNotFoundError(base_search)
+
     for base_file in base_files:
         raw_files = sorted(glob(base_file.replace("echo-1", "echo-*")))
 
         base_filename = os.path.basename(base_file)
+        print(f"\t{base_filename}")
         subject = base_filename.split("_")[0]
         prefix = base_filename.split("_echo-1")[0]
 
@@ -115,8 +118,10 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
             "func",
             f"{mask_base}_part-mag_desc-brain_mask.nii.gz",
         )
+        assert os.path.isfile(mask), mask
 
         # Get the fMRIPost-AROMA mixing file
+        mask_base = "_".join([p for p in mask_base.split("_") if not p.startswith("dir")])
         mixing = os.path.join(
             aroma_dir,
             subject,
@@ -124,11 +129,12 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
             "func",
             f"{mask_base}_part-mag_space-MNI152NLin6Asym_res-2_desc-melodic_mixing.tsv",
         )
+        assert os.path.isfile(mixing), mixing
 
         echo_times = []
         fmriprep_files = []
         for raw_file in raw_files:
-            base_query = raw_file.split("_bold.nii.gz")[0]
+            base_query = os.path.basename(raw_file).split("_bold.nii.gz")[0]
 
             # Get echo time from json file
             with open(raw_file.replace(".nii.gz", ".json"), "r") as f:
@@ -142,28 +148,31 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
                 "func",
                 f"{base_query}_desc-preproc_bold.nii.gz",
             )
+            assert os.path.isfile(fmriprep_file), fmriprep_file
             fmriprep_files.append(fmriprep_file)
 
-    tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
-    os.makedirs(tedana_run_out_dir, exist_ok=True)
+        tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
+        os.makedirs(tedana_run_out_dir, exist_ok=True)
 
-    tedana_workflow(
-        data=fmriprep_files,
-        tes=echo_times,
-        mask=mask,
-        out_dir=tedana_run_out_dir,
-        prefix=prefix,
-        fittype="curvefit",
-        combmode="t2s",
-        tree="minimal",
-        mixm=mixing,
-        gscontrol=["mir"],
-        tedort=True,
-    )
+        tedana_workflow(
+            data=fmriprep_files,
+            tes=echo_times,
+            mask=mask,
+            out_dir=tedana_run_out_dir,
+            prefix=prefix,
+            fittype="curvefit",
+            combmode="t2s",
+            tree="minimal",
+            mixm=mixing,
+            gscontrol=["mir"],
+            tedort=True,
+        )
 
 
 def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
     import numpy as np
+
+    print("TEDANA+AROMA")
 
     base_files = sorted(
         glob(
@@ -178,6 +187,7 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
     )
     for base_file in base_files:
         base_filename = os.path.basename(base_file)
+        print(f"\t{base_filename}")
         subject = base_filename.split("_")[0]
         prefix = base_filename.split("_echo-1")[0]
 
@@ -320,11 +330,11 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
 
 
 if __name__ == "__main__":
-    raw_dir_ = "/cbica/project/pafin/dset"
-    fmriprep_dir_ = "/cbica/project/pafin/derivatives/fmriprep"
-    aroma_dir_ = "/cbica/project/pafin/derivatives/fmripost_aroma"
-    tedana_out_dir_ = "/cbica/project/pafin/derivatives/tedana"
-    tedana_aroma_out_dir_ = "/cbica/project/pafin/derivatives/tedana+aroma"
+    raw_dir_ = "/cbica/projects/pafin/dset"
+    fmriprep_dir_ = "/cbica/projects/pafin/derivatives/fmriprep"
+    aroma_dir_ = "/cbica/projects/pafin/derivatives/fmripost_aroma"
+    tedana_out_dir_ = "/cbica/projects/pafin/derivatives/tedana"
+    tedana_aroma_out_dir_ = "/cbica/projects/pafin/derivatives/tedana+aroma"
 
     run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, tedana_out_dir_)
     run_tedana_aroma(raw_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)
