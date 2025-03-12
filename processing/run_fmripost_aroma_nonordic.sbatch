@@ -2,7 +2,7 @@
 #SBATCH --job-name=aroma
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1-11
+#SBATCH --array=1-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=48:00:00
@@ -33,7 +33,7 @@ cmd="apptainer run --home $HOME --cleanenv --containall --writable-tmpfs \
       -B ${SCRATCH_DIR}:/work \
       -B ${CODE_DIR}:/code \
       -B ${FS_LICENSE}:/license.txt \
-      /cbica/projects/pafin/apptainer/fmripost_aroma-0.0.9.sif \
+      /cbica/projects/pafin/apptainer/fmripost_aroma-0.0.10.sif \
       /deriv/fmriprep \
       /deriv/fmripost_aroma \
       participant \
@@ -43,7 +43,8 @@ cmd="apptainer run --home $HOME --cleanenv --containall --writable-tmpfs \
       --omp-nthreads ${SLURM_CPUS_PER_TASK} \
       --nprocs ${SLURM_CPUS_PER_TASK} \
       --mem_mb 79000 \
-      --bids-filter-file /code/processing/filter_nonordic.json"
+      --bids-filter-file /code/processing/filter_nonordic.json \
+      --stop-on-first-crash"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
