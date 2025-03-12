@@ -4,6 +4,7 @@ import json
 import os
 from glob import glob
 
+import nibabel as nb
 import numpy as np
 import pandas as pd
 from nilearn import image, masking
@@ -87,7 +88,7 @@ def minimum_image_regression(
     return t1_img, glsig_df, mixing_df
 
 
-def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
+def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
     print("TEDANA")
 
     base_search = os.path.join(
@@ -120,6 +121,28 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
         )
         assert os.path.isfile(mask), mask
 
+        # Get the fMRIPrep confounds file and identify the number of non-steady-state volumes
+        confounds_file = os.path.join(
+            fmriprep_dir,
+            subject,
+            "ses-1",
+            "func",
+            f"{mask_base}_desc-confounds_timeseries.tsv",
+        )
+        confounds_df = pd.read_table(confounds_file)
+        nss_cols = [c for c in confounds_df.columns if c.startswith("non_steady_state_outlier")]
+
+        dummy_scans = 0
+        if nss_cols:
+            initial_volumes_df = confounds_df[nss_cols]
+            dummy_scans = np.any(initial_volumes_df.to_numpy(), axis=1)
+            dummy_scans = np.where(dummy_scans)[0]
+
+            # reasonably assumes all NSS volumes are contiguous
+            dummy_scans = int(dummy_scans[-1] + 1)
+
+        print(f"\t\t{dummy_scans} dummy scans")
+
         # Get the fMRIPost-AROMA mixing file
         mask_base = "_".join([p for p in mask_base.split("_") if not p.startswith("dir")])
         mixing = os.path.join(
@@ -149,7 +172,16 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
                 f"{base_query}_desc-preproc_bold.nii.gz",
             )
             assert os.path.isfile(fmriprep_file), fmriprep_file
-            fmriprep_files.append(fmriprep_file)
+
+            # Remove non-steady-state volumes
+            echo_img = nb.load(fmriprep_file)
+            echo_img = echo_img.slicer[:, :, :, dummy_scans:]
+            temporary_file = os.path.join(
+                temp_dir,
+                os.path.basename(fmriprep_file),
+            )
+            echo_img.to_filename(temporary_file)
+            fmriprep_files.append(temporary_file)
 
         tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
         os.makedirs(tedana_run_out_dir, exist_ok=True)
@@ -170,8 +202,6 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir):
 
 
 def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
-    import numpy as np
-
     print("TEDANA+AROMA")
 
     base_files = sorted(
@@ -333,8 +363,11 @@ if __name__ == "__main__":
     raw_dir_ = "/cbica/projects/pafin/dset"
     fmriprep_dir_ = "/cbica/projects/pafin/derivatives/fmriprep"
     aroma_dir_ = "/cbica/projects/pafin/derivatives/fmripost_aroma"
+    temp_dir_ = "/cbica/comp_space/pafin/tedana_temp"
     tedana_out_dir_ = "/cbica/projects/pafin/derivatives/tedana"
     tedana_aroma_out_dir_ = "/cbica/projects/pafin/derivatives/tedana+aroma"
 
-    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, tedana_out_dir_)
+    os.makedirs(temp_dir_, exist_ok=True)
+
+    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
     run_tedana_aroma(raw_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)
