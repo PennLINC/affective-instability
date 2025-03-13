@@ -19,9 +19,10 @@ if __name__ == "__main__":
         scalar_maps = sorted(glob(os.path.join(in_dir, pattern)))
         scalar_maps = [f for f in scalar_maps if "PILOT" not in f]
         print(f"{title}: {len(scalar_maps)}")
+        scalar_imgs = [image.math_img("img * 1000", img=img) for img in scalar_maps]
 
-        mean_img = image.mean_img(scalar_maps, copy_header=True)
-        sd_img = image.math_img("np.std(img, axis=3)", img=scalar_maps)
+        mean_img = image.mean_img(scalar_imgs, copy_header=True)
+        sd_img = image.math_img("np.std(img, axis=3)", img=scalar_imgs)
 
         # Plot mean and SD
         fig, axs = plt.subplots(2, 1, figsize=(10, 5))
@@ -32,6 +33,10 @@ if __name__ == "__main__":
             title="Mean",
             axes=axs[0],
             figure=fig,
+            symmetric_cbar=False,
+            vmin=0,
+            vmax=150,
+            cmap="YlOrRd",
         )
         plotting.plot_stat_map(
             sd_img,
@@ -40,6 +45,9 @@ if __name__ == "__main__":
             title="Standard Deviation",
             axes=axs[1],
             figure=fig,
+            symmetric_cbar=False,
+            vmin=0,
+            cmap="YlOrRd",
         )
         fig.suptitle(title)
         plt.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"))

@@ -36,6 +36,10 @@ if __name__ == "__main__":
             title="Mean",
             axes=axs[0],
             figure=fig,
+            symmetric_cbar=False,
+            vmin=0,
+            vmax=120,
+            cmap="YlOrRd",
         )
         plotting.plot_stat_map(
             sd_img,
@@ -44,6 +48,9 @@ if __name__ == "__main__":
             title="Standard Deviation",
             axes=axs[1],
             figure=fig,
+            symmetric_cbar=False,
+            vmin=0,
+            cmap="YlOrRd",
         )
         fig.suptitle(title)
         plt.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"))
