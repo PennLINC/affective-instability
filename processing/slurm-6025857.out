@@ -1,0 +1,99 @@
+/var/spool/slurmd/job6025857/slurm_script: line 9: /cbica/projects/pafin/.bashrc: Permission denied
+Run 'mamba init' to be able to run mamba activate/deactivate
+and start a new shell session. Or use conda to activate/deactivate.
+
+INFO     tedana:tedana_workflow:569 Using output directory: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func
+INFO     tedana:tedana_workflow:587 Initializing and validating component selection tree
+WARNING  component_selector:validate_tree:141 Decision tree includes fields that are not used or logged ['_comment']
+INFO     component_selector:__init__:326 Performing component selection with minimal_decision_tree
+INFO     component_selector:__init__:327 first version of minimal decision tree
+INFO     tedana:tedana_workflow:590 Loading input data: ['/cbica/comp_space/pafin/tedana_temp/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_desc-preproc_bold.nii.gz', '/cbica/comp_space/pafin/tedana_temp/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-2_part-mag_desc-preproc_bold.nii.gz', '/cbica/comp_space/pafin/tedana_temp/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-3_part-mag_desc-preproc_bold.nii.gz', '/cbica/comp_space/pafin/tedana_temp/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-4_part-mag_desc-preproc_bold.nii.gz', '/cbica/comp_space/pafin/tedana_temp/sub-24053_ses-1_task-bao_dir-AP_run-01_echo-5_part-mag_desc-preproc_bold.nii.gz']
+INFO     io:__init__:155 Generating figures directory: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/figures
+INFO     tedana:tedana_workflow:676 Combining user-defined mask and T2* map to generate mask
+INFO     utils:make_adaptive_mask:198 Echo-wise intensity thresholds for adaptive mask: [5653.23669131 3592.6570638  2310.65512346 1458.94702855  771.71095011]
+WARNING  utils:make_adaptive_mask:227 527 voxels in user-defined mask do not have good signal. Removing voxels from mask.
+INFO     combine:make_optcom:192 Optimally combining data with voxel-wise T2* estimates
+INFO     tedana:tedana_workflow:758 Writing optimally combined data set: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_desc-optcom_bold.nii.gz
+INFO     tedana:tedana_workflow:854 Using supplied mixing matrix from ICA
+INFO     collect:generate_metrics:150 Calculating weight maps
+INFO     collect:generate_metrics:162 Calculating parameter estimate maps for optimally combined data
+INFO     collect:generate_metrics:182 Calculating z-statistic maps
+INFO     collect:generate_metrics:192 Calculating F-statistic maps
+INFO     collect:generate_metrics:216 Thresholding z-statistic maps
+INFO     collect:generate_metrics:226 Calculating T2* F-statistic maps
+INFO     collect:generate_metrics:236 Calculating S0 F-statistic maps
+INFO     collect:generate_metrics:247 Counting significant voxels in T2* F-statistic maps
+INFO     collect:generate_metrics:253 Counting significant voxels in S0 F-statistic maps
+INFO     collect:generate_metrics:260 Thresholding optimal combination beta maps to match T2* F-statistic maps
+INFO     collect:generate_metrics:269 Thresholding optimal combination beta maps to match S0 F-statistic maps
+INFO     collect:generate_metrics:279 Calculating kappa and rho
+INFO     collect:generate_metrics:288 Calculating variance explained
+INFO     collect:generate_metrics:294 Calculating normalized variance explained
+INFO     collect:generate_metrics:301 Calculating DSI between thresholded T2* F-statistic and optimal combination beta maps
+INFO     collect:generate_metrics:311 Calculating DSI between thresholded S0 F-statistic and optimal combination beta maps
+WARNING  utils:dice:309 2 of 39 components have empty maps, resulting in Dice values of 0. Please check your component table for dice columns with 0-values.
+/gpfs/fs001/cbica/projects/pafin/miniforge3/envs/processing/lib/python3.11/site-packages/tedana/utils.py:319: RuntimeWarning: invalid value encountered in divide
+  dsi = (2.0 * intersection.sum(axis=axis)) / arr_sum
+INFO     collect:generate_metrics:322 Calculating signal-noise t-statistics
+/gpfs/fs001/cbica/projects/pafin/miniforge3/envs/processing/lib/python3.11/site-packages/tedana/metrics/dependence.py:573: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  (signal_minus_noise_t[i_comp], signal_minus_noise_p[i_comp]) = stats.ttest_ind(
+INFO     tedica:automatic_selection:56 Performing ICA component selection with tree: minimal
+INFO     selection_nodes:manual_classify:104 Step 0: manual_classify: Set all to unclassified 
+INFO     selection_utils:log_decision_tree_step:436 Step 0: manual_classify applied to 39 components. 39 True -> unclassified. 0 False -> nochange.
+INFO     selection_nodes:manual_classify:136 Step 0: manual_classify component classification tags are cleared
+INFO     selection_utils:log_classification_counts:481 Step 0: Total component classifications: 39 unclassified
+INFO     selection_nodes:dec_left_op_right:389 Step 1: left_op_right: rejected if rho>kappa, else nochange
+INFO     selection_utils:log_decision_tree_step:436 Step 1: left_op_right applied to 39 components. 3 True -> rejected. 36 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 1: Total component classifications: 3 rejected, 36 unclassified
+INFO     selection_nodes:dec_left_op_right:389 Step 2: left_op_right: rejected if ['countsigFS0>countsigFT2 & countsigFT2>0'], else nochange
+INFO     selection_utils:log_decision_tree_step:436 Step 2: left_op_right applied to 39 components. 6 True -> rejected. 33 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 2: Total component classifications: 7 rejected, 32 unclassified
+INFO     selection_nodes:calc_median:653 Step 3: calc_median: Median(median_varex)
+INFO     selection_utils:log_decision_tree_step:448 Step 3: calc_median calculated: median_varex=2.1241346596054345
+INFO     selection_utils:log_classification_counts:481 Step 3: Total component classifications: 7 rejected, 32 unclassified
+INFO     selection_nodes:dec_left_op_right:389 Step 4: left_op_right: rejected if ['dice_FS0>dice_FT2 & variance explained>2.12'], else nochange
+INFO     selection_utils:log_decision_tree_step:436 Step 4: left_op_right applied to 39 components. 5 True -> rejected. 34 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 4: Total component classifications: 9 rejected, 30 unclassified
+INFO     selection_nodes:dec_left_op_right:389 Step 5: left_op_right: rejected if ['0>signal-noise_t & variance explained>2.12'], else nochange
+INFO     selection_utils:comptable_classification_changer:282 Step 5: No components fit criterion True to change classification
+INFO     selection_utils:log_decision_tree_step:436 Step 5: left_op_right applied to 39 components. 0 True -> rejected. 39 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 5: Total component classifications: 9 rejected, 30 unclassified
+INFO     selection_nodes:calc_kappa_elbow:757 Step 6: calc_kappa_elbow: Calc Kappa Elbow
+INFO     selection_utils:kappa_elbow_kundu:651 Calculating kappa elbow based on min of all and nonsig components.
+INFO     selection_utils:log_decision_tree_step:448 Step 6: calc_kappa_elbow calculated: kappa_elbow_kundu=18.691522021231375, kappa_allcomps_elbow=18.691522021231375, kappa_nonsig_elbow=18.691522021231375, varex_upper_p=2.309179573436346
+INFO     selection_utils:log_classification_counts:481 Step 6: Total component classifications: 9 rejected, 30 unclassified
+INFO     selection_nodes:calc_rho_elbow:882 Step 7: calc_rho_elbow: Calc Rho Elbow
+INFO     selection_utils:log_decision_tree_step:448 Step 7: calc_rho_elbow calculated: rho_elbow_liberal=10.626998975053048, rho_allcomps_elbow=10.626998975053048, rho_unclassified_elbow=8.886598126292633, elbow_f05=7.708647422176786
+INFO     selection_utils:log_classification_counts:481 Step 7: Total component classifications: 9 rejected, 30 unclassified
+INFO     selection_nodes:dec_left_op_right:389 Step 8: left_op_right: provisionalaccept if kappa>=18.69, else provisionalreject
+INFO     selection_utils:log_decision_tree_step:436 Step 8: left_op_right applied to 30 components. 9 True -> provisionalaccept. 21 False -> provisionalreject.
+INFO     selection_utils:log_classification_counts:481 Step 8: Total component classifications: 9 provisionalaccept, 21 provisionalreject, 9 rejected
+INFO     selection_nodes:dec_left_op_right:389 Step 9: left_op_right: accepted if kappa>2*rho, else nochange
+INFO     selection_utils:log_decision_tree_step:436 Step 9: left_op_right applied to 9 components. 6 True -> accepted. 3 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 9: Total component classifications: 6 accepted, 3 provisionalaccept, 21 provisionalreject, 9 rejected
+INFO     selection_nodes:dec_left_op_right:389 Step 10: left_op_right: provisionalreject if rho>10.63, else nochange
+INFO     selection_utils:log_decision_tree_step:436 Step 10: left_op_right applied to 24 components. 3 True -> provisionalreject. 21 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 10: Total component classifications: 6 accepted, 24 provisionalreject, 9 rejected
+INFO     selection_nodes:dec_variance_lessthan_thresholds:533 Step 11: variance_lt_thresholds: accepted if variance explained<0.1. All variance<1.0, else nochange
+INFO     selection_utils:comptable_classification_changer:282 Step 11: No components fit criterion True to change classification
+INFO     selection_utils:log_decision_tree_step:436 Step 11: variance_lt_thresholds applied to 24 components. 0 True -> accepted. 24 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 11: Total component classifications: 6 accepted, 24 provisionalreject, 9 rejected
+INFO     selection_nodes:manual_classify:104 Step 12: manual_classify: Set provisionalaccept to accepted 
+INFO     selection_utils:log_decision_tree_step:430 Step 12: manual_classify not applied because no remaining components were classified as provisionalaccept
+INFO     selection_utils:log_classification_counts:481 Step 12: Total component classifications: 6 accepted, 24 provisionalreject, 9 rejected
+INFO     selection_nodes:manual_classify:104 Step 13: manual_classify: Set ['provisionalreject', 'unclassified'] to rejected 
+INFO     selection_utils:log_decision_tree_step:436 Step 13: manual_classify applied to 24 components. 24 True -> rejected. 0 False -> nochange.
+INFO     selection_utils:log_classification_counts:481 Step 13: Total component classifications: 6 accepted, 33 rejected
+INFO     io:denoise_ts:560 Variance explained by decomposition: 64.45%
+INFO     io:write_split_ts:647 Writing denoised time series: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_desc-denoised_bold.nii.gz
+INFO     io:writeresults:696 Writing full ICA coefficient feature set: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_desc-ICA_components.nii.gz
+INFO     io:writeresults:700 Writing denoised ICA coefficient feature set: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_desc-ICAAccepted_components.nii.gz
+INFO     io:writeresults:706 Writing Z-normalized spatial component maps: /cbica/projects/pafin/derivatives/tedana/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_desc-ICAAccepted_stat-z_components.nii.gz
+INFO     gscontrol:minimum_image_regression:207 Performing minimum image regression to remove spatially-diffuse noise
+WARNING  gscontrol:minimum_image_regression:219 Decision tree does not contain classification tags indicating low variance components (low variance, accept borderline).
+INFO     tedana:tedana_workflow:1025 Making figures folder with static component maps and timecourse plots.
+INFO     io:denoise_ts:560 Variance explained by decomposition: 64.45%
+/gpfs/fs001/cbica/projects/pafin/miniforge3/envs/processing/lib/python3.11/site-packages/tedana/io.py:833: UserWarning: Data array used to create a new image contains 64-bit ints. This is likely due to creating the array with numpy and passing `int` as the `dtype`. Many tools such as FSL and SPM cannot deal with int64 in Nifti images, so for compatibility the data has been converted to int32.
+  nii = new_img_like(ref_img, newdata, affine=affine, copy_header=copy_header)
+/gpfs/fs001/cbica/projects/pafin/miniforge3/envs/processing/lib/python3.11/site-packages/tedana/io.py:833: UserWarning: Data array used to create a new image contains 64-bit ints. This is likely due to creating the array with numpy and passing `int` as the `dtype`. Many tools such as FSL and SPM cannot deal with int64 in Nifti images, so for compatibility the data has been converted to int32.
+  nii = new_img_like(ref_img, newdata, affine=affine, copy_header=copy_header)

@@ -153,7 +153,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
             "func",
             f"{mask_base}_space-boldref_T2starmap.nii.gz",
         )
-	assert os.path.isfile(t2star), t2star
+        assert os.path.isfile(t2star), t2star
 
         mixing = os.path.join(
             aroma_dir,
