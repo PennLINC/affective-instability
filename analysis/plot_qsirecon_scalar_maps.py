@@ -12,8 +12,6 @@ if __name__ == "__main__":
     out_dir = "../figures"
 
     patterns = {
-        "NODDI ICVF": "qsirecon-wmNODDI/sub-*/ses-1/dwi/*_space-MNI152NLin2009cAsym_model-noddi_param-icvf_dwimap.nii.gz",
-        "TORTOISE RTOP": "qsirecon-TORTOISE_model-MAPMRI/sub-*/ses-1/dwi/*_space-MNI152NLin2009cAsym_model-mapmri_param-rtop_dwimap.nii.gz",
         "DSIStudio GQI FA": "qsirecon-DSIStudioGQI/sub-*/ses-1/dwi/*_space-MNI152NLin2009cAsym_model-tensor_param-fa_dwimap.nii.gz",
         "DSIStudio GQI MD": "qsirecon-DSIStudioGQI/sub-*/ses-1/dwi/*_space-MNI152NLin2009cAsym_model-tensor_param-md_dwimap.nii.gz",
     }

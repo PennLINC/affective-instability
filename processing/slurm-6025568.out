@@ -1,0 +1,13 @@
+/var/spool/slurmd/job6025568/slurm_script: line 9: /cbica/projects/pafin/.bashrc: Permission denied
+Run 'mamba init' to be able to run mamba activate/deactivate
+and start a new shell session. Or use conda to activate/deactivate.
+
+TEDANA
+	sub-24053_ses-1_task-bao_dir-AP_run-01_echo-1_part-mag_bold.nii.gz
+Traceback (most recent call last):
+  File "/gpfs/fs001/cbica/projects/pafin/code/processing/run_tedana.py", line 405, in <module>
+    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
+  File "/gpfs/fs001/cbica/projects/pafin/code/processing/run_tedana.py", line 131, in run_tedana
+    assert os.path.isfile(t2star), t2star
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: /cbica/projects/pafin/derivatives/fmriprep/sub-24053/ses-1/func/sub-24053_ses-1_task-bao_dir-AP_run-01_part-mag_T2starmap.nii.gz
