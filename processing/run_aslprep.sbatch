@@ -61,6 +61,6 @@ exitcode=$?
 
 # Output results to a table
 echo "sub-$subject   ${SLURM_ARRAY_TASK_ID}    $exitcode" \
-      >> ${CODE_DIR}/jobs/"${SLURM_JOB_NAME}"."${SLURM_ARRAY_JOB_ID}".tsv
+      >> ${CODE_DIR}/processing/jobs/"${SLURM_JOB_NAME}"."${SLURM_ARRAY_JOB_ID}".tsv
 echo Finished tasks "${SLURM_ARRAY_TASK_ID}" with exit code $exitcode
 exit $exitcode

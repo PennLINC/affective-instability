@@ -127,7 +127,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
             subject,
             "ses-1",
             "func",
-            f"{mask_base}_desc-confounds_timeseries.tsv",
+            f"{mask_base}_part-mag_desc-confounds_timeseries.tsv",
         )
         confounds_df = pd.read_table(confounds_file)
         nss_cols = [c for c in confounds_df.columns if c.startswith("non_steady_state_outlier")]
