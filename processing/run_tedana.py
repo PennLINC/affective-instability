@@ -218,7 +218,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
             mixm=mixing2,
             gscontrol=["mir"],
             tedort=True,
-            t2smap=t2star,
+            # t2smap=t2star,
         )
 
 
