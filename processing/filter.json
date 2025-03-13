@@ -1,0 +1,11 @@
+{
+  "fmap": {
+     "echo": null
+  },
+  "t1w": {
+    "reconstruction": "norm"
+  },
+  "t2w": {
+    "reconstruction": "norm"
+  }
+}

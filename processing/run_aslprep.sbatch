@@ -1,0 +1,66 @@
+#!/bin/bash
+#SBATCH --job-name=aslprep
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --array=1-12
+#SBATCH --cpus-per-task=20
+#SBATCH --mem-per-cpu=4gb
+#SBATCH --time=36:00:00
+# Outputs ----------------------------------
+#SBATCH --output=/cbica/projects/pafin/code/processing/jobs/aslprep_%A-%a.out
+#SBATCH --error=/cbica/projects/pafin/code/processing/jobs/aslprep_%A-%a.err
+# ------------------------------------------
+
+pwd; hostname; date
+set -e
+
+#==============Shell script==============#
+# Location of the *reduced* BIDS dataset
+CODE_DIR="/cbica/projects/pafin/code/processing"
+BIDS_DIR="/cbica/projects/pafin/dset"
+SCRATCH_DIR="/cbica/comp_space/pafin/pafin-aslprep"
+DERIVS_DIR="/cbica/projects/pafin/derivatives"
+mkdir -p ${SCRATCH_DIR}
+
+# Make sure FS_LICENSE is defined in the container.
+FS_LICENSE="/cbica/projects/pafin/tokens/freesurfer_license.txt"
+
+# Parse the participants.tsv file and extract one subject ID from the line corresponding to this SLURM task.
+subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv )
+
+cmd="apptainer run --cleanenv \
+      -B ${BIDS_DIR}:/data \
+      -B ${DERIVS_DIR}:/deriv \
+      -B ${SCRATCH_DIR}:/work \
+      -B ${FS_LICENSE}:/license.txt \
+      /cbica/projects/pafin/apptainer/aslprep-0.7.5.sif \
+      /data \
+      /deriv/aslprep \
+      participant \
+      --participant-label ${subject} \
+      -w /work/ \
+      -d fmriprep=/deriv/fmriprep \
+      --fs-subjects-dir /deriv/fmriprep/sourcedata/freesurfer \
+      --omp-nthreads ${SLURM_CPUS_PER_TASK} \
+      --nprocs ${SLURM_CPUS_PER_TASK} \
+      --mem_mb 39000 \
+      --output-spaces func T1w MNI152NLin6Asym:res-2 \
+      --project-goodvoxels \
+      --cifti-output 91k \
+      --fs-license-file /license.txt \
+      --skip_bids_validation \
+      --m0_scale 10 \
+      --basil \
+      --level full"
+
+# Setup done, run the command
+echo Running task "${SLURM_ARRAY_TASK_ID}"
+echo Commandline: "$cmd"
+eval "$cmd"
+exitcode=$?
+
+# Output results to a table
+echo "sub-$subject   ${SLURM_ARRAY_TASK_ID}    $exitcode" \
+      >> ${CODE_DIR}/processing/jobs/"${SLURM_JOB_NAME}"."${SLURM_ARRAY_JOB_ID}".tsv
+echo Finished tasks "${SLURM_ARRAY_TASK_ID}" with exit code $exitcode
+exit $exitcode

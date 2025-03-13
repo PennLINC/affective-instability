@@ -1,0 +1,56 @@
+name: PAFIN_Recon
+nodes:
+
+# Extrapolate to a DSI scheme
+-   action: 3dSHORE_reconstruction
+    input: qsirecon
+    name: extrapolate_dsi
+    parameters:
+        extrapolate_scheme: DSIQ5
+        lambdaL: 1.0e-08
+        lambdaN: 1.0e-08
+        radial_order: 8
+        regularization: L2
+        write_fibgz: false
+        write_mif: false
+    software: Dipy
+    qsirecon_suffix: extrapolateDSIQ5
+
+# Fit the GQI model to the data
+-   action: reconstruction
+    input: extrapolate_dsi
+    name: dsistudio_gqi
+    parameters:
+        method: gqi
+    qsirecon_suffix: DSIStudioGQI
+    software: DSI Studio
+
+# Get 3D images of DSI Studio's scalar maps
+-   action: export
+    input: dsistudio_gqi
+    name: gqi_scalars
+    qsirecon_suffix: DSIStudioGQI
+    software: DSI Studio
+
+# Execute AutoTrack
+-   action: autotrack
+    input: dsistudio_gqi
+    name: autotrack_dsi_gqi
+    parameters:
+        tolerance: 22,26,30
+        track_id: Association,Projection,Commissure,Cerebellum
+        track_voxel_ratio: 2.0
+        yield_rate: 1.0e-06
+        model: msmt
+    qsirecon_suffix: DSIAutoTrack
+    software: DSI Studio
+
+# Map scalars to MNI
+-   action: template_map
+    input: qsirecon
+    name: template_map
+    parameters:
+        interpolation: NearestNeighbor
+    scalars_from:
+    - gqi_scalars
+    software: qsirecon

@@ -1,8 +1,12 @@
 # Custom (PennLINC) gitignore
+processing/slurm-*.out
+curation/jobs/
+processing/jobs/
 .DS_Store
 *.mp4
 Pixar.png
 tasks/data/
+logs/
 
 # Python gitignore
 # Byte-compiled / optimized / DLL files

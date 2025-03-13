@@ -1,8 +1,3 @@
-"""A heudiconv heuristic for the PAFIN study.
-
-TODO: Keep an eye out for MEGRE and T2w data.
-Will need to update the heuristic if we get any.
-"""
 from __future__ import annotations
 
 from typing import Optional
@@ -45,6 +40,14 @@ def infotodict(
         "{bids_subject_session_dir}/anat/{bids_subject_session_prefix}_rec-norm_T1w",
         outtype=outdicom,
     )
+    t2 = create_key(
+        "{bids_subject_session_dir}/anat/{bids_subject_session_prefix}_T2w",
+        outtype=outdicom,
+    )
+    t2_norm = create_key(
+        "{bids_subject_session_dir}/anat/{bids_subject_session_prefix}_rec-norm_T2w",
+        outtype=outdicom,
+    )
     fmap_dwi_ap_mag = create_key(
         "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-dwi_dir-AP_run-{item:02d}_part-mag_epi",
         outtype=outdicom,
@@ -78,19 +81,19 @@ def infotodict(
         outtype=outdicom,
     )
     fmap_func_ap_mag = create_key(
-        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func_dir-AP_run-{item:02d}_part-mag_epi",
+        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func+meepi_dir-AP_run-{item:02d}_part-mag_epi",
         outtype=outdicom,
     )
     fmap_func_ap_phase = create_key(
-        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func_dir-AP_run-{item:02d}_part-phase_epi",
+        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func+meepi_dir-AP_run-{item:02d}_part-phase_epi",
         outtype=outdicom,
     )
     fmap_func_pa_mag = create_key(
-        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func_dir-PA_run-{item:02d}_part-mag_epi",
+        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func+meepi_dir-PA_run-{item:02d}_part-mag_epi",
         outtype=outdicom,
     )
     fmap_func_pa_phase = create_key(
-        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func_dir-PA_run-{item:02d}_part-phase_epi",
+        "{bids_subject_session_dir}/fmap/{bids_subject_session_prefix}_acq-func+meepi_dir-PA_run-{item:02d}_part-phase_epi",
         outtype=outdicom,
     )
     rs_sbref = create_key(
@@ -141,10 +144,20 @@ def infotodict(
         "{bids_subject_session_dir}/perf/{bids_subject_session_prefix}_run-{item:02d}_cbf",
         outtype=outdicom,
     )
+    megre_mag = create_key(
+        "{bids_subject_session_dir}/anat/{bids_subject_session_prefix}_acq-1p5mm_run-{item:02d}_part-mag_MEGRE",
+        outtype=outdicom,
+    )
+    megre_phase = create_key(
+        "{bids_subject_session_dir}/anat/{bids_subject_session_prefix}_acq-1p5mm_run-{item:02d}_part-phase_MEGRE",
+        outtype=outdicom,
+    )
 
     info: dict[tuple[str, tuple[str, ...], None], list] = {
         t1: [],
         t1_norm: [],
+        t2: [],
+        t2_norm: [],
         fmap_dwi_ap_mag: [],
         fmap_dwi_ap_phase: [],
         fmap_dwi_pa_mag: [],
@@ -169,13 +182,19 @@ def infotodict(
         asl_asl: [],
         asl_m0scan: [],
         asl_cbf: [],
+        megre_mag: [],
+        megre_phase: [],
     }
     for s in seqinfo:
-        # T1w scans (we only want the last one)
+        # Anatomical scans (we only want the last one)
         if ("anat-T1w" in s.protocol_name) and ("NORM" not in s.image_type):
             info[t1] = [s.series_id]
         elif ("anat-T1w" in s.protocol_name) and ("NORM" in s.image_type):
             info[t1_norm] = [s.series_id]
+        elif ("anat-T2w" in s.protocol_name) and ("NORM" not in s.image_type):
+            info[t2] = [s.series_id]
+        elif ("anat-T2w" in s.protocol_name) and ("NORM" in s.image_type):
+            info[t2_norm] = [s.series_id]
         # DWI field maps
         elif ("fmap-epi_acq-dwi_dir-PA" in s.protocol_name) and ("NORM" in s.image_type):
             info[fmap_dwi_pa_mag].append([s.series_id])
@@ -214,11 +233,17 @@ def infotodict(
             info[bao_mag].append([(s.series_id)])
         elif ("func-bold_task-bao" in s.protocol_name) and ("P" in s.image_type):
             info[bao_phase].append([(s.series_id)])
+        # ASL scans
         elif ("perf-asl_ASL" in s.series_description):
             info[asl_asl].append([(s.series_id)])
         elif ("perf-asl_M0" in s.series_description):
             info[asl_m0scan].append([(s.series_id)])
         elif ("perf-asl_MeanPerf" in s.series_description):
             info[asl_cbf].append([(s.series_id)])
+        # MEGRE scans
+        elif ("anat-MEGRE" in s.protocol_name) and ("M" in s.image_type):
+            info[megre_mag].append([s.series_id])
+        elif ("anat-MEGRE" in s.protocol_name) and ("P" in s.image_type):
+            info[megre_phase].append([s.series_id])
 
     return info
