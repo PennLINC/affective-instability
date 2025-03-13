@@ -1,5 +1,6 @@
 """Plot T2* maps from tedana."""
 
+import os
 from glob import glob
 
 import matplotlib.pyplot as plt
@@ -85,14 +86,17 @@ def plot_surface(name, measure, files):
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/projects/pafin/derivatives/fmriprep"
+    # Need to run locally because surfplot was failing on CUBIC
+    in_dir = "/Users/taylor/Desktop/surface/data"
 
     patterns = {
-        "Cortical Thickness": "sub-*/ses-1/anat/*_space-fsLR_den-91k_thickness.dscalar.nii",
-        "Sulcal Curvature": "sub-*/ses-1/anat/*_space-fsLR_den-91k_curv.dscalar.nii",
-        "Sulcal Depth": "sub-*/ses-1/anat/*_space-fsLR_den-91k_sulc.dscalar.nii",
+        "Cortical Thickness": "*_space-fsLR_den-91k_thickness.dscalar.nii",
+        "Sulcal Curvature": "*_space-fsLR_den-91k_curv.dscalar.nii",
+        "Sulcal Depth": "*_space-fsLR_den-91k_sulc.dscalar.nii",
     }
     for name, pattern in patterns.items():
-        files = sorted(glob(pattern))
+        files = sorted(glob(os.path.join(in_dir, pattern)))
+        files = [f for f in files if "PILOT" not in f]
+        print(f"{name}: {len(files)}")
         for measure in ["Mean", "Standard Deviation"]:
             plot_surface(name, measure, files)
