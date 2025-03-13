@@ -262,22 +262,35 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
         for i_row, aroma_row in aroma_df.iterrows():
             aroma_clf = aroma_row["classification"]
             tedana_rationale = tedana_df.loc[i_row, "classification_tags"]
+            tedana_rationales = tedana_rationale.split(";")
 
+            aroma_rationales = []
             if aroma_clf == "rejected":
                 aroma_rationales = aroma_row["rationale"].split(";")
-                aroma_rationales = [
-                    f"AROMA {aroma_rationale}" for aroma_rationale in aroma_rationales
+                aroma_rationales = [f"AROMA {rationale}" for rationale in aroma_rationales]
+
+                # Remove tags equivalent to "ignored" classification, for MIR
+                tedana_rationales = [
+                    r for r in tedana_rationales if r not in ["low variance", "accept borderline"]
                 ]
-                aroma_rationale = ";".join(aroma_rationales)
-                tedana_rationale += f";{aroma_rationale}"
-                rationales = tedana_rationale.split(";")
-                rationales = [
-                    r for r in rationales if r not in ["low variance", "accept borderline"]
-                ]
-                tedana_rationale = ";".join(rationales)
 
                 tedana_df.iloc[i_row, "classification"] = "rejected"
-                tedana_df.iloc[i_row, "classification_tags"] = tedana_rationale
+
+            tedana_rationales = [f"TEDANA {rationale}" for rationale in tedana_rationales]
+            rationales = tedana_rationales + aroma_rationales
+            tedana_df.iloc[i_row, "classification_tags"] = ";".join(rationales)
+
+            # Add other columns from aroma_df to tedana_df
+            other_cols = [
+                "edge_fract",
+                "csf_fract",
+                "max_RP_corr",
+                "HFC",
+                "model_variance_explained",
+                "total_variance_explained",
+            ]
+            for col in other_cols:
+                tedana_df.loc[i_row, col] = aroma_row[col]
 
         # Save the combined classifications
         tedana_aroma_run_out_dir = os.path.join(
