@@ -154,6 +154,16 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
         )
         assert os.path.isfile(mixing), mixing
 
+        mixing_arr = np.loadtxt(mixing)
+        # remove dummy volumes
+        mixing_arr = mixing_arr[dummy_scans:, :]
+        mixing_df = pd.DataFrame(
+            data=mixing_arr,
+            columns=[f"ICA_{i}" for i in range(mixing_arr.shape[1])],
+        )
+        mixing2 = os.path.join(temp_dir, os.path.basename(mixing))
+        mixing_df.to_csv(mixing2, sep="\t", index=False)
+
         echo_times = []
         fmriprep_files = []
         for raw_file in raw_files:
@@ -195,7 +205,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
             fittype="curvefit",
             combmode="t2s",
             tree="minimal",
-            mixm=mixing,
+            mixm=mixing2,
             gscontrol=["mir"],
             tedort=True,
         )
