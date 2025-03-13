@@ -1,4 +1,4 @@
-"""Calculate a low-resolution, quantitative T1 map from input files.
+"""Calculate a low-resolution, quantitative t1_range map from input files.
 
 Authored by Manuel Taso
 Modified by Taylor Salo
@@ -18,7 +18,7 @@ import scipy
 
 
 def main(tdp1_file, tdp2_file, tdp2_metadata, out_file):
-    """Calculate a low-resolution, quantitative T1 map from input files.
+    """Calculate a low-resolution, quantitative t1_range map from input files.
 
     Parameters
     ----------
@@ -38,16 +38,16 @@ def main(tdp1_file, tdp2_file, tdp2_metadata, out_file):
     tdp2_img = nb.load(tdp2_file)
     tdp2_data = tdp2_img.get_fdata()
 
-    T1 = np.arange(100, 5010, 10)
+    t1_range = np.arange(100, 5010, 10)
     trec = tdp2_metadata["SaturationPulseTime"] * 1000
-    TI = tdp2_metadata["InversionTime"] * 1000
+    ti = tdp2_metadata["InversionTime"] * 1000
 
-    z = (1 - 2 * np.exp(-TI / T1) + np.exp(-trec / T1)) / (1 - np.exp(-trec / T1))
+    z = (1 - 2 * np.exp(-ti / t1_range) + np.exp(-trec / t1_range)) / (1 - np.exp(-trec / t1_range))
 
     ratio = tdp2_data / tdp1_data
     ratio[ratio == 0] = np.min(z)
     ratio[ratio >= 1] = np.max(z)
-    f = scipy.interpolate.interp1d(z, T1, fill_value="extrapolate")
+    f = scipy.interpolate.interp1d(z, t1_range, fill_value="extrapolate")
 
     t1 = f(ratio)
     t1[np.isnan(t1)] = 0
