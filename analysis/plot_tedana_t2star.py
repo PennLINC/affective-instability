@@ -1,4 +1,4 @@
-"""Plot CBF maps from ASLPrep."""
+"""Plot T2* maps from tedana."""
 
 import os
 from glob import glob
@@ -8,15 +8,11 @@ from nilearn import image, plotting
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/projects/pafin/derivatives/aslprep"
+    in_dir = "/cbica/projects/pafin/derivatives/fmriprep"
     out_dir = "../figures"
 
     patterns = {
-        "ASLPrep CBF": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_cbf.nii.gz",
-        "BASIL ATT": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_desc-basil_att.nii.gz",
-        "BASIL CBF": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_desc-basil_cbf.nii.gz",
-        "BASIL GM CBF": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_desc-basilGM_cbf.nii.gz",
-        "BASIL WM CBF": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_desc-basilWM_cbf.nii.gz",
+        "T2star": "sub-*/ses-1/func/*_space-MNI152NLin6Asym_res-2_T2starmap.nii.gz",
     }
     for title, pattern in patterns.items():
         # Get all scalar maps
