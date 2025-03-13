@@ -121,15 +121,6 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
         )
         assert os.path.isfile(mask), mask
 
-        t2star = os.path.join(
-            fmriprep_dir,
-            subject,
-            "ses-1",
-            "func",
-            f"{mask_base}_part-mag_T2starmap.nii.gz",
-        )
-        assert os.path.isfile(t2star), t2star
-
         # Get the fMRIPrep confounds file and identify the number of non-steady-state volumes
         confounds_file = os.path.join(
             fmriprep_dir,
@@ -154,6 +145,16 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
 
         # Get the fMRIPost-AROMA mixing file
         mask_base = "_".join([p for p in mask_base.split("_") if not p.startswith("dir")])
+
+        t2star = os.path.join(
+            fmriprep_dir,
+            subject,
+            "ses-1",
+            "func",
+            f"{mask_base}_space-boldref_T2starmap.nii.gz",
+        )
+	assert os.path.isfile(t2star), t2star
+
         mixing = os.path.join(
             aroma_dir,
             subject,

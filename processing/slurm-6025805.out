@@ -1,0 +1,7 @@
+/var/spool/slurmd/job6025805/slurm_script: line 9: /cbica/projects/pafin/.bashrc: Permission denied
+Run 'mamba init' to be able to run mamba activate/deactivate
+and start a new shell session. Or use conda to activate/deactivate.
+
+  File "/gpfs/fs001/cbica/projects/pafin/code/processing/run_tedana.py", line 156
+    assert os.path.isfile(t2star), t2star
+TabError: inconsistent use of tabs and spaces in indentation
