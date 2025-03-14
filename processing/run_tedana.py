@@ -181,7 +181,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
 
             # Get echo time from json file
             with open(raw_file.replace(".nii.gz", ".json"), "r") as f:
-                echo_times.append(json.load(f)["EchoTime"])
+                echo_times.append(json.load(f)["EchoTime"] * 1000)
 
             # Get the fMRIPrep BOLD files
             fmriprep_file = os.path.join(
@@ -205,6 +205,9 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
 
         tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
         os.makedirs(tedana_run_out_dir, exist_ok=True)
+        if os.path.isfile(os.path.join(tedana_run_out_dir, f"{prefix}_tedana_report.html")):
+            print(f"DONE: {prefix}")
+            continue
 
         tedana_workflow(
             data=fmriprep_files,
