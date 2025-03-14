@@ -12,13 +12,13 @@ import numpy as np
 from nilearn import image, plotting
 
 
-data_root = Path("/Users/mcieslak/projects/hbcd/pipeline_paper/data_examples")
+data_root = Path("/cbica/projects/pafin")
 
 subid = "9645436710"
 sesid = "V02"
 
 # The dir-PA nifti is always the first
-raw_nifti = data_root / "assembly_bids" / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi.nii"
+raw_nifti = data_root / "dset" /f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi.nii"
 processed_nifti = (
     data_root
     / "derivatives"

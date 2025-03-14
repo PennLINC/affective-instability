@@ -216,7 +216,8 @@ def plot_echo_wise_values(in_dir):
     ax.legend(handles=legend_elements)
     ax.set_xlabel("Echo Time (ms)")
     ax.set_ylabel("BOLD signal")
-    fig.savefig("effect_of_nordic.png")
+    fig.tight_layout()
+    fig.savefig("effect_of_nordic.png", bbox_inches="tight")
 
 
 if __name__ == "__main__":

@@ -30,9 +30,8 @@ from fury import actor, window
 from matplotlib.cm import tab20
 
 
-data_root = Path("/Users/mcieslak/projects/hbcd/pipeline_paper/paper_example_data")
-out_dir = Path("/Users/mcieslak/projects/hbcd/pipeline_paper/paper_example_data/figures")
-out_dir.mkdir(parents=True, exist_ok=True)
+data_root = Path("/cbica/projects/pafin/dset")
+out_dir = Path("/cbica/projects/pafin/code/figures")
 
 
 def lines_as_tubes(sl, line_width, **kwargs):
@@ -63,7 +62,10 @@ def slice_volume(data, x=None, y=None, z=None):
 def get_bundle_data(subid, sesid, bundle_name, reference):
     bundle_path = (
         data_root
-        / "DSIStudio"
+        / "derivatives"
+        / "qsirecon"
+        / "derivatives"
+        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
@@ -91,7 +93,10 @@ def visualize_bundles(
 ):
     fa_img = nib.load(
         data_root
-        / "DSIStudio"
+        / "derivatives"
+        / "qsirecon"
+        / "derivatives"
+        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
@@ -132,6 +137,10 @@ def visualize_bundles(
     # Transform into the T1w reference frame
     t1w_img = nib.load(
         data_root
+        / "derivatives"
+        / "qsirecon"
+        / "derivatives"
+        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"
@@ -143,6 +152,10 @@ def visualize_bundles(
     # Load the brain mask - it will be shown as a translucent contour
     brain_mask_img = nib.load(
         data_root
+        / "derivatives"
+        / "qsirecon"
+        / "derivatives"
+        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"

@@ -53,5 +53,5 @@ if __name__ == "__main__":
             cmap="YlOrRd",
         )
         fig.suptitle(title)
-        plt.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"))
+        fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
         plt.close()

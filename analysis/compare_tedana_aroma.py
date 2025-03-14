@@ -108,7 +108,8 @@ if __name__ == "__main__":
     ax.set_xlim(0, 1)
     ax.set(ylabel="")
     sns.despine(trim=True, left=True)
-    f.savefig(os.path.join(out_dir, "bold_denoising_variance_explained.png"))
+    f.tight_layout()
+    f.savefig(os.path.join(out_dir, "bold_denoising_variance_explained.png"), bbox_inches="tight")
     plt.close()
 
     # Boxplot of number of components, organized as "accepted", "rejected by AROMA",
@@ -138,5 +139,6 @@ if __name__ == "__main__":
     ax.set_xlim(0, None)
     ax.set(ylabel="")
     sns.despine(trim=True, left=True)
-    f.savefig(os.path.join(out_dir, "bold_denoising_n_components.png"))
+    f.tight_layout()
+    f.savefig(os.path.join(out_dir, "bold_denoising_n_components.png"), bbox_inches="tight")
     plt.close()
