@@ -52,6 +52,7 @@ if __name__ == "__main__":
             annotate=False,
             black_bg=False,
             resampling_interpolation="nearest",
+            colorbar=False,
         )
         vmax1 = np.round(np.percentile(sd_img.get_fdata(), 98))
         plotting.plot_stat_map(
@@ -68,6 +69,7 @@ if __name__ == "__main__":
             annotate=False,
             black_bg=False,
             resampling_interpolation="nearest",
+            colorbar=False,
         )
         # fig.suptitle(title)
         fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
