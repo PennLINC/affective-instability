@@ -77,7 +77,7 @@ def plot_surface(name, measure, files):
         cmap="viridis",
     )
     fig = p.build()
-    fig.suptitle(measure, fontsize=24)
+    # fig.suptitle(measure, fontsize=24)
     fig.savefig(
         f"../figures/{name.replace(' ', '')}_{measure.lower().replace(' ', '')}.png",
         bbox_inches="tight",
