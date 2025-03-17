@@ -12,7 +12,7 @@ from nilearn import image, maskers,plotting
 if __name__ == "__main__":
     in_dir = "/cbica/projects/pafin/derivatives/qsirecon/derivatives"
     out_dir = "../figures"
-    template = tflow.get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz")
+    template = tflow.get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz")
     mask = tflow.get("MNI152NLin2009cAsym", resolution="01", desc="brain", suffix="mask", extension="nii.gz")
 
     patterns = {

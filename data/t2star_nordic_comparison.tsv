@@ -19,3 +19,7 @@ sub-24702_ses-1_task-bao_rec-nordic_dir-AP_run-01_part-mag_space-T1w_desc-brain_
 sub-24702_ses-1_task-rat_rec-nordic_dir-PA_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	24702	1	rat	PA	01	T1w	0.8497693515136171	0.04537455	0.04370716
 sub-60295_ses-1_task-bao_rec-nordic_dir-AP_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	60295	1	bao	AP	01	T1w	0.9057493603534664	0.047156334	0.048971154
 sub-60295_ses-1_task-rat_rec-nordic_dir-PA_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	60295	1	rat	PA	01	T1w	0.9093621497803565	0.049601324	0.04797368
+sub-PILOT01_ses-1_task-rat_rec-nordic_dir-PA_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	PILOT01	1	rat	PA	01	T1w	0.9931027670996442	0.046954554	0.0470225
+sub-PILOT01_ses-1_task-rest_rec-nordic_dir-AP_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	PILOT01	1	rest	AP	01	T1w	0.9706223157833384	0.047023688	0.0474024
+sub-PILOT02_ses-1_task-bao_rec-nordic_dir-AP_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	PILOT02	1	bao	AP	01	T1w	0.9467369868698603	0.04994502	0.050741643
+sub-PILOT02_ses-1_task-rat_rec-nordic_dir-PA_run-01_part-mag_space-T1w_desc-brain_mask.nii.gz	PILOT02	1	rat	PA	01	T1w	0.9767542056983385	0.05009771	0.05025903
