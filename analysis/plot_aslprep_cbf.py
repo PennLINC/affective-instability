@@ -4,6 +4,7 @@ import os
 from glob import glob
 
 import matplotlib.pyplot as plt
+import numpy as np
 from nilearn import image, plotting
 
 
@@ -33,24 +34,26 @@ if __name__ == "__main__":
             mean_img,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
-            title="Mean",
             axes=axs[0],
             figure=fig,
             symmetric_cbar=False,
             vmin=0,
             vmax=120,
-            cmap="YlOrRd",
+            cmap="viridis",
+            annotate=False,
         )
+        vmax = np.percentile(sd_img.get_fdata(), 95)
         plotting.plot_stat_map(
             sd_img,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
-            title="Standard Deviation",
             axes=axs[1],
             figure=fig,
             symmetric_cbar=False,
             vmin=0,
-            cmap="YlOrRd",
+            vmax=vmax,
+            cmap="viridis",
+            annotate=False,
         )
         fig.suptitle(title)
         fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")

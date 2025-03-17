@@ -74,7 +74,7 @@ def plot_surface(name, measure, files):
     p = Plot(lh, rh, size=(800, 200), zoom=1.2, layout="row", mirror_views=True)
     p.add_layer(
         {"left": np.squeeze(lh_data), "right": np.squeeze(rh_data)},
-        cmap="YlOrRd_r",
+        cmap="viridis",
     )
     fig = p.build()
     fig.suptitle(measure, fontsize=24)
