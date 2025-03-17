@@ -3,10 +3,11 @@
 import os
 from glob import glob
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import templateflow.api as tflow
-from nilearn import image, maskers,plotting
+from nilearn import image, maskers, plotting
 
 
 if __name__ == "__main__":
@@ -37,7 +38,7 @@ if __name__ == "__main__":
 
         # Plot mean and SD
         fig, axs = plt.subplots(2, 1, figsize=(10, 5))
-        vmax = np.percentile(mean_img.get_fdata(), 98)
+        vmax0 = np.round(np.percentile(mean_img.get_fdata(), 98), 2)
         plotting.plot_stat_map(
             mean_img,
             bg_img=template,
@@ -47,13 +48,13 @@ if __name__ == "__main__":
             figure=fig,
             symmetric_cbar=False,
             vmin=0,
-            vmax=vmax,
+            vmax=vmax0,
             cmap="viridis",
             annotate=False,
             black_bg=False,
             resampling_interpolation="nearest",
         )
-        vmax = np.percentile(sd_img.get_fdata(), 98)
+        vmax1 = np.round(np.percentile(sd_img.get_fdata(), 98), 2)
         plotting.plot_stat_map(
             sd_img,
             bg_img=template,
@@ -63,7 +64,7 @@ if __name__ == "__main__":
             figure=fig,
             symmetric_cbar=False,
             vmin=0,
-            vmax=vmax,
+            vmax=vmax1,
             cmap="viridis",
             annotate=False,
             black_bg=False,
@@ -71,4 +72,30 @@ if __name__ == "__main__":
         )
         # fig.suptitle(title)
         fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
+        plt.close()
+
+        # Plot the colorbars
+        fig, axs = plt.subplots(2, 1, figsize=(10, 0.5), layout='constrained')
+        cmap = mpl.cm.viridis
+
+        norm = mpl.colors.Normalize(vmin=0, vmax=vmax0)
+        cbar = fig.colorbar(
+            mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+            cax=axs[0],
+            orientation='horizontal',
+        )
+        cbar.set_ticks([0, np.mean([0, vmax0]), vmax0])
+
+        norm = mpl.colors.Normalize(vmin=0, vmax=vmax1)
+        cbar = fig.colorbar(
+            mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+            cax=axs[1],
+            orientation='horizontal',
+        )
+        cbar.set_ticks([0, np.mean([0, vmax1]), vmax1])
+
+        fig.savefig(
+            os.path.join(out_dir, f"{title.replace(' ', '_')}_colorbar.png"),
+            bbox_inches="tight",
+        )
         plt.close()
