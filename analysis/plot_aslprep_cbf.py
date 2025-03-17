@@ -5,12 +5,15 @@ from glob import glob
 
 import matplotlib.pyplot as plt
 import numpy as np
-from nilearn import image, plotting
+import templateflow.api as tflow
+from nilearn import image, maskers, plotting
 
 
 if __name__ == "__main__":
     in_dir = "/cbica/projects/pafin/derivatives/aslprep"
     out_dir = "../figures"
+    template = tflow.get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="T1w", extension="nii.gz")
+    mask = tflow.get("MNI152NLin6Asym", resolution="01", desc="brain", suffix="mask", extension="nii.gz")
 
     patterns = {
         "ASLPrep CBF": "sub-*/ses-1/perf/*_space-MNI152NLin6Asym_cbf.nii.gz",
@@ -25,26 +28,34 @@ if __name__ == "__main__":
         scalar_maps = [f for f in scalar_maps if "PILOT" not in f]
         print(f"{title}: {len(scalar_maps)}")
 
+        masker = maskers.NiftiMasker(mask, resampling_target="data")
         mean_img = image.mean_img(scalar_maps, copy_header=True)
+        mean_img = masker.inverse_transform(masker.fit_transform(mean_img))
         sd_img = image.math_img("np.std(img, axis=3)", img=scalar_maps)
+        sd_img = masker.inverse_transform(masker.transform(sd_img))
 
         # Plot mean and SD
         fig, axs = plt.subplots(2, 1, figsize=(10, 5))
+        vmax = np.percentile(mean_img.get_fdata(), 98)
         plotting.plot_stat_map(
             mean_img,
+            bg_img=template,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
             axes=axs[0],
             figure=fig,
             symmetric_cbar=False,
             vmin=0,
-            vmax=120,
+            vmax=vmax,
             cmap="viridis",
             annotate=False,
+            black_bg=False,
+            resampling_interpolation="nearest",
         )
-        vmax = np.percentile(sd_img.get_fdata(), 95)
+        vmax = np.percentile(sd_img.get_fdata(), 98)
         plotting.plot_stat_map(
             sd_img,
+            bg_img=template,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
             axes=axs[1],
@@ -54,7 +65,9 @@ if __name__ == "__main__":
             vmax=vmax,
             cmap="viridis",
             annotate=False,
+            black_bg=False,
+            resampling_interpolation="nearest",
         )
-        fig.suptitle(title)
+        # fig.suptitle(title)
         fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
         plt.close()

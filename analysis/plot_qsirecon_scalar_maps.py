@@ -5,12 +5,14 @@ from glob import glob
 
 import matplotlib.pyplot as plt
 import numpy as np
+import templateflow.api as tflow
 from nilearn import image, plotting
 
 
 if __name__ == "__main__":
     in_dir = "/cbica/projects/pafin/derivatives/qsirecon/derivatives"
     out_dir = "../figures"
+    template = tflow.get("MNI152NLin2009cAsym", resolution="01", desc=None, suffix="T1w", extension="nii.gz")
 
     patterns = {
         "DSIStudio GQI FA": "qsirecon-DSIStudioGQI/sub-*/ses-1/dwi/*_space-MNI152NLin2009cAsym_model-tensor_param-fa_dwimap.nii.gz",
@@ -28,9 +30,10 @@ if __name__ == "__main__":
 
         # Plot mean and SD
         fig, axs = plt.subplots(2, 1, figsize=(10, 5))
-        vmax = np.percentile(mean_img.get_fdata(), 95)
+        vmax = np.percentile(mean_img.get_fdata(), 98)
         plotting.plot_stat_map(
             mean_img,
+            bg_img=template,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
             axes=axs[0],
@@ -41,9 +44,10 @@ if __name__ == "__main__":
             cmap="viridis",
             annotate=False,
         )
-        vmax = np.percentile(sd_img.get_fdata(), 95)
+        vmax = np.percentile(sd_img.get_fdata(), 98)
         plotting.plot_stat_map(
             sd_img,
+            bg_img=template,
             display_mode="z",
             cut_coords=[-30, -15, 0, 15, 30, 45, 60],
             axes=axs[1],
@@ -54,6 +58,6 @@ if __name__ == "__main__":
             cmap="viridis",
             annotate=False,
         )
-        fig.suptitle(title)
+        # fig.suptitle(title)
         fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
         plt.close()
