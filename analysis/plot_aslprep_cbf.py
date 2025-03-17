@@ -3,6 +3,7 @@
 import os
 from glob import glob
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import templateflow.api as tflow
@@ -73,7 +74,7 @@ if __name__ == "__main__":
         plt.close()
 
         # Plot the colorbars
-        fig, axs = plt.subplots(2, 1, figsize=(10, 0.5), layout='constrained')
+        fig, axs = plt.subplots(2, 1, figsize=(10, 1.5))
         cmap = mpl.cm.viridis
 
         norm = mpl.colors.Normalize(vmin=0, vmax=vmax0)
@@ -92,6 +93,7 @@ if __name__ == "__main__":
         )
         cbar.set_ticks([0, np.mean([0, vmax1]), vmax1])
 
+        fig.tight_layout()
         fig.savefig(
             os.path.join(out_dir, f"{title.replace(' ', '_')}_colorbar.png"),
             bbox_inches="tight",

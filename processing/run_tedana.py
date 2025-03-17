@@ -248,6 +248,7 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
         tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
         # Get the fMRIPrep brain mask
         mask_base = base_filename.split("_echo-1")[0]
+        mask_base = "_".join([p for p in mask_base.split("_") if not p.startswith("dir")])
 
         # Combine the classifications from tedana with the AROMA classifications
         # and save the combined classifications to the derivatives folder
@@ -257,7 +258,7 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
             subject,
             "ses-1",
             "func",
-            f"{mask_base}_part-mag_space-MNI152NLin6Asym_res-2_desc-aroma_metrics.tsv",
+            f"{mask_base}_part-mag_desc-aroma_metrics.tsv",
         )
         aroma_df = pd.read_table(aroma_classifications)
 
@@ -288,11 +289,11 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
                     r for r in tedana_rationales if r not in ["low variance", "accept borderline"]
                 ]
 
-                tedana_df.iloc[i_row, "classification"] = "rejected"
+                tedana_df.loc[i_row, "classification"] = "rejected"
 
             tedana_rationales = [f"TEDANA {rationale}" for rationale in tedana_rationales]
             rationales = tedana_rationales + aroma_rationales
-            tedana_df.iloc[i_row, "classification_tags"] = ";".join(rationales)
+            tedana_df.loc[i_row, "classification_tags"] = ";".join(rationales)
 
             # Add other columns from aroma_df to tedana_df
             other_cols = [
@@ -406,5 +407,5 @@ if __name__ == "__main__":
 
     os.makedirs(temp_dir_, exist_ok=True)
 
-    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
+    # run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
     run_tedana_aroma(raw_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)
