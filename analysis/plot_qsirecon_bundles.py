@@ -61,7 +61,7 @@ def get_bundle_data(data_root, subid, sesid, bundle_name, reference):
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_model-gqi_bundle-{bundle_name}_streamlines.tck"
+        / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-msmt_bundle-{bundle_name}_streamlines.tck"
     )
     bundle_path_gz = bundle_path.with_suffix(".tck.gz")
     if bundle_path.exists():
@@ -84,7 +84,7 @@ def visualize_bundles(
     interactive=False,
     camera_positions=None,
 ):
-    fa_img = nb.load(
+    fa_file = (
         data_root
         / "qsirecon"
         / "derivatives"
@@ -94,9 +94,11 @@ def visualize_bundles(
         / "dwi"
         / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
     )
-    if not fa_img.exists():
-        print(f"Could not find FA image at {fa_img}")
+    if not fa_file.exists():
+        print(f"Could not find FA image at {fa_file}")
         return
+
+    fa_img = nb.load(fa_file)
 
     print("Loading arcuate fasciculus streamlines...")
     l_arc = get_bundle_data(
@@ -130,7 +132,7 @@ def visualize_bundles(
     )
     # AssociationInferiorFrontoOccipitalFasciculusR
     r_inf_front_occipital = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / / "qsirecon-DSIAutoTrack",
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusR",
@@ -306,7 +308,7 @@ if __name__ == "__main__":
             "view_up": (0.0, -1.0, 0.0),
         },
     }
-    subjects = sorted(data_root.glob("sub-*"))
+    subjects = sorted((data_root / "dset").glob("sub-*"))
     for subject in subjects:
         subid = subject.name
         session_dirs = sorted(subject.glob("ses-*"))
@@ -314,7 +316,7 @@ if __name__ == "__main__":
         for sesid in sesids:
             print(f"Processing {subid} {sesid}")
             images = visualize_bundles(
-                data_root=data_root,
+                data_root=data_root / "derivatives",
                 out_dir=out_dir,
                 subid=subid.replace("sub-", ""),
                 sesid=sesid.replace("ses-", ""),
