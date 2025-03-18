@@ -225,7 +225,7 @@ def run_tedana(raw_dir, fmriprep_dir, aroma_dir, temp_dir, tedana_out_dir):
         )
 
 
-def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
+def run_tedana_aroma(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
     print("TEDANA+AROMA")
 
     base_files = sorted(
@@ -247,8 +247,30 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
 
         tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
         # Get the fMRIPrep brain mask
-        mask_base = base_filename.split("_echo-1")[0]
-        mask_base = "_".join([p for p in mask_base.split("_") if not p.startswith("dir")])
+        fname_base = base_filename.split("_echo-1")[0]
+        fname_base = "_".join([p for p in fname_base.split("_") if not p.startswith("dir")])
+
+        # Get the fMRIPrep confounds file and identify the number of non-steady-state volumes
+        confounds_file = os.path.join(
+            fmriprep_dir,
+            subject,
+            "ses-1",
+            "func",
+            f"{fname_base}_part-mag_desc-confounds_timeseries.tsv",
+        )
+        confounds_df = pd.read_table(confounds_file)
+        nss_cols = [c for c in confounds_df.columns if c.startswith("non_steady_state_outlier")]
+
+        dummy_scans = 0
+        if nss_cols:
+            initial_volumes_df = confounds_df[nss_cols]
+            dummy_scans = np.any(initial_volumes_df.to_numpy(), axis=1)
+            dummy_scans = np.where(dummy_scans)[0]
+
+            # reasonably assumes all NSS volumes are contiguous
+            dummy_scans = int(dummy_scans[-1] + 1)
+
+        print(f"\t\t{dummy_scans} dummy scans")
 
         # Combine the classifications from tedana with the AROMA classifications
         # and save the combined classifications to the derivatives folder
@@ -258,7 +280,7 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
             subject,
             "ses-1",
             "func",
-            f"{mask_base}_part-mag_desc-aroma_metrics.tsv",
+            f"{fname_base}_part-mag_desc-aroma_metrics.tsv",
         )
         aroma_df = pd.read_table(aroma_classifications)
 
@@ -389,6 +411,11 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
         mixing_arr = mixing_df.to_numpy()
         confounds_arr = mixing_arr[:, comps_rejected]
         rej_columns = [mixing_df.columns[i] for i in comps_rejected]
+
+        # Add dummy volumes to confounds_arr
+        dummy_confounds = np.zeros((dummy_scans, confounds_arr.shape[1]))
+        confounds_arr = np.vstack((dummy_confounds, confounds_arr))
+
         confounds_df = pd.DataFrame(columns=rej_columns, data=confounds_arr)
         confounds_df.to_csv(
             os.path.join(tedana_aroma_run_out_dir, f"{prefix}_desc-confounds_timeseries.tsv"),
@@ -408,4 +435,4 @@ if __name__ == "__main__":
     os.makedirs(temp_dir_, exist_ok=True)
 
     # run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
-    run_tedana_aroma(raw_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)
+    run_tedana_aroma(raw_dir_, fmriprep_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)

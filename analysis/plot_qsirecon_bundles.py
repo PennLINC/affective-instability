@@ -116,6 +116,7 @@ def visualize_bundles(
         reference=fa_img,
     )
     print("Loading cingulum streamlines...")
+    # Missing in PILOT02 and 24053
     l_cst = get_bundle_data(
         data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
@@ -123,6 +124,7 @@ def visualize_bundles(
         "ProjectionBrainstemCorticospinalTractL",
         reference=fa_img,
     )
+    # Missing in PILOT02 and 24053
     r_cst = get_bundle_data(
         data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,

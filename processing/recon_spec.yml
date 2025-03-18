@@ -41,7 +41,7 @@ nodes:
         track_id: Association,Projection,Commissure,Cerebellum
         track_voxel_ratio: 2.0
         yield_rate: 1.0e-06
-        model: msmt
+        model: gqi
     qsirecon_suffix: DSIAutoTrack
     software: DSI Studio
 
