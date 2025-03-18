@@ -137,7 +137,7 @@ def collect_t2star_results(in_dir):
     ax.set_ylabel("Mean T2* (ms)", fontsize=24)
     ax.set_ylim(42.5, 57.5)
     ax.grid(visible=False, axis="x")
-    fig.savefig("../figures/t2star_nordic_comparison.png")
+    fig.savefig("../figures/fMRIPrep_T2star_NORDIC.png")
 
 
 def plot_echo_wise_values(in_dir):

@@ -86,22 +86,28 @@ def visualize_bundles(
 ):
     fa_img = nb.load(
         data_root
+        / "qsirecon"
+        / "derivatives"
+        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
+        / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
     )
+    if not fa_img.exists():
+        print(f"Could not find FA image at {fa_img}")
+        return
 
     print("Loading arcuate fasciculus streamlines...")
     l_arc = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "AssociationArcuateFasciculusL",
         reference=fa_img,
     )
     r_arc = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "AssociationArcuateFasciculusR",
@@ -109,14 +115,14 @@ def visualize_bundles(
     )
     print("Loading cingulum streamlines...")
     l_cst = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractL",
         reference=fa_img,
     )
     r_cst = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractR",
@@ -124,14 +130,14 @@ def visualize_bundles(
     )
     # AssociationInferiorFrontoOccipitalFasciculusR
     r_inf_front_occipital = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusR",
         reference=fa_img,
     )
     l_inf_front_occipital = get_bundle_data(
-        data_root,
+        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusL",
@@ -142,6 +148,7 @@ def visualize_bundles(
     # Transform into the T1w reference frame
     t1w_img = nb.load(
         data_root
+        / "qsiprep"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"
@@ -152,6 +159,7 @@ def visualize_bundles(
     # Load the brain mask - it will be shown as a translucent contour
     brain_mask_img = nb.load(
         data_root
+        / "qsiprep"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"
@@ -278,9 +286,7 @@ def visualize_bundles(
 
 
 if __name__ == "__main__":
-    data_root = Path(
-        "/cbica/projects/pafin/derivatives/qsirecon/derivatives/qsirecon-DSIAutoTrack"
-    )
+    data_root = Path("/cbica/projects/pafin")
     out_dir = Path("/cbica/projects/pafin/code/figures")
     camera_positions6 = {
         "lh_camera_position": {

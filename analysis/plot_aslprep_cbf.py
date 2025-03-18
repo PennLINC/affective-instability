@@ -72,7 +72,10 @@ if __name__ == "__main__":
             colorbar=False,
         )
         # fig.suptitle(title)
-        fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
+        fig.savefig(
+            os.path.join(out_dir, f"ASLPrep_{title.replace(' ', '_')}.png"),
+            bbox_inches="tight",
+        )
         plt.close()
 
         # Plot the colorbars
