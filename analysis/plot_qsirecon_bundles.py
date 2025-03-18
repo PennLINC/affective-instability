@@ -279,7 +279,7 @@ def visualize_bundles(
 
 if __name__ == "__main__":
     data_root = Path(
-        "/cbica/projects/pafin/dset/derivatives/qsirecon/derivatives/qsirecon-DSIAutoTrack"
+        "/cbica/projects/pafin/derivatives/qsirecon/derivatives/qsirecon-DSIAutoTrack"
     )
     out_dir = Path("/cbica/projects/pafin/code/figures")
     camera_positions6 = {
@@ -303,13 +303,15 @@ if __name__ == "__main__":
     subjects = sorted(data_root.glob("sub-*"))
     for subject in subjects:
         subid = subject.name
-        sesids = sorted(subject.glob("ses-*"))
+        session_dirs = sorted(subject.glob("ses-*"))
+        sesids = [session_dir.name for session_dir in session_dirs]
         for sesid in sesids:
+            print(f"Processing {subid} {sesid}")
             images = visualize_bundles(
                 data_root=data_root,
                 out_dir=out_dir,
-                subid=subid,
-                sesid=sesid,
+                subid=subid.replace("sub-", ""),
+                sesid=sesid.replace("ses-", ""),
                 out_png=f"QSIRecon_DSIAutoTrack_{subid}_{sesid}",
                 camera_positions=camera_positions6,
             )
