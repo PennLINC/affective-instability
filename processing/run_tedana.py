@@ -387,7 +387,7 @@ def run_tedana_aroma(raw_dir, aroma_dir, tedana_out_dir, tedana_aroma_out_dir):
             sep="\t",
         )
         mixing_arr = mixing_df.to_numpy()
-        confounds_arr = mixing_arr[:, comps_accepted]
+        confounds_arr = mixing_arr[:, comps_rejected]
         rej_columns = [mixing_df.columns[i] for i in comps_rejected]
         confounds_df = pd.DataFrame(columns=rej_columns, data=confounds_arr)
         confounds_df.to_csv(
