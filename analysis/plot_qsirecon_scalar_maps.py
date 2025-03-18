@@ -30,6 +30,7 @@ if __name__ == "__main__":
         mean_img = image.mean_img(scalar_maps, copy_header=True)
         sd_img = image.math_img("np.std(img, axis=3)", img=scalar_maps)
 
+        # Mask out non-brain voxels
         masker = maskers.NiftiMasker(mask, resampling_target="data")
         mean_img = image.mean_img(scalar_maps, copy_header=True)
         mean_img = masker.inverse_transform(masker.fit_transform(mean_img))
@@ -73,7 +74,10 @@ if __name__ == "__main__":
             colorbar=False,
         )
         # fig.suptitle(title)
-        fig.savefig(os.path.join(out_dir, f"{title.replace(' ', '_')}.png"), bbox_inches="tight")
+        fig.savefig(
+            os.path.join(out_dir, f"QSIRecon_{title.replace(' ', '_')}.png"),
+            bbox_inches="tight",
+        )
         plt.close()
 
         # Plot the colorbars
@@ -98,7 +102,7 @@ if __name__ == "__main__":
 
         fig.tight_layout()
         fig.savefig(
-            os.path.join(out_dir, f"{title.replace(' ', '_')}_colorbar.png"),
+            os.path.join(out_dir, f"QSIRecon_{title.replace(' ', '_')}_colorbar.png"),
             bbox_inches="tight",
         )
         plt.close()

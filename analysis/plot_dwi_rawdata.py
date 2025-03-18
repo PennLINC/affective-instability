@@ -12,91 +12,6 @@ import numpy as np
 from nilearn import image, plotting
 
 
-data_root = Path("/cbica/projects/pafin")
-
-subid = "9645436710"
-sesid = "V02"
-
-# The dir-PA nifti is always the first
-raw_nifti = data_root / "dset" /f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi.nii"
-processed_nifti = (
-    data_root
-    / "derivatives"
-    / "qsiprep"
-    / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi.nii"
-)
-raw_to_acpc_xfm = processed_nifti.parent / f"sub-{subid}_ses-{sesid}_from-raw_to-ACPC_rigid.mat"
-raw_mean_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi_mean.nii"
-processed_mean_path = (
-    processed_nifti.parent / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
-)
-
-# If there is not transform file, we need to run the registration
-if not Path(raw_to_acpc_xfm).exists():
-    # Load the nifti files
-    raw_img = nb.load(raw_nifti)
-    processed_img = nb.load(processed_nifti)
-
-    # Get the data and calculate mean of first 4 volumes
-    raw_data = raw_img.get_fdata()
-    processed_data = processed_img.get_fdata()
-
-    raw_mean = raw_data[..., :4].mean(axis=3)
-    processed_mean = processed_data[..., :4].mean(axis=3)
-
-    # Create new nifti images with the mean data
-    raw_mean_img = nb.Nifti1Image(raw_mean, raw_img.affine, raw_img.header)
-    processed_mean_img = nb.Nifti1Image(processed_mean, processed_img.affine, processed_img.header)
-
-    # Save the mean images
-    nb.save(raw_mean_img, raw_mean_path)
-    nb.save(processed_mean_img, processed_mean_path)
-
-    # Load the mean images directly with ANTs
-    raw_mean_ants = ants.image_read(str(raw_mean_path))
-    processed_mean_ants = ants.image_read(str(processed_mean_path))
-
-    # Perform rigid registration
-    registration = ants.registration(
-        fixed=processed_mean_ants, moving=raw_mean_ants, type_of_transform="Similarity"
-    )
-    shutil.copy(registration["fwdtransforms"][0], raw_to_acpc_xfm)
-    # Apply transform using lanczoswindowedsinc interpolation
-    registered_processed = ants.apply_transforms(
-        fixed=processed_mean_ants,
-        moving=raw_mean_ants,
-        transformlist=registration["fwdtransforms"],
-        interpolator="lanczosWindowedSinc",
-    )
-
-    # Save the registered image
-    registered_path = (
-        processed_nifti.parent / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
-    )
-    ants.image_write(registered_processed, str(registered_path))
-
-# use nilearn image.crop_img to get the cropped reference image
-ref_img_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-cropped_dwi.nii"
-if not Path(ref_img_path).exists():
-    # Call 3dAutobox using subprocess
-    cmd = [
-        "3dAutobox",
-        "-prefix",
-        str(ref_img_path),
-        "-input",
-        str(processed_mean_path),
-        "-npad",
-        "5",
-    ]
-
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    stdout, stderr = process.communicate()
-
-    if process.returncode != 0:
-        raise RuntimeError(f"3dAutobox failed with error: {stderr.decode()}")
-
-
 def resample_processed_into_raw(image_index):
     """Select a 3d volume from raw_nifti and transform the corresponding
     volume from processed_nifti so they can be plotted next to each other.
@@ -233,8 +148,109 @@ def make_figure(raw_nii_path, registered_nii_path, image_index, crop_proportion=
     iio.imwrite(fig_path, cropped)
 
 
-vols_to_plot = [14, 15, 16, 17, 18, 19, 20, 21, 22]
-for vol in vols_to_plot:
-    print(f"Plotting volume {vol}")
-    raw_nii_path, registered_nii_path = resample_processed_into_raw(vol)
-    make_figure(raw_nii_path, registered_nii_path, vol)
+if __name__ == "__main__":
+    data_root = Path("/cbica/projects/pafin/dset")
+
+    subjects = sorted(data_root.glob("sub-*"))
+    for subject in subjects:
+        subid = subject.name
+        sesids = sorted(subject.glob("ses-*"))
+        for sesid in sesids:
+            print(f"Processing {subid} {sesid}")
+
+            # The dir-PA nifti is always the first
+            raw_nifti = data_root / "dset" / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi.nii"
+            processed_nifti = (
+                data_root
+                / "derivatives"
+                / "qsiprep"
+                / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi.nii"
+            )
+            raw_to_acpc_xfm = (
+                processed_nifti.parent / f"sub-{subid}_ses-{sesid}_from-raw_to-ACPC_rigid.mat"
+            )
+            raw_mean_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi_mean.nii"
+            processed_mean_path = (
+                processed_nifti.parent
+                / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
+            )
+
+            # If there is not transform file, we need to run the registration
+            if not Path(raw_to_acpc_xfm).exists():
+                # Load the nifti files
+                raw_img = nb.load(raw_nifti)
+                processed_img = nb.load(processed_nifti)
+
+                # Get the data and calculate mean of first 4 volumes
+                raw_data = raw_img.get_fdata()
+                processed_data = processed_img.get_fdata()
+
+                raw_mean = raw_data[..., :4].mean(axis=3)
+                processed_mean = processed_data[..., :4].mean(axis=3)
+
+                # Create new nifti images with the mean data
+                raw_mean_img = nb.Nifti1Image(raw_mean, raw_img.affine, raw_img.header)
+                processed_mean_img = nb.Nifti1Image(
+                    processed_mean,
+                    processed_img.affine,
+                    processed_img.header,
+                )
+
+                # Save the mean images
+                nb.save(raw_mean_img, raw_mean_path)
+                nb.save(processed_mean_img, processed_mean_path)
+
+                # Load the mean images directly with ANTs
+                raw_mean_ants = ants.image_read(str(raw_mean_path))
+                processed_mean_ants = ants.image_read(str(processed_mean_path))
+
+                # Perform rigid registration
+                registration = ants.registration(
+                    fixed=processed_mean_ants,
+                    moving=raw_mean_ants,
+                    type_of_transform="Similarity",
+                )
+                shutil.copy(registration["fwdtransforms"][0], raw_to_acpc_xfm)
+                # Apply transform using lanczoswindowedsinc interpolation
+                registered_processed = ants.apply_transforms(
+                    fixed=processed_mean_ants,
+                    moving=raw_mean_ants,
+                    transformlist=registration["fwdtransforms"],
+                    interpolator="lanczosWindowedSinc",
+                )
+
+                # Save the registered image
+                registered_path = (
+                    processed_nifti.parent
+                    / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
+                )
+                ants.image_write(registered_processed, str(registered_path))
+
+            # use nilearn image.crop_img to get the cropped reference image
+            ref_img_path = (
+                raw_nifti.parent / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-cropped_dwi.nii"
+            )
+            if not Path(ref_img_path).exists():
+                # Call 3dAutobox using subprocess
+                cmd = [
+                    "3dAutobox",
+                    "-prefix",
+                    str(ref_img_path),
+                    "-input",
+                    str(processed_mean_path),
+                    "-npad",
+                    "5",
+                ]
+
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                stdout, stderr = process.communicate()
+
+                if process.returncode != 0:
+                    raise RuntimeError(f"3dAutobox failed with error: {stderr.decode()}")
+
+            vols_to_plot = [14, 15, 16, 17, 18, 19, 20, 21, 22]
+            for vol in vols_to_plot:
+                print(f"Plotting volume {vol}")
+                raw_nii_path, registered_nii_path = resample_processed_into_raw(vol)
+                make_figure(raw_nii_path, registered_nii_path, vol)

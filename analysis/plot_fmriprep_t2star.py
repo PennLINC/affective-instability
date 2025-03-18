@@ -75,7 +75,7 @@ if __name__ == "__main__":
         )
         # fig.suptitle(title)
         fig.savefig(
-            os.path.join(out_dir, f"{title.replace(' ', '_')}.png"),
+            os.path.join(out_dir, f"fMRIPrep_{title.replace(' ', '_')}.png"),
             bbox_inches="tight",
         )
         plt.close()
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
         fig.tight_layout()
         fig.savefig(
-            os.path.join(out_dir, f"{title.replace(' ', '_')}_colorbar.png"),
+            os.path.join(out_dir, f"fMRIPrep_{title.replace(' ', '_')}_colorbar.png"),
             bbox_inches="tight",
         )
         plt.close()

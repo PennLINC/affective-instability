@@ -21,17 +21,13 @@ import gzip
 import shutil
 from pathlib import Path
 
-import nibabel as nib
+import nibabel as nb
 import numpy as np
 from AFQ.viz.utils import PanelFigure
 from dipy.io.streamline import load_tck
 from dipy.tracking.streamline import transform_streamlines
 from fury import actor, window
 from matplotlib.cm import tab20
-
-
-data_root = Path("/cbica/projects/pafin/dset")
-out_dir = Path("/cbica/projects/pafin/code/figures")
 
 
 def lines_as_tubes(sl, line_width, **kwargs):
@@ -59,13 +55,9 @@ def slice_volume(data, x=None, y=None, z=None):
     return slicer_actors
 
 
-def get_bundle_data(subid, sesid, bundle_name, reference):
+def get_bundle_data(data_root, subid, sesid, bundle_name, reference):
     bundle_path = (
         data_root
-        / "derivatives"
-        / "qsirecon"
-        / "derivatives"
-        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
@@ -84,36 +76,47 @@ def get_bundle_data(subid, sesid, bundle_name, reference):
 
 
 def visualize_bundles(
+    data_root,
+    out_dir,
     subid,
     sesid,
     out_png,
-    slice_coords=None,
     interactive=False,
     camera_positions=None,
 ):
-    fa_img = nib.load(
+    fa_img = nb.load(
         data_root
-        / "derivatives"
-        / "qsirecon"
-        / "derivatives"
-        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_model-gqi_param-qa_dwimap.nii.gz"
+        / f"sub-{subid}_ses-{sesid}_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
     )
 
     print("Loading arcuate fasciculus streamlines...")
-    l_arc = get_bundle_data(subid, sesid, "AssociationArcuateFasciculusL", reference=fa_img)
-    r_arc = get_bundle_data(subid, sesid, "AssociationArcuateFasciculusR", reference=fa_img)
+    l_arc = get_bundle_data(
+        data_root,
+        subid,
+        sesid,
+        "AssociationArcuateFasciculusL",
+        reference=fa_img,
+    )
+    r_arc = get_bundle_data(
+        data_root,
+        subid,
+        sesid,
+        "AssociationArcuateFasciculusR",
+        reference=fa_img,
+    )
     print("Loading cingulum streamlines...")
     l_cst = get_bundle_data(
+        data_root,
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractL",
         reference=fa_img,
     )
     r_cst = get_bundle_data(
+        data_root,
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractR",
@@ -121,12 +124,14 @@ def visualize_bundles(
     )
     # AssociationInferiorFrontoOccipitalFasciculusR
     r_inf_front_occipital = get_bundle_data(
+        data_root,
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusR",
         reference=fa_img,
     )
     l_inf_front_occipital = get_bundle_data(
+        data_root,
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusL",
@@ -135,27 +140,18 @@ def visualize_bundles(
 
     print("Loading T1w reference image...")
     # Transform into the T1w reference frame
-    t1w_img = nib.load(
+    t1w_img = nb.load(
         data_root
-        / "derivatives"
-        / "qsirecon"
-        / "derivatives"
-        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_T2w_brain.nii.gz"
+        / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_T1w.nii.gz"
     )
-    t1w = t1w_img.get_fdata()
 
     print("Loading brain mask...")
     # Load the brain mask - it will be shown as a translucent contour
-    brain_mask_img = nib.load(
+    brain_mask_img = nb.load(
         data_root
-        / "derivatives"
-        / "qsirecon"
-        / "derivatives"
-        / "qsirecon-DSIStudioGQI"
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "anat"
@@ -281,48 +277,39 @@ def visualize_bundles(
     return images
 
 
-camera_positions6 = {
-    "lh_camera_position": {
-        "offset": (360.0, 0.0, 0.0),
-        "view_up": (0.0, 0.0, 1.00),
-    },
-    "rh_camera_position": {
-        "offset": (-360.0, 0.0, 0.0),
-        "view_up": (0.0, 0.0, 1.00),
-    },
-    "posterior_camera_position": {
-        "offset": (0.0, 360.0, 0.0),
-        "view_up": (0.0, 0.0, 1.00),
-    },
-    "superior_camera_position": {
-        "offset": (0.0, 0.0, 360.0),
-        "view_up": (0.0, -1.0, 0.0),
-    },
-}
-
-# scene = visualize_bundles("6821775788", "V03", "6821775788_V03", interactive=True)
-images = visualize_bundles(
-    "6821775788",
-    "V02",
-    "6821775788_V02",
-    camera_positions=camera_positions6,
-)
-images = visualize_bundles(
-    "6821775788",
-    "V03",
-    "6821775788_V03",
-    camera_positions=camera_positions6,
-)
-
-images = visualize_bundles(
-    "5451906374",
-    "V02",
-    "5451906374_V02",
-    camera_positions=camera_positions6,
-)
-images = visualize_bundles(
-    "5451906374",
-    "V03",
-    "5451906374_V03",
-    camera_positions=camera_positions6,
-)
+if __name__ == "__main__":
+    data_root = Path(
+        "/cbica/projects/pafin/dset/derivatives/qsirecon/derivatives/qsirecon-DSIAutoTrack"
+    )
+    out_dir = Path("/cbica/projects/pafin/code/figures")
+    camera_positions6 = {
+        "lh_camera_position": {
+            "offset": (360.0, 0.0, 0.0),
+            "view_up": (0.0, 0.0, 1.00),
+        },
+        "rh_camera_position": {
+            "offset": (-360.0, 0.0, 0.0),
+            "view_up": (0.0, 0.0, 1.00),
+        },
+        "posterior_camera_position": {
+            "offset": (0.0, 360.0, 0.0),
+            "view_up": (0.0, 0.0, 1.00),
+        },
+        "superior_camera_position": {
+            "offset": (0.0, 0.0, 360.0),
+            "view_up": (0.0, -1.0, 0.0),
+        },
+    }
+    subjects = sorted(data_root.glob("sub-*"))
+    for subject in subjects:
+        subid = subject.name
+        sesids = sorted(subject.glob("ses-*"))
+        for sesid in sesids:
+            images = visualize_bundles(
+                data_root=data_root,
+                out_dir=out_dir,
+                subid=subid,
+                sesid=sesid,
+                out_png=f"QSIRecon_DSIAutoTrack_{subid}_{sesid}",
+                camera_positions=camera_positions6,
+            )

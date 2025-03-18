@@ -76,10 +76,16 @@ def plot_surface(name, measure, files):
         {"left": np.squeeze(lh_data), "right": np.squeeze(rh_data)},
         cmap="viridis",
     )
-    fig = p.build()
-    # fig.suptitle(measure, fontsize=24)
+    fig = p.build(
+        cbar_kws={
+            "location": "right",
+            "decimals": 2,
+            "shrink": 0.7,
+        },
+    )
+    fig.suptitle(measure, fontsize=18, y=0.8)
     fig.savefig(
-        f"../figures/{name.replace(' ', '')}_{measure.lower().replace(' ', '')}.png",
+        f"../figures/fMRIPrep_{name.replace(' ', '')}_{measure.replace(' ', '')}.png",
         bbox_inches="tight",
     )
     plt.close()
