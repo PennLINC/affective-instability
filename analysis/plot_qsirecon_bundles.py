@@ -61,7 +61,7 @@ def get_bundle_data(data_root, subid, sesid, bundle_name, reference):
         / f"sub-{subid}"
         / f"ses-{sesid}"
         / "dwi"
-        / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-msmt_bundle-{bundle_name}_streamlines.tck"
+        / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-gqi_bundle-{bundle_name}_streamlines.tck"
     )
     bundle_path_gz = bundle_path.with_suffix(".tck.gz")
     if bundle_path.exists():

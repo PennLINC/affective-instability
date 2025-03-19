@@ -5,11 +5,10 @@
 #SBATCH --array=1-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
-#SBATCH --time=100:00:00
-#SBATCH --partition=long
+#SBATCH --time=36:00:00
 # Outputs ----------------------------------
-#SBATCH --output=/cbica/projects/pafin/code/jobs/xcpd_%A-%a.out
-#SBATCH --error=/cbica/projects/pafin/code/jobs/xcpd_%A-%a.err
+#SBATCH --output=/cbica/projects/pafin/code/processing/jobs/xcpd_%A-%a.out
+#SBATCH --error=/cbica/projects/pafin/code/processing/jobs/xcpd_%A-%a.err
 # ------------------------------------------
 
 pwd; hostname; date
@@ -33,7 +32,8 @@ cmd="apptainer run --cleanenv \
     -B ${INPUT_DIR}:/data \
     -B ${DERIVS_DIR}:/out \
     -B ${SCRATCH_DIR}:/work \
-    /cbica/home/salot/apptainer/xcp_d-0.10.6.sif \
+    -B ${CODE_DIR}:/code \
+    /cbica/projects/pafin/apptainer/xcp_d-0.10.6.sif \
     /data/fmriprep \
     /out \
     participant \
@@ -44,7 +44,8 @@ cmd="apptainer run --cleanenv \
     --nprocs ${SLURM_CPUS_PER_TASK} \
     --mem-gb 79 \
     --mode linc \
-    --dummy-scans auto"
+    --dummy-scans auto \
+    --nuisance-regressors /code/processing/tedana+aroma.yml"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
@@ -54,6 +55,6 @@ exitcode=$?
 
 # Output results to a table
 echo "sub-$subject   ${SLURM_ARRAY_TASK_ID}    $exitcode" \
-      >> ${CODE_DIR}/jobs/"${SLURM_JOB_NAME}"."${SLURM_ARRAY_JOB_ID}".tsv
+      >> ${CODE_DIR}/processing/jobs/"${SLURM_JOB_NAME}"."${SLURM_ARRAY_JOB_ID}".tsv
 echo Finished tasks "${SLURM_ARRAY_TASK_ID}" with exit code $exitcode
 exit $exitcode

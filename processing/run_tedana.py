@@ -248,7 +248,6 @@ def run_tedana_aroma(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir, tedana_ar
         tedana_run_out_dir = os.path.join(tedana_out_dir, subject, "ses-1", "func")
         # Get the fMRIPrep brain mask
         fname_base = base_filename.split("_echo-1")[0]
-        fname_base = "_".join([p for p in fname_base.split("_") if not p.startswith("dir")])
 
         # Get the fMRIPrep confounds file and identify the number of non-steady-state volumes
         confounds_file = os.path.join(
@@ -271,6 +270,8 @@ def run_tedana_aroma(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir, tedana_ar
             dummy_scans = int(dummy_scans[-1] + 1)
 
         print(f"\t\t{dummy_scans} dummy scans")
+
+        fname_base = "_".join([p for p in fname_base.split("_") if not p.startswith("dir")])
 
         # Combine the classifications from tedana with the AROMA classifications
         # and save the combined classifications to the derivatives folder

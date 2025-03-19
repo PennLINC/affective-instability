@@ -52,7 +52,8 @@ cmd="apptainer run --cleanenv \
       --output-resolution 1.7 \
       --subject-anatomical-reference sessionwise \
       --hmc-model 3dSHORE \
-      --pepolar-method DRBUDDI"
+      --pepolar-method DRBUDDI \
+      --b1-biascorrect-stage none"
 
 # Setup done, run the command
 echo Running task "${SLURM_ARRAY_TASK_ID}"
