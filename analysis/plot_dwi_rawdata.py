@@ -12,7 +12,7 @@ import numpy as np
 from nilearn import image, plotting
 
 
-def resample_processed_into_raw(image_index):
+def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_index):
     """Select a 3d volume from raw_nifti and transform the corresponding
     volume from processed_nifti so they can be plotted next to each other.
 
@@ -27,15 +27,14 @@ def resample_processed_into_raw(image_index):
     # Load the image from image_index using nilearn, save as a single-volume nifti
     # No need to transform the processed image, it is already in ACPC space
     processed_vol_path = (
-        processed_nifti.parent
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_vol-{image_index}.nii"
+        temp_dir / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_vol-{image_index}.nii"
     )
     processed_vol = image.index_img(str(processed_nifti), image_index)
     processed_vol.to_filename(processed_vol_path)
 
     # Transform the raw image at image_index to the ACPC space
     raw_nii = image.index_img(str(raw_nifti), image_index)
-    raw_nii_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_vol-{image_index}_raw.nii"
+    raw_nii_path = temp_dir / f"sub-{subid}_ses-{sesid}_vol-{image_index}_raw.nii"
     raw_nii.to_filename(raw_nii_path)
     raw_ants = ants.image_read(str(raw_nii_path))
     raw_vol = ants.apply_transforms(
@@ -45,7 +44,7 @@ def resample_processed_into_raw(image_index):
         interpolator="lanczosWindowedSinc",
     )
     resampled_raw_nii_path = (
-        raw_nifti.parent / f"sub-{subid}_ses-{sesid}_vol-{image_index}_space-ACPC_raw.nii"
+        temp_dir / f"sub-{subid}_ses-{sesid}_vol-{image_index}_space-ACPC_raw.nii"
     )
     ants.image_write(raw_vol, str(resampled_raw_nii_path))
 
@@ -59,7 +58,7 @@ def resample_processed_into_raw(image_index):
     return resampled_raw_nii_path, processed_vol_path
 
 
-def make_figure(raw_nii_path, registered_nii_path, image_index, crop_proportion=0.1):
+def make_figure(out_dir, raw_nii_path, registered_nii_path, image_index, crop_proportion=0.1):
     """Create a figure comparing raw and registered volumes.
 
     Parameters
@@ -129,7 +128,7 @@ def make_figure(raw_nii_path, registered_nii_path, image_index, crop_proportion=
     plt.subplots_adjust(hspace=0, wspace=0, left=0, right=1, bottom=0, top=1)
 
     # Save the figure
-    fig_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_vol-{image_index}_comparison.png"
+    fig_path = out_dir / f"QSIPrep_sub-{subid}_ses-{sesid}_vol-{image_index}_comparison.png"
     plt.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close()
 
@@ -149,30 +148,45 @@ def make_figure(raw_nii_path, registered_nii_path, image_index, crop_proportion=
 
 
 if __name__ == "__main__":
-    data_root = Path("/cbica/projects/pafin/dset")
+    data_root = Path("/cbica/projects/pafin")
+    out_dir = Path("/cbica/projects/pafin/code/figures")
+    temp_dir = Path("/cbica/comp_space/pafin/qsiprep_figures")
+    temp_dir.mkdir(parents=False, exist_ok=True)
 
-    subjects = sorted(data_root.glob("sub-*"))
+    subjects = sorted((data_root / "dset").glob("sub-*"))
     for subject in subjects:
         subid = subject.name
-        sesids = sorted(subject.glob("ses-*"))
+        sesids = sorted((data_root / "dset" / subject).glob("ses-*"))
+        sesids = [sesid.name for sesid in sesids]
         for sesid in sesids:
             print(f"Processing {subid} {sesid}")
 
             # The dir-PA nifti is always the first
-            raw_nifti = data_root / "dset" / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi.nii"
+            raw_nifti = (
+                data_root
+                / "dset"
+                / f"sub-{subid}"
+                / f"ses-{sesid}"
+                / "dwi"
+                / f"sub-{subid}_ses-{sesid}_dir-AP_run-01_part-mag_dwi.nii.gz"
+            )
             processed_nifti = (
                 data_root
                 / "derivatives"
                 / "qsiprep"
-                / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi.nii"
+                / f"sub-{subid}"
+                / f"ses-{sesid}"
+                / "dwi"
+                / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_desc-preproc_dwi.nii.gz"
             )
             raw_to_acpc_xfm = (
-                processed_nifti.parent / f"sub-{subid}_ses-{sesid}_from-raw_to-ACPC_rigid.mat"
+                processed_nifti.parent.parent
+                / "anat"
+                / f"sub-{subid}_ses-{sesid}_from-raw_to-ACPC_rigid.mat"
             )
-            raw_mean_path = raw_nifti.parent / f"sub-{subid}_ses-{sesid}_dir-PA_run-1_dwi_mean.nii"
+            raw_mean_path = temp_dir / f"sub-{subid}_ses-{sesid}_dir-AP_run-1_dwi_mean.nii"
             processed_mean_path = (
-                processed_nifti.parent
-                / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
+                temp_dir / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
             )
 
             # If there is not transform file, we need to run the registration

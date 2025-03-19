@@ -1,10 +1,17 @@
 """Check that multi-echo scans are the right length."""
-from bids import BIDSLayout
-from bids.layout import Query
+
 import nibabel as nb
+from bids.layout import BIDSLayout, Query
+
 
 layout = BIDSLayout("/cbica/projects/pafin/dset", validate=False)
-files = layout.get(echo=1, reconstruction="nordic", part="mag", suffix=["noRF", "bold"], extension=["nii.gz"])
+files = layout.get(
+    echo=1,
+    reconstruction="nordic",
+    part="mag",
+    suffix=["noRF", "bold"],
+    extension=["nii.gz"],
+)
 for f in files:
     print(f.filename)
     size_check = {}
@@ -14,20 +21,26 @@ for f in files:
         file_entities["echo"] = i_echo
         echo_file = layout.get(**file_entities)
         if len(echo_file) != 1:
-            raise ValueError(f"Something's wrong with {file_entities}\n{len(echo_file)} files found:\n{echo_file}")
+            raise ValueError(
+                f"Something's wrong with {file_entities}\n{len(echo_file)} files found:\n"
+                f"{echo_file}"
+            )
 
         img_size = nb.load(echo_file[0].path).shape
         size_check[f"mag_{i_echo}"] = img_size
 
     file_entities["part"] = "phase"
-    for	i_echo in range(1, 6):
-       	file_entities["echo"] =	i_echo
-       	echo_file = layout.get(**file_entities)
-       	if len(echo_file) != 1:
-       	    raise ValueError(f"Something's wrong with {file_entities}\n{len(echo_file)} files found:\n{echo_file}")
+    for i_echo in range(1, 6):
+        file_entities["echo"] = i_echo
+        echo_file = layout.get(**file_entities)
+        if len(echo_file) != 1:
+            raise ValueError(
+                f"Something's wrong with {file_entities}\n{len(echo_file)} files found:\n"
+                f"{echo_file}"
+            )
 
         img_size = nb.load(echo_file[0].path).shape
-       	size_check[f"phase_{i_echo}"] = img_size
+        size_check[f"phase_{i_echo}"] = img_size
 
     test_size = size_check["mag_1"]
     if (len(test_size) != 4) or (test_size[3] == 0):
@@ -36,4 +49,3 @@ for f in files:
     for k, v in size_check.items():
         if test_size != v:
             print(f"Size of {k} ({v}) != {f.filename} ({test_size})")
-

@@ -15,6 +15,13 @@ addition, it is often useful to have visualizations that are visually appealing
 and striking. In this tutorial, we will use the `fury <https://fury.gl/>`_
 library [1]_ to visualize outputs of pyAFQ as publication-ready figures.
 
+To run this script, I copied the QSIRecon derivatives from CUBIC to my laptop, in a single folder.
+I created a new environment, then ran the script.
+
+micromamba create --name dipy python=3.11 nibabel numpy dipy fury matplotlib
+pip install pyAFQ
+
+I also deleted the view-wise figures, since they are large and not needed for the manuscript.
 """
 
 import gzip
@@ -58,9 +65,6 @@ def slice_volume(data, x=None, y=None, z=None):
 def get_bundle_data(data_root, subid, sesid, bundle_name, reference):
     bundle_path = (
         data_root
-        / f"sub-{subid}"
-        / f"ses-{sesid}"
-        / "dwi"
         / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-gqi_bundle-{bundle_name}_streamlines.tck"
     )
     bundle_path_gz = bundle_path.with_suffix(".tck.gz")
@@ -85,14 +89,7 @@ def visualize_bundles(
     camera_positions=None,
 ):
     fa_file = (
-        data_root
-        / "qsirecon"
-        / "derivatives"
-        / "qsirecon-DSIStudioGQI"
-        / f"sub-{subid}"
-        / f"ses-{sesid}"
-        / "dwi"
-        / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
+        data_root / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_model-tensor_param-fa_dwimap.nii.gz"
     )
     if not fa_file.exists():
         print(f"Could not find FA image at {fa_file}")
@@ -102,14 +99,14 @@ def visualize_bundles(
 
     print("Loading arcuate fasciculus streamlines...")
     l_arc = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "AssociationArcuateFasciculusL",
         reference=fa_img,
     )
     r_arc = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "AssociationArcuateFasciculusR",
@@ -118,7 +115,7 @@ def visualize_bundles(
     print("Loading cingulum streamlines...")
     # Missing in PILOT02 and 24053
     l_cst = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractL",
@@ -126,7 +123,7 @@ def visualize_bundles(
     )
     # Missing in PILOT02 and 24053
     r_cst = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "ProjectionBrainstemCorticospinalTractR",
@@ -134,14 +131,14 @@ def visualize_bundles(
     )
     # AssociationInferiorFrontoOccipitalFasciculusR
     r_inf_front_occipital = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusR",
         reference=fa_img,
     )
     l_inf_front_occipital = get_bundle_data(
-        data_root / "qsirecon" / "derivatives" / "qsirecon-DSIAutoTrack",
+        data_root,
         subid,
         sesid,
         "AssociationInferiorFrontoOccipitalFasciculusL",
@@ -150,24 +147,12 @@ def visualize_bundles(
 
     print("Loading T1w reference image...")
     # Transform into the T1w reference frame
-    t1w_img = nb.load(
-        data_root
-        / "qsiprep"
-        / f"sub-{subid}"
-        / f"ses-{sesid}"
-        / "anat"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_T1w.nii.gz"
-    )
+    t1w_img = nb.load(data_root / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_T1w.nii.gz")
 
     print("Loading brain mask...")
     # Load the brain mask - it will be shown as a translucent contour
     brain_mask_img = nb.load(
-        data_root
-        / "qsiprep"
-        / f"sub-{subid}"
-        / f"ses-{sesid}"
-        / "anat"
-        / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-brain_mask.nii.gz"
+        data_root / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-brain_mask.nii.gz"
     )
     brain_mask_data = brain_mask_img.get_fdata()
     # find the center of mass for the brain mask
@@ -290,8 +275,8 @@ def visualize_bundles(
 
 
 if __name__ == "__main__":
-    data_root = Path("/cbica/projects/pafin")
-    out_dir = Path("/cbica/projects/pafin/code/figures")
+    data_root = Path("/Users/taylor/Desktop/pafin-qsirecon")
+    out_dir = Path("/Users/taylor/Documents/linc/affective-instability/figures")
     camera_positions6 = {
         "lh_camera_position": {
             "offset": (360.0, 0.0, 0.0),
@@ -310,15 +295,16 @@ if __name__ == "__main__":
             "view_up": (0.0, -1.0, 0.0),
         },
     }
-    subjects = sorted((data_root / "dset").glob("sub-*"))
+    subjects = sorted((data_root).glob("sub-*"))
+    subjects = [subject.name.split("_")[0] for subject in subjects]
+    subjects = sorted(set(subjects))
     for subject in subjects:
-        subid = subject.name
-        session_dirs = sorted(subject.glob("ses-*"))
-        sesids = [session_dir.name for session_dir in session_dirs]
+        subid = subject
+        sesids = ["ses-1"]
         for sesid in sesids:
             print(f"Processing {subid} {sesid}")
             images = visualize_bundles(
-                data_root=data_root / "derivatives",
+                data_root=data_root,
                 out_dir=out_dir,
                 subid=subid.replace("sub-", ""),
                 sesid=sesid.replace("ses-", ""),
