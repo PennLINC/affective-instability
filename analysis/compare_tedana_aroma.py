@@ -41,16 +41,16 @@ if __name__ == "__main__":
 
         rejected_df = df.loc[df["classification"] == "rejected"]
         rejected_both_df = rejected_df.loc[
-            rejected_df["classification_tags"].str.contains("TEDANA")
+            rejected_df["classification_tags"].str.contains("TEDANA Unlikely")
             & rejected_df["classification_tags"].str.contains("AROMA")
         ]
         rejected_aroma_df = rejected_df.loc[
             rejected_df["classification_tags"].str.contains("AROMA")
-            & ~rejected_df["classification_tags"].str.contains("TEDANA")
+            & ~rejected_df["classification_tags"].str.contains("TEDANA Unlikely")
         ]
         rejected_tedana_df = rejected_df.loc[
             ~rejected_df["classification_tags"].str.contains("AROMA")
-            & rejected_df["classification_tags"].str.contains("TEDANA")
+            & rejected_df["classification_tags"].str.contains("TEDANA Unlikely")
         ]
 
         file_dict["n_rejected_both"] = rejected_both_df.shape[0]
