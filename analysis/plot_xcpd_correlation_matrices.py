@@ -1,113 +1,11 @@
+"""Plot the correlation matrices for the XCP-D Bao and RAT tasks."""
+
 from glob import glob
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-
-def plot_matrix(corr_mat, network_labels, ax):
-    """Plot matrix in subplot Axes."""
-    assert corr_mat.shape[0] == len(network_labels)
-    assert corr_mat.shape[1] == len(network_labels)
-
-    # Determine order of nodes while retaining original order of networks
-    unique_labels = []
-    for label in network_labels:
-        if label not in unique_labels:
-            unique_labels.append(label)
-
-    mapper = {label: f"{i:03d}_{label}" for i, label in enumerate(unique_labels)}
-    mapped_network_labels = [mapper[label] for label in network_labels]
-    community_order = np.argsort(mapped_network_labels)
-
-    # Sort parcels by community
-    corr_mat = corr_mat[community_order, :]
-    corr_mat = corr_mat[:, community_order]
-
-    # Get the community name associated with each network
-    labels = np.array(network_labels)[community_order]
-    unique_labels = sorted(set(labels))
-    unique_labels = []
-    for label in labels:
-        if label not in unique_labels:
-            unique_labels.append(label)
-
-    # Find the locations for the community-separating lines
-    break_idx = [0]
-    end_idx = None
-    for label in unique_labels:
-        start_idx = np.where(labels == label)[0][0]
-        if end_idx:
-            break_idx.append(np.nanmean([start_idx, end_idx]))
-
-        end_idx = np.where(labels == label)[0][-1]
-
-    break_idx.append(len(labels))
-    break_idx = np.array(break_idx)
-
-    # Find the locations for the labels in the middles of the communities
-    label_idx = np.nanmean(np.vstack((break_idx[1:], break_idx[:-1])), axis=0)
-
-    np.fill_diagonal(corr_mat, 0)
-
-    # Plot the correlation matrix
-    im = ax.imshow(corr_mat, vmin=-1, vmax=1, cmap="seismic")
-
-    # Add lines separating networks
-    for idx in break_idx[1:-1]:
-        ax.axes.axvline(idx, color="black")
-        ax.axes.axhline(idx, color="black")
-
-    # Add network names
-    ax.axes.set_yticks(label_idx)
-    ax.axes.set_xticks(label_idx)
-    ax.axes.set_yticklabels(unique_labels)
-    ax.axes.set_xticklabels(unique_labels, rotation=90)
-
-    return im, ax
-
-
-def plot_thing():
-    for i_ax, atlas in enumerate(selected_atlases):
-        i_row, i_col = divmod(i_ax, ncols)
-        ax = fig.add_subplot(gs[i_row, i_col])
-        atlas_idx = atlases.index(atlas)
-        atlas_file = correlations_tsv[atlas_idx]
-        dseg_file = atlas_tsvs[atlas_idx]
-
-        column_name = COMMUNITY_LOOKUP.get(atlas, "network_label")
-        dseg_df = pd.read_table(dseg_file)
-        corrs_df = pd.read_table(atlas_file, index_col="Node")
-
-        if atlas.startswith("4S"):
-            atlas_mapper = {
-                "CIT168Subcortical": "Subcortical",
-                "ThalamusHCP": "Thalamus",
-                "SubcorticalHCP": "Subcortical",
-            }
-            network_labels = dseg_df[column_name].fillna(dseg_df["atlas_name"]).tolist()
-            network_labels = [atlas_mapper.get(network, network) for network in network_labels]
-        elif column_name in dseg_df.columns:
-            network_labels = dseg_df[column_name].fillna("None").tolist()
-        else:
-            network_labels = ["None"] * dseg_df.shape[0]
-
-        im, ax = plot_matrix(
-            corr_mat=corrs_df.to_numpy(),
-            network_labels=network_labels,
-            ax=ax,
-        )
-        ax.set_title(
-            atlas,
-            fontdict={"weight": "normal", "size": 20},
-        )
-
-    # Add colorbar in the reserved space
-    cbar_ax = fig.add_subplot(gs[0, -1])
-    plt.colorbar(im, cax=cbar_ax)
-    cbar_ax.set_yticks([-1, 0, 1])
-    fig.tight_layout()
 
 
 if __name__ == "__main__":
@@ -160,7 +58,10 @@ if __name__ == "__main__":
     label_idx = np.nanmean(np.vstack((break_idx[1:], break_idx[:-1])), axis=0)
 
     corrmats = sorted(
-        glob("/cbica/projects/pafin/derivatives/xcp_d/sub-*/ses-1/func/*seg-4S156Parcels_stat-pearsoncorrelation_relmat.tsv")
+        glob(
+            "/cbica/projects/pafin/derivatives/xcp_d/sub-*/ses-1/func/"
+            "*seg-4S156Parcels_stat-pearsoncorrelation_relmat.tsv"
+        )
     )
     for task in ["bao", "rat"]:
         for denoising in ["none", "nordic"]:
@@ -245,7 +146,7 @@ if __name__ == "__main__":
             cbar = fig.colorbar(
                 mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
                 cax=axs[0],
-                orientation='horizontal',
+                orientation="horizontal",
             )
             cbar.set_ticks([-1, 0, 1])
 
@@ -253,7 +154,7 @@ if __name__ == "__main__":
             cbar = fig.colorbar(
                 mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
                 cax=axs[1],
-                orientation='horizontal',
+                orientation="horizontal",
             )
             cbar.set_ticks([0, np.mean([0, vmax1]), vmax1])
 
