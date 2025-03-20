@@ -264,7 +264,9 @@ if __name__ == "__main__":
                 if process.returncode != 0:
                     raise RuntimeError(f"3dAutobox failed with error: {stderr.decode()}")
 
-            vols_to_plot = [0, 1, 14, 27, 40, 53, 66, 79, 103, 15, 22, 33, 44, 71, 86]
+            lowb_vols = [0, 1, 14, 27, 40, 53, 66, 79, 103]
+            highb_vols = [15, 22, 33, 44, 71, 86]
+            vols_to_plot = lowb_vols + highb_vols
             for vol in vols_to_plot:
                 print(f"Plotting volume {vol}")
                 raw_nii_path, registered_nii_path = resample_processed_into_raw(
