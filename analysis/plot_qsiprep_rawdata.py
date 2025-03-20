@@ -12,7 +12,7 @@ import numpy as np
 from nilearn import image, plotting
 
 
-def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_index):
+def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_index, subid, sesid):
     """Select a 3d volume from raw_nifti and transform the corresponding
     volume from processed_nifti so they can be plotted next to each other.
 
@@ -27,14 +27,14 @@ def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_inde
     # Load the image from image_index using nilearn, save as a single-volume nifti
     # No need to transform the processed image, it is already in ACPC space
     processed_vol_path = (
-        temp_dir / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_vol-{image_index}.nii"
+        temp_dir / f"{subid}_{sesid}_space-ACPC_desc-preproc_dwi_vol-{image_index}.nii"
     )
     processed_vol = image.index_img(str(processed_nifti), image_index)
     processed_vol.to_filename(processed_vol_path)
 
     # Transform the raw image at image_index to the ACPC space
     raw_nii = image.index_img(str(raw_nifti), image_index)
-    raw_nii_path = temp_dir / f"sub-{subid}_ses-{sesid}_vol-{image_index}_raw.nii"
+    raw_nii_path = temp_dir / f"{subid}_{sesid}_vol-{image_index}_raw.nii"
     raw_nii.to_filename(raw_nii_path)
     raw_ants = ants.image_read(str(raw_nii_path))
     raw_vol = ants.apply_transforms(
@@ -43,9 +43,7 @@ def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_inde
         transformlist=[str(raw_to_acpc_xfm)],
         interpolator="lanczosWindowedSinc",
     )
-    resampled_raw_nii_path = (
-        temp_dir / f"sub-{subid}_ses-{sesid}_vol-{image_index}_space-ACPC_raw.nii"
-    )
+    resampled_raw_nii_path = temp_dir / f"{subid}_{sesid}_vol-{image_index}_space-ACPC_raw.nii"
     ants.image_write(raw_vol, str(resampled_raw_nii_path))
 
     temp_files_to_delete = [
@@ -58,7 +56,15 @@ def resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, image_inde
     return resampled_raw_nii_path, processed_vol_path
 
 
-def make_figure(out_dir, raw_nii_path, registered_nii_path, image_index, crop_proportion=0.1):
+def make_figure(
+    out_dir,
+    raw_nii_path,
+    registered_nii_path,
+    image_index,
+    subid,
+    sesid,
+    crop_proportion=0.1,
+):
     """Create a figure comparing raw and registered volumes.
 
     Parameters
@@ -128,7 +134,7 @@ def make_figure(out_dir, raw_nii_path, registered_nii_path, image_index, crop_pr
     plt.subplots_adjust(hspace=0, wspace=0, left=0, right=1, bottom=0, top=1)
 
     # Save the figure
-    fig_path = out_dir / f"QSIPrep_sub-{subid}_ses-{sesid}_vol-{image_index}_comparison.png"
+    fig_path = out_dir / f"QSIPrep_{subid}_{sesid}_vol-{image_index}_comparison.png"
     plt.savefig(fig_path, dpi=300, bbox_inches="tight")
     plt.close()
 
@@ -259,5 +265,12 @@ if __name__ == "__main__":
             vols_to_plot = [14, 15, 16, 17, 18, 19, 20, 21, 22]
             for vol in vols_to_plot:
                 print(f"Plotting volume {vol}")
-                raw_nii_path, registered_nii_path = resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, vol)
-                make_figure(raw_nii_path, registered_nii_path, vol)
+                raw_nii_path, registered_nii_path = resample_processed_into_raw(
+                    processed_nifti,
+                    raw_nifti,
+                    temp_dir,
+                    vol,
+                    subid,
+                    sesid,
+                )
+                make_figure(out_dir, raw_nii_path, registered_nii_path, vol, subid, sesid)
