@@ -160,8 +160,10 @@ if __name__ == "__main__":
     temp_dir.mkdir(parents=False, exist_ok=True)
 
     subjects = sorted((data_root / "dset").glob("sub-*"))
+    subjects = ["sub-24683"]
     for subject in subjects:
-        subid = subject.name
+        # subid = subject.name
+        subid = subject
         sesids = sorted((data_root / "dset" / subid).glob("ses-*"))
         sesids = [sesid.name for sesid in sesids]
         for sesid in sesids:
@@ -262,7 +264,7 @@ if __name__ == "__main__":
                 if process.returncode != 0:
                     raise RuntimeError(f"3dAutobox failed with error: {stderr.decode()}")
 
-            vols_to_plot = [14, 15, 16, 17, 18, 19, 20, 21, 22]
+            vols_to_plot = [0, 1, 14, 27, 40, 53, 66, 79, 103, 15, 22, 33, 44, 71, 86]
             for vol in vols_to_plot:
                 print(f"Plotting volume {vol}")
                 raw_nii_path, registered_nii_path = resample_processed_into_raw(
