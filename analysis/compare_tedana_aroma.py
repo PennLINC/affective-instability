@@ -23,23 +23,7 @@ if __name__ == "__main__":
             )
         )
     )
-    group_df = pd.DataFrame(
-        columns=[
-            "file",
-            "subject",
-            "denoising",
-            "n_components",
-            "n_accepted",
-            "n_rejected_aroma",
-            "n_rejected_tedana",
-            "n_rejected_both",
-            "varex_accepted",
-            "varex_rejected_aroma",
-            "varex_rejected_tedana",
-            "varex_rejected_both",
-            "varex_unmodeled",
-        ],
-    )
+    file_dicts = []
     for file in files:
         df = pd.read_table(file)
         subject = os.path.basename(file).split("_")[0]
@@ -76,9 +60,10 @@ if __name__ == "__main__":
         file_dict["varex_rejected_aroma"] = rejected_aroma_df["total_variance_explained"].sum()
         file_dict["varex_rejected_tedana"] = rejected_tedana_df["total_variance_explained"].sum()
 
-        group_df = group_df.append(file_dict, ignore_index=True)
+        file_dicts.append(file_dict)
 
-    group_df.to_csv("../data/bold_denoising_metrics.tsv", index=False, sep="\t")
+    group_df = pd.DataFrame(file_dicts)
+    group_df.to_csv("../data/AROMA+tedana_denoising_metrics.tsv", index=False, sep="\t")
 
     # Boxplot of variance explained, organized as "accepted", "rejected by AROMA",
     # "rejected by TEDANA", "rejected by both", "unmodeled" across runs
@@ -109,7 +94,7 @@ if __name__ == "__main__":
     ax.set(ylabel="")
     sns.despine(trim=True, left=True)
     f.tight_layout()
-    f.savefig(os.path.join(out_dir, "bold_denoising_variance_explained.png"), bbox_inches="tight")
+    f.savefig(os.path.join(out_dir, "AROMA+tedana_variance_explained.png"), bbox_inches="tight")
     plt.close()
 
     # Boxplot of number of components, organized as "accepted", "rejected by AROMA",
@@ -140,5 +125,5 @@ if __name__ == "__main__":
     ax.set(ylabel="")
     sns.despine(trim=True, left=True)
     f.tight_layout()
-    f.savefig(os.path.join(out_dir, "bold_denoising_n_components.png"), bbox_inches="tight")
+    f.savefig(os.path.join(out_dir, "AROMA+tedana_n_components.png"), bbox_inches="tight")
     plt.close()
