@@ -156,7 +156,7 @@ if __name__ == "__main__":
     subjects = sorted((data_root / "dset").glob("sub-*"))
     for subject in subjects:
         subid = subject.name
-        sesids = sorted((data_root / "dset" / subject).glob("ses-*"))
+        sesids = sorted((data_root / "dset" / subid).glob("ses-*"))
         sesids = [sesid.name for sesid in sesids]
         for sesid in sesids:
             print(f"Processing {subid} {sesid}")
@@ -165,29 +165,27 @@ if __name__ == "__main__":
             raw_nifti = (
                 data_root
                 / "dset"
-                / f"sub-{subid}"
-                / f"ses-{sesid}"
+                / subid
+                / sesid
                 / "dwi"
-                / f"sub-{subid}_ses-{sesid}_dir-AP_run-01_part-mag_dwi.nii.gz"
+                / f"{subid}_{sesid}_dir-AP_run-01_part-mag_dwi.nii.gz"
             )
             processed_nifti = (
                 data_root
                 / "derivatives"
                 / "qsiprep"
-                / f"sub-{subid}"
-                / f"ses-{sesid}"
+                / subid
+                / sesid
                 / "dwi"
-                / f"sub-{subid}_ses-{sesid}_dir-AP_space-ACPC_desc-preproc_dwi.nii.gz"
+                / f"{subid}_{sesid}_dir-AP_space-ACPC_desc-preproc_dwi.nii.gz"
             )
             raw_to_acpc_xfm = (
                 processed_nifti.parent.parent
                 / "anat"
-                / f"sub-{subid}_ses-{sesid}_from-raw_to-ACPC_rigid.mat"
+                / f"{subid}_{sesid}_from-raw_to-ACPC_rigid.mat"
             )
-            raw_mean_path = temp_dir / f"sub-{subid}_ses-{sesid}_dir-AP_run-1_dwi_mean.nii"
-            processed_mean_path = (
-                temp_dir / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
-            )
+            raw_mean_path = temp_dir / f"{subid}_{sesid}_dir-AP_run-1_dwi_mean.nii"
+            processed_mean_path = temp_dir / f"{subid}_{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
 
             # If there is not transform file, we need to run the registration
             if not Path(raw_to_acpc_xfm).exists():
@@ -234,16 +232,11 @@ if __name__ == "__main__":
                 )
 
                 # Save the registered image
-                registered_path = (
-                    processed_nifti.parent
-                    / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
-                )
+                registered_path = temp_dir / f"{subid}_{sesid}_space-ACPC_desc-preproc_dwi_mean.nii"
                 ants.image_write(registered_processed, str(registered_path))
 
             # use nilearn image.crop_img to get the cropped reference image
-            ref_img_path = (
-                raw_nifti.parent / f"sub-{subid}_ses-{sesid}_space-ACPC_desc-cropped_dwi.nii"
-            )
+            ref_img_path = temp_dir / f"{subid}_{sesid}_space-ACPC_desc-cropped_dwi.nii"
             if not Path(ref_img_path).exists():
                 # Call 3dAutobox using subprocess
                 cmd = [
@@ -266,5 +259,5 @@ if __name__ == "__main__":
             vols_to_plot = [14, 15, 16, 17, 18, 19, 20, 21, 22]
             for vol in vols_to_plot:
                 print(f"Plotting volume {vol}")
-                raw_nii_path, registered_nii_path = resample_processed_into_raw(vol)
+                raw_nii_path, registered_nii_path = resample_processed_into_raw(processed_nifti, raw_nifti, temp_dir, vol)
                 make_figure(raw_nii_path, registered_nii_path, vol)
