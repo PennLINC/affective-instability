@@ -1,5 +1,6 @@
 from glob import glob
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -159,7 +160,7 @@ if __name__ == "__main__":
     label_idx = np.nanmean(np.vstack((break_idx[1:], break_idx[:-1])), axis=0)
 
     corrmats = sorted(
-        glob("/cbica/projects/pafin/derivatives/xcp_d/sub-*/ses-1/func/*seg-4S156Parcels*.tsv")
+        glob("/cbica/projects/pafin/derivatives/xcp_d/sub-*/ses-1/func/*seg-4S156Parcels_stat-pearsoncorrelation_relmat.tsv")
     )
     for task in ["bao", "rat"]:
         for denoising in ["none", "nordic"]:
@@ -181,15 +182,16 @@ if __name__ == "__main__":
 
             # First mean
             mean_arr_z = np.nanmean(arr_3d_z, axis=2)
-            mean_arr_r = np.tanh(mean_arr_z)
 
             # Sort parcels by community
             mean_arr_z = mean_arr_z[community_order, :]
             mean_arr_z = mean_arr_z[:, community_order]
             np.fill_diagonal(mean_arr_z, 0)
 
-            fig, ax = plt.subplots(figsize=(10, 5))
-            ax.imshow(mean_arr_r, cmap="seismic", vmin=-1, vmax=1)
+            mean_arr_r = np.tanh(mean_arr_z)
+
+            fig, ax = plt.subplots(figsize=(10, 10))
+            ax.imshow(mean_arr_r, cmap="viridis", vmin=-1, vmax=1)
 
             # Add lines separating networks
             for idx in break_idx[1:-1]:
@@ -201,20 +203,25 @@ if __name__ == "__main__":
             ax.axes.set_xticks(label_idx)
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
-
+            fig.tight_layout()
             fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_Mean.png")
             plt.close()
 
             # Now standard deviation
             sd_arr_z = np.nanstd(arr_3d_z, axis=2)
-            sd_arr_r = np.tanh(sd_arr_z)
 
             # Sort parcels by community
             sd_arr_z = sd_arr_z[community_order, :]
             sd_arr_z = sd_arr_z[:, community_order]
+            np.fill_diagonal(sd_arr_z, 0)
 
-            fig, ax = plt.subplots(figsize=(10, 5))
-            ax.imshow(sd_arr_r, cmap="seismic", vmin=0)
+            sd_arr_r = np.tanh(sd_arr_z)
+            # vmax1 = np.round(np.max(sd_arr_r), 2)
+            # hardcoded based on previous checks
+            vmax1 = 0.6
+
+            fig, ax = plt.subplots(figsize=(10, 10))
+            ax.imshow(sd_arr_r, cmap="viridis", vmin=0, vmax=vmax1)
 
             # Add lines separating networks
             for idx in break_idx[1:-1]:
@@ -226,6 +233,33 @@ if __name__ == "__main__":
             ax.axes.set_xticks(label_idx)
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
-
+            fig.tight_layout()
             fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_StandardDeviation.png")
+            plt.close()
+
+            # Plot the colorbars
+            fig, axs = plt.subplots(2, 1, figsize=(10, 1.5))
+            cmap = mpl.cm.viridis
+
+            norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+            cbar = fig.colorbar(
+                mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+                cax=axs[0],
+                orientation='horizontal',
+            )
+            cbar.set_ticks([-1, 0, 1])
+
+            norm = mpl.colors.Normalize(vmin=0, vmax=vmax1)
+            cbar = fig.colorbar(
+                mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+                cax=axs[1],
+                orientation='horizontal',
+            )
+            cbar.set_ticks([0, np.mean([0, vmax1]), vmax1])
+
+            fig.tight_layout()
+            fig.savefig(
+                f"../figures/XCPD_task-{task}_denoising-{denoising}_colorbar.png",
+                bbox_inches="tight",
+            )
             plt.close()
