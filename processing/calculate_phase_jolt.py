@@ -1,6 +1,7 @@
 """Calculate phase jolt and phase jump time series from phase data."""
 
 import os
+import subprocess
 from glob import glob
 
 
@@ -35,4 +36,6 @@ if __name__ == "__main__":
                     f"-output {out_prefix}"
                 )
                 print(cmd)
-                os.system(cmd)
+                subprocess.run(
+                    cmd.split(),
+                )
