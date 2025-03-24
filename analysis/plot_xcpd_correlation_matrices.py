@@ -92,7 +92,7 @@ if __name__ == "__main__":
             mean_arr_r = np.tanh(mean_arr_z)
 
             fig, ax = plt.subplots(figsize=(10, 10))
-            ax.imshow(mean_arr_r, cmap="viridis", vmin=-1, vmax=1)
+            ax.imshow(mean_arr_r, cmap="seismic", vmin=-1, vmax=1)
 
             # Add lines separating networks
             for idx in break_idx[1:-1]:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
             vmax1 = 0.6
 
             fig, ax = plt.subplots(figsize=(10, 10))
-            ax.imshow(sd_arr_r, cmap="viridis", vmin=0, vmax=vmax1)
+            ax.imshow(sd_arr_r, cmap="seismic", vmin=0, vmax=vmax1)
 
             # Add lines separating networks
             for idx in break_idx[1:-1]:
@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
             # Plot the colorbars
             fig, axs = plt.subplots(2, 1, figsize=(10, 1.5))
-            cmap = mpl.cm.viridis
+            cmap = mpl.cm.seismic
 
             norm = mpl.colors.Normalize(vmin=-1, vmax=1)
             cbar = fig.colorbar(
