@@ -28,14 +28,14 @@ if __name__ == "__main__":
     os.makedirs(temp_dir, exist_ok=True)
 
     for subject_dir in glob(os.path.join(in_dir, "sub-*"))[:1]:
-        subject_id = os.path.basename(subject_dir)
-        print(subject_id)
+        subid = os.path.basename(subject_dir)
+        print(subid)
 
         for session_dir in glob(os.path.join(subject_dir, "ses-*"))[:1]:
-            session_id = os.path.basename(session_dir)
-            print(f"\t{session_id}")
+            sesid = os.path.basename(session_dir)
+            print(f"\t{sesid}")
 
-            out_sub_dir = os.path.join(out_dir, subject_id, session_id, "func")
+            out_sub_dir = os.path.join(out_dir, subid, sesid, "func")
             os.makedirs(out_sub_dir, exist_ok=True)
 
             phase_files = sorted(
@@ -80,7 +80,10 @@ if __name__ == "__main__":
                     nb.load(phase_jolt_file).to_filename(out_phase_jolt_file)
                     phase_jump_files.append(out_phase_jump_file)
                     phase_jolt_files.append(out_phase_jolt_file)
+                    del phase_jump_file, phase_jolt_file
+                    del out_phase_jump_file, out_phase_jolt_file
 
+                print("\t\tAveraging phase jumps")
                 base_name = os.path.basename(phase_file)
                 avg_phase_jump_file = os.path.join(
                     out_sub_dir,
@@ -95,6 +98,7 @@ if __name__ == "__main__":
                 del arrs, avg_phase_jump
                 phase_jump_files.append(avg_phase_jump_file)
 
+                print("\t\tAveraging phase jolts")
                 avg_phase_jolt_file = os.path.join(
                     out_sub_dir,
                     base_name.replace("echo-1_", "").replace("_bold", "_desc-jolt_bold"),
@@ -110,35 +114,32 @@ if __name__ == "__main__":
 
                 # Now apply HMC+coreg+norm transforms to the phase jolt and jump files
                 # Get the HMC+coreg+norm transforms
-                fmriprep_sub_dir = os.path.join(fmriprep_dir, subject_id, session_id)
+                fmriprep_sub_dir = os.path.join(fmriprep_dir, subid, sesid)
+                new_base_name = base_name.split("_echo-")[0]
                 hmc_file = os.path.join(
                     fmriprep_sub_dir,
                     "func",
-                    f"{base_name.split('_echo-')[0]}_from-orig_to-boldref_mode-image_desc-hmc_xfm.txt",
+                    f"{new_base_name}_from-orig_to-boldref_mode-image_desc-hmc_xfm.txt",
                 )
                 coreg_file = os.path.join(
                     fmriprep_sub_dir,
                     "func",
-                    f"{base_name.split('_echo-')[0]}_from-boldref_to-T1w_mode-image_desc-coreg_xfm.txt",
+                    f"{new_base_name}_from-boldref_to-T1w_mode-image_desc-coreg_xfm.txt",
                 )
                 norm_file = os.path.join(
                     fmriprep_sub_dir,
                     "anat",
-                    f"{subject_id}_ses-1_rec-norm_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5",
+                    f"{subid}_{sesid}_rec-norm_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5",
                 )
 
                 # Apply the transforms to the phase jolt and jump files
                 for phase_jump_file in phase_jump_files:
-                    out_phase_jump_file = os.path.join(
-                        out_dir,
-                        subject_id,
-                        session_id,
-                        "func",
-                        os.path.basename(phase_jump_file).replace(
-                            "desc-",
-                            "space-MNI152NLin2009cAsym_desc-",
-                        ),
+                    print(f"\t\tWarping {os.path.basename(phase_jump_file)}")
+                    out_fname = os.path.basename(phase_jump_file).replace(
+                        "desc-",
+                        "space-MNI152NLin2009cAsym_desc-",
                     )
+                    out_phase_jump_file = os.path.join(out_sub_dir, out_fname)
                     resampler = ResampleSeries(
                         jacobian=False,
                         in_file=phase_jump_file,
@@ -149,16 +150,12 @@ if __name__ == "__main__":
                     shutil.copyfile(result.outputs.out_file, out_phase_jump_file)
 
                 for phase_jolt_file in phase_jolt_files:
-                    out_phase_jolt_file = os.path.join(
-                        out_dir,
-                        subject_id,
-                        session_id,
-                        "func",
-                        os.path.basename(phase_jolt_file).replace(
-                            "desc-",
-                            "space-MNI152NLin2009cAsym_desc-",
-                        ),
+                    print(f"\t\tWarping {os.path.basename(phase_jolt_file)}")
+                    out_fname = os.path.basename(phase_jolt_file).replace(
+                        "desc-",
+                        "space-MNI152NLin2009cAsym_desc-",
                     )
+                    out_phase_jolt_file = os.path.join(out_sub_dir, out_fname)
                     resampler = ResampleSeries(
                         jacobian=False,
                         in_file=phase_jolt_file,
