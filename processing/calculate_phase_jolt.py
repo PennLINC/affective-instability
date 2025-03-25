@@ -17,7 +17,13 @@ if __name__ == "__main__":
     out_dir = "/cbica/projects/pafin/derivatives/phase_jolt"
     fmriprep_dir = "/cbica/projects/pafin/derivatives/fmriprep"
 
-    ref_file = tfapi.get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension=".nii.gz")
+    ref_file = tfapi.get(
+        "MNI152NLin2009cAsym",
+        resolution="02",
+        desc=None,
+        suffix="T1w",
+        extension=".nii.gz",
+    )
 
     os.makedirs(temp_dir, exist_ok=True)
 
@@ -124,7 +130,7 @@ if __name__ == "__main__":
 
                 # Apply the transforms to the phase jolt and jump files
                 for phase_jump_file in phase_jump_files:
-                    out_phase_jolt_file = os.path.join(
+                    out_phase_jump_file = os.path.join(
                         out_dir,
                         subject_id,
                         session_id,
@@ -141,7 +147,7 @@ if __name__ == "__main__":
                         transforms=[hmc_file, coreg_file, norm_file],
                     )
                     result = resampler.run(cwd=temp_dir)
-       	       	    shutil.copyfile(result.outputs.out_file, out_phase_jump_file)
+                    shutil.copyfile(result.outputs.out_file, out_phase_jump_file)
 
                 for phase_jolt_file in phase_jolt_files:
                     out_phase_jolt_file = os.path.join(
