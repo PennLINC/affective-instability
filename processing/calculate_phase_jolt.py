@@ -67,9 +67,6 @@ if __name__ == "__main__":
                     assert os.path.isfile(phase_jump_file)
                     assert os.path.isfile(phase_jolt_file)
 
-                    phase_jump_files.append(phase_jump_file)
-                    phase_jolt_files.append(phase_jolt_file)
-
                     out_phase_jump_file = os.path.join(
                         out_sub_dir,
                         base_name.replace("_bold.nii.gz", "_desc-jump_bold.nii.gz"),
@@ -81,6 +78,8 @@ if __name__ == "__main__":
 
                     nb.load(phase_jump_file).to_filename(out_phase_jump_file)
                     nb.load(phase_jolt_file).to_filename(out_phase_jolt_file)
+                    phase_jump_files.append(out_phase_jump_file)
+                    phase_jolt_files.append(out_phase_jolt_file)
 
                 base_name = os.path.basename(phase_file)
                 avg_phase_jump_file = os.path.join(
