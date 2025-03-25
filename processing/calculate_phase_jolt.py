@@ -1,11 +1,13 @@
 """Calculate phase jolt and phase jump time series from phase data."""
 
 import os
+import shutil
 import subprocess
 from glob import glob
 
 import nibabel as nb
 import numpy as np
+import templateflow.api as tfapi
 from fmriprep.interfaces.resampling import ResampleSeries
 
 
@@ -14,6 +16,8 @@ if __name__ == "__main__":
     temp_dir = "/cbica/comp_space/pafin/phase_jolt"
     out_dir = "/cbica/projects/pafin/derivatives/phase_jolt"
     fmriprep_dir = "/cbica/projects/pafin/derivatives/fmriprep"
+
+    ref_file = tfapi.get("MNI152NLin2009cAsym", resolution="02", desc=None, suffix="T1w", extension=".nii.gz")
 
     os.makedirs(temp_dir, exist_ok=True)
 
@@ -46,7 +50,7 @@ if __name__ == "__main__":
 
                     cmd = (
                         "/cbica/projects/pafin/laynii/LN2_PHASE_JOLT "
-                        f"-input {echo_file} -int13 -phase_jump -output {out_prefix}"
+                        f"-input {echo_file} -int13 -phase_jump -2D -output {out_prefix}"
                     )
                     print(cmd)
                     subprocess.run(
@@ -105,12 +109,12 @@ if __name__ == "__main__":
                 hmc_file = os.path.join(
                     fmriprep_sub_dir,
                     "func",
-                    f"{out_prefix}_from-orig_to-boldref_mode-image_desc-hmc_xfm.txt",
+                    f"{base_name.split('_echo-')[0]}_from-orig_to-boldref_mode-image_desc-hmc_xfm.txt",
                 )
                 coreg_file = os.path.join(
                     fmriprep_sub_dir,
                     "func",
-                    f"{out_prefix}_from-boldref_to-T1w_mode-image_desc-coreg_xfm.txt",
+                    f"{base_name.split('_echo-')[0]}_from-boldref_to-T1w_mode-image_desc-coreg_xfm.txt",
                 )
                 norm_file = os.path.join(
                     fmriprep_sub_dir,
@@ -133,10 +137,11 @@ if __name__ == "__main__":
                     resampler = ResampleSeries(
                         jacobian=False,
                         in_file=phase_jump_file,
-                        out_file=out_phase_jump_file,
+                        ref_file=ref_file,
                         transforms=[hmc_file, coreg_file, norm_file],
                     )
-                    resampler.run()
+                    result = resampler.run(cwd=temp_dir)
+       	       	    shutil.copyfile(result.outputs.out_file, out_phase_jump_file)
 
                 for phase_jolt_file in phase_jolt_files:
                     out_phase_jolt_file = os.path.join(
@@ -152,7 +157,8 @@ if __name__ == "__main__":
                     resampler = ResampleSeries(
                         jacobian=False,
                         in_file=phase_jolt_file,
-                        out_file=out_phase_jolt_file,
+                        ref_file=ref_file,
                         transforms=[hmc_file, coreg_file, norm_file],
                     )
-                    resampler.run()
+                    result = resampler.run(cwd=temp_dir)
+                    shutil.copyfile(result.outputs.out_file, out_phase_jolt_file)
