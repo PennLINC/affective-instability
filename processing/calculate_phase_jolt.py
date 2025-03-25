@@ -27,11 +27,11 @@ if __name__ == "__main__":
 
     os.makedirs(temp_dir, exist_ok=True)
 
-    for subject_dir in glob(os.path.join(in_dir, "sub-*"))[:1]:
+    for subject_dir in glob(os.path.join(in_dir, "sub-*")):
         subid = os.path.basename(subject_dir)
         print(subid)
 
-        for session_dir in glob(os.path.join(subject_dir, "ses-*"))[:1]:
+        for session_dir in glob(os.path.join(subject_dir, "ses-*")):
             sesid = os.path.basename(session_dir)
             print(f"\t{sesid}")
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
             phase_files = sorted(
                 glob(os.path.join(session_dir, "func", "*echo-1*part-phase_bold.nii.gz"))
             )
-            for phase_file in phase_files[:1]:
+            for phase_file in phase_files:
                 print(f"\t\t{os.path.basename(phase_file)}")
                 echo_files = sorted(glob(phase_file.replace("echo-1", "echo-*")))
                 phase_jump_files = []
