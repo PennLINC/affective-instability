@@ -77,8 +77,17 @@ if __name__ == "__main__":
             "varex_unmodeled",
         ],
         value_name="Variance Explained",
-        var_name="Classification",
+        var_name="classification",
     )
+    df_varex["Classification"] = df_varex["classification"].map(
+        {
+            "varex_accepted": "Accepted\n(ME-ICA & AROMA)",
+            "varex_rejected_aroma": "Rejected\n(AROMA only)",
+            "varex_rejected_tedana": "Rejected\n(ME-ICA only)",
+            "varex_rejected_both": "Rejected\n(ME-ICA & AROMA)",
+        }
+    )
+    df_varex["Denoising"] = df_varex["denoising"]
 
     sns.set_theme(style="ticks")
     f, ax = plt.subplots(figsize=(7, 6))
@@ -86,7 +95,7 @@ if __name__ == "__main__":
         df_varex,
         x="Variance Explained",
         y="Classification",
-        hue="denoising",
+        hue="Denoising",
         palette="vlag",
     )
     ax.xaxis.grid(True)
@@ -108,8 +117,17 @@ if __name__ == "__main__":
             "n_rejected_both",
         ],
         value_name="Number of Components",
-        var_name="Classification",
+        var_name="classification",
     )
+    df_ncomps["Classification"] = df_ncomps["classification"].map(
+        {
+            "n_accepted": "Accepted\n(ME-ICA & AROMA)",
+            "n_rejected_aroma": "Rejected\n(AROMA only)",
+            "n_rejected_tedana": "Rejected\n(ME-ICA only)",
+            "n_rejected_both": "Rejected\n(ME-ICA & AROMA)",
+        }
+    )
+    df_ncomps["Denoising"] = df_ncomps["denoising"]
 
     sns.set_theme(style="ticks")
     f, ax = plt.subplots(figsize=(7, 6))
@@ -117,7 +135,7 @@ if __name__ == "__main__":
         df_ncomps,
         x="Number of Components",
         y="Classification",
-        hue="denoising",
+        hue="Denoising",
         palette="vlag",
     )
     ax.xaxis.grid(True)
