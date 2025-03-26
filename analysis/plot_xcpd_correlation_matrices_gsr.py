@@ -106,7 +106,7 @@ if __name__ == "__main__":
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
             fig.tight_layout()
-            fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_Mean.png")
+            fig.savefig(f"../figures/XCPD_gsr_task-{task}_denoising-{denoising}_Mean.png")
             plt.close()
 
             # Now standard deviation
@@ -136,7 +136,7 @@ if __name__ == "__main__":
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
             fig.tight_layout()
-            fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_StandardDeviation.png")
+            fig.savefig(f"../figures/XCPD_gsr_task-{task}_denoising-{denoising}_StandardDeviation.png")
             plt.close()
 
             # Plot the colorbars
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
             fig.tight_layout()
             fig.savefig(
-                f"../figures/XCPD_task-{task}_denoising-{denoising}_colorbar.png",
+                f"../figures/XCPD_gsr_task-{task}_denoising-{denoising}_colorbar.png",
                 bbox_inches="tight",
             )
             plt.close()
