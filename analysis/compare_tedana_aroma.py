@@ -101,6 +101,11 @@ if __name__ == "__main__":
     ax.xaxis.grid(True)
     ax.set_xlim(0, 1)
     ax.set(ylabel="")
+    labels = ax.get_yticklabels()
+    for label in labels:
+        label.set_horizontalalignment('center')
+
+    ax.tick_params(axis='y', pad=50)
     sns.despine(trim=True, left=True)
     f.tight_layout()
     f.savefig(os.path.join(out_dir, "AROMA+tedana_variance_explained.png"), bbox_inches="tight")
@@ -141,6 +146,11 @@ if __name__ == "__main__":
     ax.xaxis.grid(True)
     ax.set_xlim(0, None)
     ax.set(ylabel="")
+    labels = ax.get_yticklabels()
+    for label in labels:
+        label.set_horizontalalignment('center')
+
+    ax.tick_params(axis='y', pad=50)
     sns.despine(trim=True, left=True)
     f.tight_layout()
     f.savefig(os.path.join(out_dir, "AROMA+tedana_n_components.png"), bbox_inches="tight")

@@ -66,6 +66,7 @@ if __name__ == "__main__":
     for task in ["bao", "rat"]:
         for denoising in ["none", "nordic"]:
             selected_corrmats = [cm for cm in corrmats if f"task-{task}" in cm]
+            selected_corrmats = [cm for cm in selected_corrmats if "sub-PILOT" not in cm]
             if denoising == "nordic":
                 selected_corrmats = [cm for cm in selected_corrmats if "rec-nordic" in cm]
             else:
@@ -122,7 +123,7 @@ if __name__ == "__main__":
             vmax1 = 0.6
 
             fig, ax = plt.subplots(figsize=(10, 10))
-            ax.imshow(sd_arr_r, cmap="seismic", vmin=0, vmax=vmax1)
+            ax.imshow(sd_arr_r, cmap="Reds", vmin=0, vmax=vmax1)
 
             # Add lines separating networks
             for idx in break_idx[1:-1]:
@@ -152,7 +153,7 @@ if __name__ == "__main__":
 
             norm = mpl.colors.Normalize(vmin=0, vmax=vmax1)
             cbar = fig.colorbar(
-                mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+                mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.Reds),
                 cax=axs[1],
                 orientation="horizontal",
             )
