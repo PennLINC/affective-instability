@@ -141,11 +141,10 @@ if __name__ == "__main__":
 
             # Plot the colorbars
             fig, axs = plt.subplots(2, 1, figsize=(10, 1.5))
-            cmap = mpl.cm.seismic
 
             norm = mpl.colors.Normalize(vmin=-1, vmax=1)
             cbar = fig.colorbar(
-                mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
+                mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.seismic),
                 cax=axs[0],
                 orientation="horizontal",
             )

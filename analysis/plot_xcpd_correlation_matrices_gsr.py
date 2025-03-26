@@ -10,7 +10,7 @@ import pandas as pd
 
 if __name__ == "__main__":
     dseg_file = (
-        "/cbica/projects/pafin/derivatives/xcp_d_36P/atlases/atlas-4S156Parcels/"
+        "/cbica/projects/pafin/derivatives/xcp_d_gsr/atlases/atlas-4S156Parcels/"
         "atlas-4S156Parcels_dseg.tsv"
     )
     dseg_df = pd.read_table(dseg_file)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     corrmats = sorted(
         glob(
-            "/cbica/projects/pafin/derivatives/xcp_d_36P/sub-*/ses-1/func/"
+            "/cbica/projects/pafin/derivatives/xcp_d_gsr/sub-*/ses-1/func/"
             "*seg-4S156Parcels_stat-pearsoncorrelation_relmat.tsv"
         )
     )
@@ -106,7 +106,7 @@ if __name__ == "__main__":
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
             fig.tight_layout()
-            fig.savefig(f"../figures/XCPD_36P_task-{task}_denoising-{denoising}_Mean.png")
+            fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_Mean.png")
             plt.close()
 
             # Now standard deviation
@@ -136,9 +136,7 @@ if __name__ == "__main__":
             ax.axes.set_yticklabels(unique_labels)
             ax.axes.set_xticklabels(unique_labels, rotation=90)
             fig.tight_layout()
-            fig.savefig(
-                f"../figures/XCPD_36P_task-{task}_denoising-{denoising}_StandardDeviation.png"
-            )
+            fig.savefig(f"../figures/XCPD_task-{task}_denoising-{denoising}_StandardDeviation.png")
             plt.close()
 
             # Plot the colorbars
@@ -162,7 +160,7 @@ if __name__ == "__main__":
 
             fig.tight_layout()
             fig.savefig(
-                f"../figures/XCPD_36P_task-{task}_denoising-{denoising}_colorbar.png",
+                f"../figures/XCPD_task-{task}_denoising-{denoising}_colorbar.png",
                 bbox_inches="tight",
             )
             plt.close()
