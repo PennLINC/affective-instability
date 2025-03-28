@@ -20,7 +20,6 @@ import shutil
 from glob import glob
 
 import nibabel as nb
-import pandas as pd
 
 
 N_NOISE_VOLS = 3
@@ -63,10 +62,8 @@ if __name__ == "__main__":
 
                 # Overwrite the BOLD scan
                 os.remove(me_bold)
-                # Preserve the scale and intercept of the original BOLD scan.
-                bold_img.header.set_slope_inter(1, 0)
+
                 bold_img.to_filename(me_bold)
-                noise_img.header.set_slope_inter(1, 0)
                 noise_img.to_filename(noise_scan)
 
                 # Copy the JSON as well
