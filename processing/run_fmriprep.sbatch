@@ -5,8 +5,7 @@
 #SBATCH --array=2-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
-#SBATCH --time=100:00:00
-#SBATCH --partition=long
+#SBATCH --time=48:00:00
 # Outputs ----------------------------------
 #SBATCH --output=/cbica/projects/pafin/code/processing/jobs/fmriprep_%A-%a.out
 #SBATCH --error=/cbica/projects/pafin/code/processing/jobs/fmriprep_%A-%a.err

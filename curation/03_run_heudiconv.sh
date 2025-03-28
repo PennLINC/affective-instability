@@ -17,7 +17,7 @@ do
     echo "$sub"
     heudiconv \
         -f /cbica/projects/pafin/code/curation/heuristic.py \
-        -o /cbica/projects/pafin/dset \
+        -o /cbica/projects/pafin/dset2 \
         -d "/cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353/{subject}_*/*/*/*/*.dcm" \
         --subjects "$sub" \
         --ses 1 \

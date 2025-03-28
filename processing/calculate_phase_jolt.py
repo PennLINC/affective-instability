@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     os.makedirs(temp_dir, exist_ok=True)
 
-    for subject_dir in glob(os.path.join(in_dir, "sub-*")):
+    for subject_dir in glob(os.path.join(in_dir, "sub-*"))[:1]:
         subid = os.path.basename(subject_dir)
         print(subid)
 
@@ -46,6 +46,7 @@ if __name__ == "__main__":
                 echo_files = sorted(glob(phase_file.replace("echo-1", "echo-*")))
                 phase_jump_files = []
                 phase_jolt_files = []
+                phase_laplacian_files = []
 
                 for echo_file in echo_files:
                     base_name = os.path.basename(echo_file)
@@ -67,6 +68,17 @@ if __name__ == "__main__":
                     assert os.path.isfile(phase_jump_file)
                     assert os.path.isfile(phase_jolt_file)
 
+                    cmd = (
+                        "/cbica/projects/pafin/laynii/LN2_PHASE_LAPLACIAN "
+                        f"-input {echo_file} -int13 -2D -output {out_prefix}"
+                    )
+                    print(cmd)
+                    subprocess.run(
+                        cmd.split(),
+                    )
+                    phase_laplacian_file = out_prefix + "_phase_laplacian.nii"
+                    assert os.path.isfile(phase_laplacian_file)
+
                     out_phase_jump_file = os.path.join(
                         out_sub_dir,
                         base_name.replace("_bold.nii.gz", "_desc-jump_bold.nii.gz"),
@@ -75,13 +87,19 @@ if __name__ == "__main__":
                         out_sub_dir,
                         base_name.replace("_bold.nii.gz", "_desc-jolt_bold.nii.gz"),
                     )
+                    out_phase_laplacian_file = os.path.join(
+                        out_sub_dir,
+                        base_name.replace("_bold.nii.gz", "_desc-laplacian_bold.nii.gz"),
+                    )
 
                     nb.load(phase_jump_file).to_filename(out_phase_jump_file)
                     nb.load(phase_jolt_file).to_filename(out_phase_jolt_file)
+                    nb.load(phase_laplacian_file).to_filename(out_phase_laplacian_file)
                     phase_jump_files.append(out_phase_jump_file)
                     phase_jolt_files.append(out_phase_jolt_file)
-                    del phase_jump_file, phase_jolt_file
-                    del out_phase_jump_file, out_phase_jolt_file
+                    phase_laplacian_files.append(out_phase_laplacian_file)
+                    del phase_jump_file, phase_jolt_file, phase_laplacian_file
+                    del out_phase_jump_file, out_phase_jolt_file, out_phase_laplacian_file
 
                 print("\t\tAveraging phase jumps")
                 base_name = os.path.basename(phase_file)
@@ -111,6 +129,20 @@ if __name__ == "__main__":
                 )
                 del arrs, avg_phase_jolt
                 phase_jolt_files.append(avg_phase_jolt_file)
+
+                print("\t\tAveraging phase laplacians")
+                avg_phase_laplacian_file = os.path.join(
+                    out_sub_dir,
+                    base_name.replace("echo-1_", "").replace("_bold", "_desc-laplacian_bold"),
+                )
+                arrs = [nb.load(f).get_fdata() for f in phase_laplacian_files]
+                avg_phase_laplacian = np.mean(arrs, axis=0)
+                base_img = nb.load(phase_laplacian_files[0])
+                nb.Nifti1Image(avg_phase_laplacian, base_img.affine, base_img.header).to_filename(
+                    avg_phase_laplacian_file
+                )
+                del arrs, avg_phase_laplacian
+                phase_laplacian_files.append(avg_phase_laplacian_file)
 
                 # Now apply HMC+coreg+norm transforms to the phase jolt and jump files
                 # Get the HMC+coreg+norm transforms
@@ -164,3 +196,19 @@ if __name__ == "__main__":
                     )
                     result = resampler.run(cwd=temp_dir)
                     shutil.copyfile(result.outputs.out_file, out_phase_jolt_file)
+
+                for phase_jolt_file in phase_jolt_files:
+                    print(f"\t\tWarping {os.path.basename(phase_laplacian_file)}")
+                    out_fname = os.path.basename(phase_laplacian_file).replace(
+                        "desc-",
+                        "space-MNI152NLin2009cAsym_desc-",
+                    )
+                    out_phase_laplacian_file = os.path.join(out_sub_dir, out_fname)
+                    resampler = ResampleSeries(
+                        jacobian=False,
+                        in_file=phase_laplacian_file,
+                        ref_file=ref_file,
+                        transforms=[hmc_file, coreg_file, norm_file],
+                    )
+                    result = resampler.run(cwd=temp_dir)
+                    shutil.copyfile(result.outputs.out_file, out_phase_laplacian_file)
