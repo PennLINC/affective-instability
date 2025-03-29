@@ -197,7 +197,7 @@ if __name__ == "__main__":
                     result = resampler.run(cwd=temp_dir)
                     shutil.copyfile(result.outputs.out_file, out_phase_jolt_file)
 
-                for phase_jolt_file in phase_jolt_files:
+                for phase_laplacian_file in phase_laplacian_files:
                     print(f"\t\tWarping {os.path.basename(phase_laplacian_file)}")
                     out_fname = os.path.basename(phase_laplacian_file).replace(
                         "desc-",
