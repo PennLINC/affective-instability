@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=xcp_d
+#SBATCH --job-name=xcpd_36P
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=3
+#SBATCH --array=1-12
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=36:00:00
