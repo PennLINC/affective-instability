@@ -48,6 +48,20 @@ if __name__ == "__main__":
                 phase_jolt_files = []
                 phase_laplacian_files = []
 
+                # Check if the last file that will be created already exists
+                # This is the MNI-resampled mean (across echoes)phase laplacian file
+                temp_base_name = os.path.basename(phase_file)
+                temp_base_name = temp_base_name.replace("echo-1_", "")
+                temp_base_name = temp_base_name.replace("_bold", "_desc-laplacian_bold")
+                temp_base_name = temp_base_name.replace(
+                    "desc-",
+                    "space-MNI152NLin2009cAsym_desc-",
+                )
+                last_file = os.path.join(out_sub_dir, temp_base_name)
+                if os.path.isfile(last_file):
+                    print(f"\t\t\t{os.path.basename(last_file)} already exists")
+                    continue
+
                 for echo_file in echo_files:
                     base_name = os.path.basename(echo_file)
                     out_prefix = os.path.join(
