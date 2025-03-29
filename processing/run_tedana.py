@@ -435,5 +435,5 @@ if __name__ == "__main__":
 
     os.makedirs(temp_dir_, exist_ok=True)
 
-    # run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
+    run_tedana(raw_dir_, fmriprep_dir_, aroma_dir_, temp_dir_, tedana_out_dir_)
     run_tedana_aroma(raw_dir_, fmriprep_dir_, aroma_dir_, tedana_out_dir_, tedana_aroma_out_dir_)

@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     os.makedirs(temp_dir, exist_ok=True)
 
-    for subject_dir in glob(os.path.join(in_dir, "sub-*"))[:1]:
+    for subject_dir in glob(os.path.join(in_dir, "sub-*")):
         subid = os.path.basename(subject_dir)
         print(subid)
 

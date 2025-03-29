@@ -9,4 +9,5 @@
 
 mamba activate processing
 
-python calculate_phase_jolt.py
+# python calculate_phase_jolt.py
+python run_tedana.py

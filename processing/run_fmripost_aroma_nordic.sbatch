@@ -18,7 +18,7 @@ set -e
 # Location of the *reduced* BIDS dataset
 BIDS_DIR="/cbica/projects/pafin/dset"
 CODE_DIR="/cbica/projects/pafin/code"
-SCRATCH_DIR="/cbica/comp_space/pafin/pafin-aroma"
+SCRATCH_DIR="/cbica/comp_space/pafin/pafin-aroma-nordic"
 DERIVS_DIR="/cbica/projects/pafin/derivatives"
 mkdir -p ${SCRATCH_DIR}
 
