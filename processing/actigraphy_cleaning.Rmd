@@ -1,0 +1,371 @@
+---
+title: "PAFIN Sleep and Activity Data Cleaning"
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    toc: true
+---
+
+# Load and clean sleep data 
+
+For sleep data, there are two different "summary levels":
+
+* `person_data`, pulled from `part4_summary_sleep_cleaned.csv`: corresponds to a person's sleep data aggregated across all nights (so rows are participants)
+* `night_data`, pulled from `part4_nightsummary_sleep_cleaned.csv`: corresponds to person's sleep data per night (so rows are nights x participants)
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+# source helper functions
+source("/Users/joelleba/PennLINC/pafin/code/actigraphy/helper_functions.R")
+
+```
+
+
+```{r}
+# set root directory
+root <- "/Users/joelleba/Documents/large_data/pafin/"
+# set the base directory where each subject's folder is stored
+base_dir <- paste0(root, "ggir_output")
+
+## list subject directories
+subject_dirs <- get_subject_dirs(base_dir)
+
+# combine person-level data from all subjects
+person_results <- combine_person_data(subject_dirs)
+person_data <- person_results$df
+person_missing_files <- person_results$missing_files
+
+# combine night-level data from all subjects
+night_results <- combine_night_data(subject_dirs)
+night_data <- night_results$df
+night_missing_files <- night_results$missing_files
+
+# write the combined data to csv
+dir.create(paste0(root, "group_summary"), recursive = TRUE, showWarnings = FALSE)
+write_csv(person_data, paste0(root, "group_summary/group_person_level_summary.csv"))
+write_csv(night_data, paste0(root, "group_summary/group_night_level_summary.csv"))
+
+# load the combined data
+person_data <- read_csv(paste0(root, "group_summary/group_person_level_summary.csv"))
+night_data <- read_csv(paste0(root, "group_summary/group_night_level_summary.csv"))
+
+
+```
+
+```{r}
+
+### Select and clean variable names for person-level data ###
+
+person_data <- person_data %>%
+  dplyr::select("ID", "n_nights_sleeplog", "calendar_date",
+         "SptDuration_AD_T5A5_mn", "SptDuration_AD_T5A5_sd",
+         "SleepDurationInSpt_AD_T5A5_mn", "SleepDurationInSpt_AD_T5A5_sd",
+         "WASO_AD_T5A5_mn", "WASO_AD_T5A5_sd",
+         "number_of_awakenings_AD_T5A5_mn", "number_of_awakenings_AD_T5A5_sd",
+         "SleepRegularityIndex_AD_T5A5_mn", "SleepRegularityIndex_AD_T5A5_sd",
+         "sleeponset_AD_T5A5_mn", "sleeponset_AD_T5A5_sd",
+         "wakeup_AD_T5A5_mn", "wakeup_AD_T5A5_sd"
+         ) %>%
+  rename(
+    participantID = "ID",
+    num_nights = "n_nights_sleeplog",
+    date = "calendar_date",
+    time_in_bed_mean = "SptDuration_AD_T5A5_mn",
+    time_in_bed_sd = "SptDuration_AD_T5A5_sd",
+    sleep_duration_mean =  "SleepDurationInSpt_AD_T5A5_mn",
+    sleep_duration_sd = "SleepDurationInSpt_AD_T5A5_sd",
+    waso_mean = "WASO_AD_T5A5_mn",
+    waso_sd = "WASO_AD_T5A5_sd",
+    awakenings_mean = "number_of_awakenings_AD_T5A5_mn",
+    awakenings_sd = "number_of_awakenings_AD_T5A5_sd",
+    sleep_regularity_mean = "SleepRegularityIndex_AD_T5A5_mn",
+    sleep_regularity_sd = "SleepRegularityIndex_AD_T5A5_sd",
+    sleep_onset_mean = "sleeponset_AD_T5A5_mn",
+    sleep_onset_sd = "sleeponset_AD_T5A5_sd",
+    wakeup_mean = "wakeup_AD_T5A5_mn",
+    wakeup_sd = "wakeup_AD_T5A5_sd"
+  ) %>%
+  # add sleep efficiency
+  mutate(
+    sleep_efficiency_mean = sleep_duration_mean / time_in_bed_mean,
+    sleep_efficiency_sd = sqrt((sleep_duration_sd/time_in_bed_mean)^2 + 
+                             (sleep_duration_mean * time_in_bed_sd/time_in_bed_mean^2)^2)
+  )
+
+### Select and clean variable names for night-level data ###
+
+night_data <- night_data %>%
+  dplyr::select("ID", "night", "calendar_date",
+         "SptDuration",
+         "guider_SptDuration",
+         "SleepDurationInSpt",
+          "WASO",
+          "number_of_awakenings",
+          # "SleepRegularityIndex",
+          "fraction_night_invalid",
+          "cleaningcode",
+          "nonwear_perc_spt",
+          "sleeponset_ts",
+          "wakeup_ts",
+          "guider_onset",
+          "guider_wakeup_ts",
+          "number_sib_sleepperiod",
+          "daysleeper"
+         ) %>%
+  rename(
+    participantID = "ID",
+    date = "calendar_date",
+    time_in_bed = "SptDuration",
+    time_in_bed_guider = "guider_SptDuration",
+    sleep_duration =  "SleepDurationInSpt",
+    waso = "WASO",
+    awakenings = "number_of_awakenings",
+    sleeponset = "sleeponset_ts",
+    wakeup = "wakeup_ts",
+    # sleep_regularity = "SleepRegularityIndex"
+  ) %>%
+  mutate(
+    #### calculate sleep efficiency ###
+    sleep_efficiency = sleep_duration / time_in_bed_guider * 100, # per GGIR manual: SleepDurationInSpt / guider_inbedDuration (default)
+    # alternative: SleepDurationInSpt / (wakeup - sleeponset) per mMARCH.AC https://cran.r-project.org/web/packages/mMARCH.AC/vignettes/mMARCH.AC.html
+
+    ### calculate sleep midpoint ###
+    # Convert to datetime by adding an arbitrary date
+    onset_dt = as.POSIXct(paste("2024-01-01", sleeponset)),
+    wakeup_dt = as.POSIXct(paste("2024-01-01", wakeup)),
+    # Add a day to wakeup if it's before onset
+    wakeup_dt = if_else(wakeup_dt < onset_dt,
+                       wakeup_dt + days(1),
+                       wakeup_dt),
+    # Calculate midpoint and format as HH:MM
+    sleep_midpoint = format(onset_dt + seconds(as.numeric(difftime(wakeup_dt, onset_dt, units = "secs"))/2), "%H:%M")
+  ) %>%
+  select(-onset_dt, -wakeup_dt)  # clean up temporary columns
+
+# Select relevant variables for plotting
+night_data_long <- night_data %>%
+  dplyr::select(participantID, night,
+         time_in_bed, sleep_duration,
+         waso, awakenings,
+         fraction_night_invalid, nonwear_perc_spt,
+         # sleep_regularity
+         ) %>%
+  pivot_longer(cols = -c(participantID, night),
+               names_to = "variable", values_to = "value")
+
+# write to csv (note: these are cleaned variables but no QC applied yet)
+write_csv(person_data, paste0(root, "group_summary/group_person_level_summary_clean.csv"))
+write_csv(night_data, paste0(root, "group_summary/group_night_level_summary_clean.csv"))
+```
+
+
+## Quality Control (QC) Criteria for Sleep Data
+
+1. **Device Issues** (`apply_part2_cleaning`):
+    - `clipping_score`: Must be ≤ 0.1 (fraction of 15 minute windows per file where acceleration in one axis was close to maximum for ≥80% of time. Should be close to 0 for good quality data).
+    - `calib_status`: Must be "recalibration done, no problems detected" (indicates proper device calibration).
+
+2. **Data Quality** (`apply_night_level_qc`):
+    - `nonwear_perc_spt`: Must be < 30% (keeps nights with less than 30% non-wear time during sleep period)
+    - `fraction_night_invalid`: Must be < 20% (keeps nights where at least 80% of data is valid)
+
+3. **Problem Codes** (`apply_night_level_qc`):
+    - Excludes nights with codes 2, 3, or 4:
+        - 2: insufficient valid accelerometer data
+        - 3: no accelerometer data available
+        - 4: no nights to analyze
+
+4. **Sleep Duration** (`apply_night_level_qc`):
+    - Minimum: 2 hours (excludes nights with less than 2 hours of sleep)
+    - Maximum: 14 hours (excludes nights with more than 14 hours of sleep)
+
+5. **Daytime Sleep** (`apply_night_level_qc`):
+    - For daysleeper nights, excludes sleep onset between 6:00 and 18:00
+    - Ensures we capture evening-to-morning sleep patterns
+
+6. **Sleep Episodes** (`apply_night_level_qc`):
+    - Minimum: 5 sleep episodes
+    - Maximum: 40 sleep episodes (excludes nights with excessive fragmentation)
+
+7. **Early Wake-up** (`apply_night_level_qc`):
+    - Wake-up time: remove nights where wake-up is before 1:00 AM (excludes nights with very early termination of sleep)
+
+8. **Number of Nights per Participant** (`apply_night_level_qc`):
+    - Maximum: 21 nights (excludes recordings beyond study protocol)
+    - Minimum: 3 nights (ensures sufficient data for reliable estimates)
+
+Device issues QC parameters are first applied to both person and night data. Data quality and problem codes QC parameters are then applied at the night level. Finally, person-level data is recomputed based on this.
+
+
+```{r}
+
+# apply initial cleaning for invalid actigraphy data based on part2 summary
+cleaned_data_part1 <- apply_part2_cleaning(subject_dirs, person_data, night_data)
+step1_cleaned_person_sleep <- cleaned_data_part1$person_data
+step1_cleaned_nights <- cleaned_data_part1$night_data
+
+# apply night-level QC for invalid nights based on part4 night summary
+step2_cleaned_nights <- apply_night_level_qc(step1_cleaned_nights, 
+                                      nonwear_threshold = 30, # 30% threshold
+                                      invalid_threshold = 0.20,  # 20% threshold
+                                      problem_codes = c(2, 3, 4),
+                                      sleep_duration_min = 2, # at least 2 hours
+                                      sleep_duration_max = 14, # no more than 14 hours
+                                      min_sleep_episodes = 5,
+                                      max_sleep_episodes = 40,
+                                      filter_daysleep_onset = 6, # exclude daysleeper nights where sleep onset >= 6 AM (if provided)
+                                      min_wakeup_hour = 1, # minimum wake-up time (1 AM)
+                                      min_nights = 3,  # min nights per participant
+                                      max_nights = 21 # max nights per participant
+                                      )
+# note: percentages outputted here represent the percentage of nights that were excluded due to each criterion, with respect to the total number of nights in the input dataset (step1_cleaned_nights).
+
+# regenerate person-level data based on cleaned nights 
+step3_cleaned_person_sleep <- regenerate_person_data(step2_cleaned_nights)
+
+
+# write to csv
+write_csv(step2_cleaned_nights, paste0(root, "group_summary/group_night_level_summary_clean.csv"))
+write_csv(step3_cleaned_person_sleep, paste0(root, "group_summary/group_person_level_summary_clean.csv")) # will be used for sample selection
+
+```
+
+
+# Load and clean activity data
+
+
+For activity data, there are also two different "summary levels":
+
+* `person_activity`, pulled from `part5_personsummary_MM_L40M100V400_T5A5.csv`: corresponds to a person's activity data aggregated across all days. The L40M100V400_T5A5 indicates the accelerometer cut-off values used for the analysis (these are the default values used in the GGIR package).
+* `day_activity`, pulled from `part5_daysummary_MM_L40M100V400_T5A5.csv`: corresponds to person's activity data per day (so rows are days x participants)
+
+
+
+```{r}
+# Set base directory
+base_dir <- "/Users/joelleba/Documents/large_data/pafin/ggir_output"
+
+# Get subject directories
+subject_dirs <- get_subject_dirs(base_dir)
+
+# Combine day-level activity data
+day_activity_results <- combine_day_activity_data(subject_dirs)
+day_activity <- day_activity_results$df
+day_activity_missing <- day_activity_results$missing_files
+
+# Combine person-level activity data
+person_activity_results <- combine_person_activity_data(subject_dirs)
+person_activity <- person_activity_results$df
+person_activity_missing <- person_activity_results$missing_files
+
+# write to csv
+write_csv(day_activity, paste0(root, "group_summary/group_day_level_activity.csv"))
+write_csv(person_activity, paste0(root, "group_summary/group_person_level_activity.csv"))
+
+```
+
+
+```{r}
+# load data
+day_activity <- read_csv(paste0(root, "group_summary/group_day_level_activity.csv"))
+person_activity <- read_csv(paste0(root, "group_summary/group_person_level_activity.csv"))
+
+# select relevant variables and clean variable names for person-level activity data
+person_activity <- person_activity %>%
+  dplyr::select(ID, 
+  dur_day_total_IN_min_pla, 
+  dur_day_total_LIG_min_pla, 
+  dur_day_total_MOD_min_pla, 
+  dur_day_total_VIG_min_pla, 
+  nonwear_perc_day_pla) %>%
+  rename(participantID = ID,
+         mean_total_inactivity_min = dur_day_total_IN_min_pla,
+         mean_total_light_min = dur_day_total_LIG_min_pla,
+         mean_total_moderate_min = dur_day_total_MOD_min_pla,
+         mean_total_vigorous_min = dur_day_total_VIG_min_pla,
+         mean_nonwear_percent = nonwear_perc_day_pla
+         )
+
+
+# select relevant variables and clean variable names for day-level activity data
+day_activity <- day_activity %>%
+  dplyr::select(ID, 
+    window_number, 
+    cleaningcode,
+    dur_day_total_IN_min, 
+    dur_day_total_LIG_min, 
+    dur_day_total_MOD_min, 
+    dur_day_total_VIG_min, 
+    nonwear_perc_day) %>%
+  rename(participantID = ID,
+         total_inactivity_min = dur_day_total_IN_min,
+         total_light_min = dur_day_total_LIG_min,
+         total_moderate_min = dur_day_total_MOD_min,
+         total_vigorous_min = dur_day_total_VIG_min,
+         nonwear_percent = nonwear_perc_day)
+
+# write to csv
+write_csv(day_activity, paste0(root, "group_summary/group_day_level_activity_clean.csv"))
+write_csv(person_activity, paste0(root, "group_summary/group_person_level_activity_clean.csv"))
+
+```
+
+## QC on activity data
+
+Here, the following QC steps are applied:
+
+1. **Device Issues** (`apply_part2_cleaning`):
+    - `clipping_score`: Must be ≤ 0.1 (fraction of 15 minute windows per file where acceleration in one axis was close to maximum for ≥80% of time. Should be close to 0 for good quality data).
+    - `calib_status`: Must be "recalibration done, no problems detected" (indicates proper device calibration).
+
+2. **Data Quality**:
+    - `nonwear_perc_day`: Must be < 30% (keeps days with less than 30% non-wear time, per recommendation from Jonathan Mitchell)
+    - `cleaningcode`: Must be 0 or 1 (keeps days with no problems)
+
+3. **Problem Codes** (`apply_day_level_qc`):
+    - Excludes days with codes 2, 3, or 4:
+        - 2: insufficient valid accelerometer data
+        - 3: no accelerometer data available
+        - 4: no nights to analyze
+
+4. **Number of Days** (`apply_day_level_qc`):
+    - Maximum: 21 days (excludes days beyond study protocol)
+    - Minimum: 3 days (ensures sufficient data for reliable estimates)
+    
+
+```{r}
+
+# load cleaned variables data
+day_activity <- read_csv(paste0(root, "group_summary/group_day_level_activity_clean.csv"))
+person_activity <- read_csv(paste0(root, "group_summary/group_person_level_activity_clean.csv"))
+
+# first apply initial cleaning for invalid activity data based on part2 summary
+cleaned_data_part1 <- apply_part2_cleaning(subject_dirs, person_activity, day_activity)
+step1_cleaned_person_activity <- cleaned_data_part1$person_data
+step1_cleaned_day_activity <- cleaned_data_part1$night_data
+
+
+# Apply QC to day-level data
+step2_cleaned_days <- apply_day_level_qc(step1_cleaned_day_activity,
+                                  nonwear_threshold = 30, 
+                                  problem_codes = c(2, 3, 4),
+                                  max_days = 21,
+                                  min_days = 3
+                                  )
+
+# Regenerate person-level summaries from cleaned day-level data
+step3_cleaned_person_activity <- regenerate_person_activity_data(step2_cleaned_days)
+
+# write to csv
+write_csv(step2_cleaned_days, paste0(root, "group_summary/group_day_level_activity_clean.csv"))
+write_csv(step3_cleaned_person_activity, paste0(root, "group_summary/group_person_level_activity_clean.csv"))
+
+```
+
+These cleaned data are used for exploratory analysis in the next step (`pafin_sleep_activity_analysis.Rmd`).

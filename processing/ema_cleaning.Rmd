@@ -1,0 +1,124 @@
+---
+title: "PAFIN EMA Data Cleaning"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: '2'
+    df_print: paged
+  pdf_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r load_data}
+
+# root directory
+root <- "/Users/joelleba/Documents/large_data/pafin/"
+
+# Load EMA data
+ema_data <- read_csv(file.path(root, "ema/report_response_formatted_widened.csv"),
+                    show_col_types = FALSE)
+
+### Select relevant variables ###
+
+ema_data <- ema_data %>%
+  select(
+    secret_user_id,
+    activity_start_time_utc,
+    activity_end_time_utc,
+    activity_schedule_start_time_utc,
+    activity_name,
+    now_sadness,
+    now_anxiousness,
+    now_active,
+    now_tired,
+    now_thoughts_positive,
+    
+    now_thoughts_negative,
+    event_stress,
+    morning_sleep_quantity,
+    morning_sleep_quality,
+    morning_sleep_problems,
+    morning_bedtime,
+    morning_fall_asleep,
+    morning_waketime,
+    morning_outbed
+  ) %>%
+  filter(secret_user_id %in% c(60295, 24683, 24696, 24702, 24699, 24697, 24053, 60107)) %>%
+  rename(
+    participantID = secret_user_id,
+    sadness = now_sadness,
+    anxiousness = now_anxiousness,
+    active = now_active,
+    tired = now_tired,
+    thoughts_positive = now_thoughts_positive,
+    thoughts_negative = now_thoughts_negative,
+    event_stress = event_stress,
+    sleep_quantity = morning_sleep_quantity,
+    sleep_quality = morning_sleep_quality,
+    sleep_problems = morning_sleep_problems,
+    bedtime = morning_bedtime,
+    fall_asleep = morning_fall_asleep,
+    waketime = morning_waketime,
+    outbed = morning_outbed
+  ) %>%
+  mutate(participantID = factor(participantID))
+
+
+# Convert UTC times to New York time
+ema_data <- ema_data %>%
+  mutate(
+    # Convert UTC times to NY time
+    activity_start_time = with_tz(activity_start_time_utc, tzone = "America/New_York"),
+    activity_end_time = with_tz(activity_end_time_utc, tzone = "America/New_York"),
+    activity_schedule_start_time = with_tz(activity_schedule_start_time_utc, tzone = "America/New_York"),
+    ) %>%
+
+  # Remove UTC columns since we now have local time
+  select(-ends_with("_utc")) %>%
+    
+    # Create day number variable with NA handling
+    group_by(participantID) %>%
+    mutate(
+        date = date(activity_start_time),
+        day_number = if(all(is.na(date))) {
+          NA_real_
+        } else {
+          as.numeric(date - min(date, na.rm = TRUE)) + 1
+        }
+    ) %>%
+  ungroup() %>%
+
+  # Set activity_name as factor with specified order and filter out day 15 because protocol is only 14 days
+  mutate(
+    activity_name = factor(
+      activity_name,
+      levels = c("Morning Assessment", "Mid-day Assessment", "Afternoon Assessment", "Evening Assessment")
+    )
+  ) %>%
+  filter(day_number < 15) %>% # filter out day 15 because protocol is only 14 days
+
+  # Create combined day and activity name variable  
+  mutate(
+    activity_short = case_when(
+      activity_name == "Morning Assessment" ~ "am",
+      activity_name == "Mid-day Assessment" ~ "noon", 
+      activity_name == "Afternoon Assessment" ~ "pm",
+      activity_name == "Evening Assessment" ~ "eve"
+    ),
+    day_activity = paste0("d", day_number, "_", activity_short)
+  )
+
+
+# write to csv
+write_csv(ema_data, file.path(root, "group_summary/ema_data_cleaned.csv"))
+
+```
