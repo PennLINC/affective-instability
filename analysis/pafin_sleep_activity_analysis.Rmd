@@ -1,0 +1,279 @@
+---
+title: "PAFIN Sleep and Activity Analysis"
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    toc: true
+---
+
+
+# PAFIN sleep and activity figures
+
+
+```{r, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(ggridges)
+```
+
+```{r}
+# set root directory
+root <- "/Users/joelleba/Documents/large_data/pafin/"
+
+# load cleaned data
+cleaned_person_sleep <- read_csv(paste0(root, "group_summary/group_person_level_summary_clean.csv"),
+                                show_col_types = FALSE)
+cleaned_person_activity <- read_csv(paste0(root, "group_summary/group_person_level_activity_clean.csv"),
+                                    show_col_types = FALSE)
+cleaned_nights <- read_csv(paste0(root, "group_summary/group_night_level_summary_clean.csv"),
+                           show_col_types = FALSE)
+cleaned_days <- read_csv(paste0(root, "group_summary/group_day_level_activity_clean.csv"),
+                        show_col_types = FALSE)
+
+```
+
+
+```{r, fig.height = 10, fig.width = 8}
+
+# -----------------------------------------------------------------------------
+# Figure 1: Sleep timing patterns by subject (ridge plot)
+# -----------------------------------------------------------------------------
+sleep_timing_ridge <- function(cleaned_person_sleep, cleaned_person_activity) {
+  # Convert timestamps to time of day for better visualization
+  night_data_times <- cleaned_nights %>%
+    mutate(
+      # Extract time component and convert to decimal hours
+      sleep_onset_hour = hour(sleeponset) + minute(sleeponset) / 60,
+      wakeup_hour = hour(wakeup) + minute(wakeup) / 60,
+      # Adjust sleep onset times before midnight to be >24 for continuity
+      sleep_onset_hour = ifelse(sleep_onset_hour < 12, sleep_onset_hour + 24, sleep_onset_hour)
+    )
+
+  # Create density ridges plot by subject
+  night_data_long_times <- night_data_times %>%
+    dplyr::select(participantID, night, sleep_onset_hour, wakeup_hour) %>%
+    pivot_longer(
+      cols = c(sleep_onset_hour, wakeup_hour),
+      names_to = "event",
+      values_to = "hour"
+    ) %>%
+    mutate(participantID = factor(participantID))
+
+  panel_b <- ggplot(night_data_long_times, 
+               aes(x = hour, 
+                   y = participantID,
+                   fill = event,
+                   group = interaction(participantID, event))) +
+    geom_density_ridges(alpha = 0.5, scale = 1, bandwidth = 0.5) +
+    scale_x_continuous(
+      breaks = c(0, 4, 8, 12, 16, 20, 24, 28),
+      labels = c("12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "12 AM", "4 AM"),
+      limits = c(0, 28)
+    ) +
+    scale_fill_manual(
+      values = c("sleep_onset_hour" = "#9370DB", "wakeup_hour" = "#18ad6d"),
+      labels = c("Sleep onset", "Wake up")
+    ) +
+    theme_minimal() +
+    labs(
+    #   title = "B) Sleep Timing Patterns",
+      x = "Time of day", 
+      y = "Participant",
+      fill = "Event"
+    ) +
+    theme(
+      legend.position = "top",
+      panel.grid.major = element_line(color = "gray90"),
+      axis.text.y = element_blank(),
+      axis.text.x = element_text(size = 14),
+      legend.text = element_text(size = 16),
+      legend.title = element_text(size = 16),
+      axis.title = element_text(size = 16),
+      plot.title = element_text(size = 20, face = "bold")
+    )
+  
+  return(panel_b)
+}
+
+# create the panel
+sleep_timing_fig <- sleep_timing_ridge(cleaned_person_sleep, cleaned_person_activity)
+sleep_timing_fig
+
+# save the panel as a svg
+ggsave("/Users/joelleba/PennLINC/pafin/figures/sleep_timing.svg", 
+       sleep_timing_fig, 
+       width = 8, 
+       height = 10, 
+       units = "in",
+       limitsize = FALSE)
+ 
+    
+```
+
+```{r, fig.height = 10, fig.width = 15}
+
+# -----------------------------------------------------------------------------
+# Figure 2: Night/Day variation patterns
+# -----------------------------------------------------------------------------
+
+# helper functions
+create_spaghetti_plot <- function(data, x_var, y_var, title, color, title_size = 16, show_x_label = FALSE) {
+  ggplot(data, aes(x = {{x_var}}, y = {{y_var}})) +
+    geom_line(aes(group = participantID), alpha = 0.4, color = "gray70") +
+    stat_summary(fun = mean, geom = "line", color = color, size = 1) +
+    stat_summary(fun.data = mean_se, geom = "ribbon", alpha = 0.2, fill = color) +
+    scale_x_continuous(breaks = seq(0, max(data[[deparse(substitute(x_var))]]), by = 4)) + 
+    theme_minimal() +
+    theme(
+      strip.text = element_text(size = title_size),
+      panel.grid.major = element_line(color = "gray90"),
+      text = element_text(size = title_size),
+      axis.title.x = if(!show_x_label) element_blank() else element_text(size = title_size)  # Hide x-axis title if not bottom plot
+    ) +
+    labs(
+      x = ifelse(deparse(substitute(x_var)) == "night", "Night", "Day"),
+      y = title
+    )
+}
+
+create_density_plot <- function(data, var, title, color, title_size = 16, show_y_label = FALSE) {
+  ggplot(data, aes(x = {{var}})) +
+    geom_density(fill = color, alpha = 0.5) +
+    coord_flip() +
+    theme_minimal() +
+    theme(
+      strip.text = element_blank(),
+      panel.grid.major = element_line(color = "gray90"),
+      text = element_text(size = title_size),
+      axis.title.y = element_blank(),
+      axis.text = element_text(size = 10),
+      axis.title.x = if(!show_y_label) element_blank() else element_text(size = title_size)  # Hide density label if not bottom plot
+    ) +
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 3), 
+                      labels = function(x) ifelse(x == 0, "0", sprintf("%.3f", x))) +
+    labs(y = if(show_y_label) "Density" else "")
+}
+
+daily_actigraphy_panel <- function(cleaned_nights, cleaned_days) {
+  # Sleep plots with progressive blues
+  sleep_duration_spaghetti <- create_spaghetti_plot(
+    cleaned_nights, night, sleep_duration, "Sleep duration (hours)", 
+    "#BFE1FF")  # Light blue
+  sleep_duration_density <- create_density_plot(
+    cleaned_nights, sleep_duration, "Sleep duration (hours)", 
+    "#BFE1FF")  # Light blue
+    
+  waso_spaghetti <- create_spaghetti_plot(
+    cleaned_nights, night, waso, "Wake after sleep onset (hours)", 
+    "#6BAED6")  # Medium blue
+  waso_density <- create_density_plot(
+    cleaned_nights, waso, "Wake after sleep onset (hours)", 
+    "#6BAED6")  # Medium blue
+    
+  efficiency_spaghetti <- create_spaghetti_plot(
+    cleaned_nights, night, sleep_efficiency, "Sleep efficiency (%)", 
+    "#2171B5", show_x_label = TRUE)  # Show x-label for bottom plot
+  efficiency_density <- create_density_plot(
+    cleaned_nights, sleep_efficiency, "Sleep efficiency (%)", 
+    "#2171B5", show_y_label = TRUE)  # Show y-label for bottom plot
+
+  light_activity_spaghetti <- create_spaghetti_plot(
+    cleaned_days, window_number, total_light_min, "Light activity (min)", 
+    "#FFA563")  # Light-medium orange
+  light_activity_density <- create_density_plot(
+    cleaned_days, total_light_min, "Light activity (min)", 
+    "#FFA563")  # Light-medium orange
+    
+  moderate_activity_spaghetti <- create_spaghetti_plot(
+    cleaned_days, window_number, total_moderate_min, "Moderate activity (min)", 
+    "#FF7F32")  # Medium-dark orange
+  moderate_activity_density <- create_density_plot(
+    cleaned_days, total_moderate_min, "Moderate activity (min)", 
+    "#FF7F32")  # Medium-dark orange
+    
+  vigorous_activity_spaghetti <- create_spaghetti_plot(
+    cleaned_days, window_number, total_vigorous_min, "Vigorous activity (min)", 
+    "#FF5500", show_x_label = TRUE)  # Show x-label for bottom plot
+  vigorous_activity_density <- create_density_plot(
+    cleaned_days, total_vigorous_min, "Vigorous activity (min)", 
+    "#FF5500", show_y_label = TRUE)  # Show y-label for bottom plot
+
+  # Combine all plots
+  panel <- (
+    (sleep_duration_spaghetti / waso_spaghetti / efficiency_spaghetti) | 
+    (sleep_duration_density / waso_density / efficiency_density) | 
+    (light_activity_spaghetti / moderate_activity_spaghetti / vigorous_activity_spaghetti) |
+    (light_activity_density / moderate_activity_density / vigorous_activity_density)
+  ) +
+    plot_layout(widths = c(4, 1.6, 4, 1.6))
+    
+  return(panel)
+}
+
+# create the panel
+daily_actigraphy_panel <- daily_actigraphy_panel(cleaned_nights, cleaned_days)
+daily_actigraphy_panel
+
+# save the panel as a svg
+ggsave("/Users/joelleba/PennLINC/pafin/figures/actigraphy_daily_patterns.svg", 
+       daily_actigraphy_panel, 
+       width = 15, 
+       height = 10, 
+       units = "in",
+       limitsize = FALSE)
+
+
+
+```
+
+
+# Numerical summary for sleep and activity variables
+
+```{r}
+# -----------------------------------------------------------------------------
+# Create numerical summary for Figure 2 variables
+# -----------------------------------------------------------------------------
+
+# Calculate summary statistics for sleep variables
+sleep_summary <- cleaned_nights %>%
+  summarise(
+    sleep_duration_mean = mean(sleep_duration, na.rm = TRUE),
+    sleep_duration_sd = sd(sleep_duration, na.rm = TRUE),
+    sleep_duration_min = min(sleep_duration, na.rm = TRUE),
+    sleep_duration_max = max(sleep_duration, na.rm = TRUE),
+    waso_mean = mean(waso, na.rm = TRUE), 
+    waso_sd = sd(waso, na.rm = TRUE),
+    waso_min = min(waso, na.rm = TRUE),
+    waso_max = max(waso, na.rm = TRUE),
+    efficiency_mean = mean(sleep_efficiency, na.rm = TRUE),
+    efficiency_sd = sd(sleep_efficiency, na.rm = TRUE),
+    efficiency_min = min(sleep_efficiency, na.rm = TRUE),
+    efficiency_max = max(sleep_efficiency, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
+
+sleep_summary
+
+# Calculate summary statistics for activity variables 
+activity_summary <- cleaned_days %>%
+  summarise(
+    light_activity_mean = mean(total_light_min, na.rm = TRUE),
+    light_activity_sd = sd(total_light_min, na.rm = TRUE),
+    light_activity_min = min(total_light_min, na.rm = TRUE),
+    light_activity_max = max(total_light_min, na.rm = TRUE),
+    moderate_activity_mean = mean(total_moderate_min, na.rm = TRUE),
+    moderate_activity_sd = sd(total_moderate_min, na.rm = TRUE), 
+    moderate_activity_min = min(total_moderate_min, na.rm = TRUE),
+    moderate_activity_max = max(total_moderate_min, na.rm = TRUE),
+    vigorous_activity_mean = mean(total_vigorous_min, na.rm = TRUE),
+    vigorous_activity_sd = sd(total_vigorous_min, na.rm = TRUE),
+    vigorous_activity_min = min(total_vigorous_min, na.rm = TRUE),
+    vigorous_activity_max = max(total_vigorous_min, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
+activity_summary
+
+
+```
