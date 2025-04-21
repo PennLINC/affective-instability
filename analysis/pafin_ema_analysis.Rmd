@@ -1,10 +1,11 @@
 ---
 title: "PAFIN EMA Data Analysis"
 date: "`r Sys.Date()`"
-format:
-  html:
-    code-fold: true
+output:
+  html_document:
+    code_folding: hide
     toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -24,6 +25,7 @@ library(lubridate)
 root <- "/Users/joelleba/Documents/large_data/pafin/"
 ema_data <- read_csv(file.path(root, "group_summary/ema_data_cleaned.csv"),
                     show_col_types = FALSE)
+
 ```
 
 
@@ -62,12 +64,12 @@ create_density_plot <- function(data, var, title, color, title_size = 16, show_x
       panel.grid.major = element_line(color = "gray90"),
       text = element_text(size = title_size),
       axis.title.y = element_blank(),
-      axis.text = element_text(size = 10),
+      axis.text = element_text(size = 14),
       axis.title.x = if(!show_x_label) element_blank() else element_text(size = title_size)  # Hide density label if not bottom plot
     ) +
     scale_x_continuous(limits = c(1, 7), breaks = seq(1, 7, 1)) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 3), 
-                      labels = function(x) ifelse(x == 0, "0", sprintf("%.3f", x))) +
+                      labels = function(x) ifelse(x == 0, "0", sprintf("%.2f", x))) +
     labs(y = if(show_x_label) "Density" else "")
 }
 
@@ -205,45 +207,77 @@ print(daily_summary, n = Inf)
 
 ```{r, fig.height = 10, fig.width = 10}
 
-# Updated helper function with optional emotion descriptions
-gg_emotion_act <- function(emotion_levels, emotion_labels, emotion_descriptions = NULL) {
+# helper function with optional emotion descriptions
+gg_emotion_act <- function(emotion_levels, emotion_labels, emotion_descriptions = TRUE) {
   # Create custom color palette
   custom_colors <- colorRampPalette(c("#4dc08a", "#f5f5f5", "#ab8ee3"))(7)
   
   # Create list of plot elements
   plot_elements <- list( 
     geom_bar(width = 0.6, position = position_fill(reverse = TRUE)),
-    labs(y = ""),
+    labs(
+      title = "Mood Circumplex Scores",
+      y = "", 
+      fill = "Rating"
+    ),
     theme_minimal(),
     theme(
-      legend.position = "none",
-      plot.margin = unit(rep(0.5,4), "cm"),
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.title = element_text(size = 16),
+      legend.box = "horizontal",
+      legend.spacing.x = unit(0.2, 'cm'),
+      legend.key.width = unit(1, 'cm'),
+      legend.key.height = unit(0.5, 'cm'),
+      plot.margin = unit(c(0.5, 0.8, 0.5, 0.5), "cm"),
       axis.text = element_text(size = 16, color = "#000000"),
       strip.text = element_text(size = 16),
       axis.title = element_text(size = 16),
       axis.title.x = element_text(margin = margin(t = 16)),
+      plot.title = element_text(size = 20, hjust = 0.5),  
       panel.spacing = unit(3, "cm")
     ),
+    guides(fill = guide_legend(nrow = 1)),
     scale_fill_manual(values = custom_colors),
     scale_x_continuous(
-      limits = c(0, 1),
+      limits = c(0, 1), 
       expand = c(0, 0),
-      breaks = seq(0, 1, length.out = 7),
-      labels = 1:7
+      breaks = seq(0, 1, length.out = 5),
+      labels = scales::percent
     ),
     coord_cartesian(clip = "off")
   )
   
   # Add descriptions if provided
-  if (!is.null(emotion_descriptions)) {
+  if (emotion_descriptions) {
     # Create y positions
     y_positions <- seq(1.4, 6.4, length.out = length(emotion_levels))
+    
+    # Split descriptions into left and right
+    left_descriptions <- c(
+      "None at all", 
+      "Very inactive/quiet",
+      "Very tired/sluggish",
+      "Very relaxed/calm",
+      "Very cheerful/happy",
+      "None at all"
+    )
+    
+    right_descriptions <- c(
+      "Many positive thoughts",
+      "Very active/aroused",
+      "Very energetic/lively",
+      "Very nervous/anxious",
+      "Very sad/depressed/unhappy",
+      "Many negative thoughts"
+    )
     
     # Create data frame for descriptions
     var_descriptions <- data.frame(
       variable = factor(emotion_levels, levels = emotion_levels),
       label = emotion_labels,
-      description = emotion_descriptions,
+      left_desc = left_descriptions,
+      right_desc = right_descriptions,
       y_pos = y_positions
     )
     
@@ -251,11 +285,22 @@ gg_emotion_act <- function(emotion_levels, emotion_labels, emotion_descriptions 
     plot_elements <- c(
       plot_elements,
       list(
+        # Left-aligned descriptions
         geom_text(
           data = var_descriptions,
-          aes(x = 0.5, y = y_pos, label = description),
+          aes(x = 0.1, y = y_pos, label = left_desc),
           inherit.aes = FALSE,
-          size = 4.5,  
+          size = 4.5,
+          hjust = 0,  # Left alignment
+          color = "black"
+        ),
+        # Right-aligned descriptions
+        geom_text(
+          data = var_descriptions,
+          aes(x = 0.9, y = y_pos, label = right_desc),
+          inherit.aes = FALSE,
+          size = 4.5,
+          hjust = 1,  # Right alignment
           color = "black"
         )
       )
@@ -270,14 +315,6 @@ emotion_levels <- c("thoughts_positive", "active", "tired", "anxiousness", "sadn
 
 emotion_labels <- c("Positive thoughts", "Active", "Tired", "Anxiousness", "Sadness", "Negative thoughts")
 
-emotion_descriptions <- c(
-  "None at all                                                                 Many positive thoughts",
-  "Very inactive/quiet                                                       Very active/aroused",
-  "Very tired/sluggish                                                        Very energetic/lively",
-  "Very relaxed/calm                                                    Very nervous/anxious",
-  "Very cheerful/happy                                   Very sad/depressed/unhappy",
-  "None at all                                                     Many negative thoughts"
-)
 
 # Create plot with descriptions
 plot_all <- ema_data %>%
@@ -290,32 +327,16 @@ plot_all <- ema_data %>%
                    labels = emotion_labels)
   ) %>%
   ggplot(aes(y = emotion, fill = factor(rating))) +
-  gg_emotion_act(emotion_levels, emotion_labels, emotion_descriptions) +
-  labs(x = "Response")
+  gg_emotion_act(emotion_levels, emotion_labels, emotion_descriptions = TRUE) +
+  labs(x = "Response") 
 plot_all
  
-#  Version of plot without descriptions
-# plot_no_desc <- ema_data %>%
-#   select(sadness:thoughts_negative) %>%
-#   filter(!if_all(sadness:thoughts_negative, is.na)) %>% 
-#   pivot_longer(everything(), names_to = "emotion", values_to = "rating") %>%
-#   mutate(
-#     emotion = factor(emotion, 
-#                    levels = emotion_levels,
-#                    labels = emotion_labels)
-#   ) %>%
-#   ggplot(aes(y = emotion, fill = factor(rating))) +
-#   gg_emotion_act(emotion_levels, emotion_labels) +  # No descriptions provided
-#   labs(x = "Response")
-
-
 # save as svg
 ggsave("/Users/joelleba/PennLINC/pafin/figures/emotions_overall_likert.svg", 
        plot_all, 
        width = 10, 
-       height = 8, 
+       height = 9, 
        units = "in"
        )
 
 ```
-

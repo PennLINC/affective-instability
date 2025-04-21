@@ -1,10 +1,11 @@
 ---
 title: "PAFIN Sleep and Activity Analysis"
 date: "`r Sys.Date()`"
-format:
-  html:
-    code-fold: true
+output:
+  html_document:
+    code_folding: hide
     toc: true
+    toc_float: true
 ---
 
 
@@ -148,11 +149,11 @@ create_density_plot <- function(data, var, title, color, title_size = 16, show_y
       panel.grid.major = element_line(color = "gray90"),
       text = element_text(size = title_size),
       axis.title.y = element_blank(),
-      axis.text = element_text(size = 10),
+      axis.text = element_text(size = 14),
       axis.title.x = if(!show_y_label) element_blank() else element_text(size = title_size)  # Hide density label if not bottom plot
     ) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 3), 
-                      labels = function(x) ifelse(x == 0, "0", sprintf("%.3f", x))) +
+                      labels = function(x) ifelse(x == 0, "0", sprintf("%.2f", x))) +
     labs(y = if(show_y_label) "Density" else "")
 }
 
