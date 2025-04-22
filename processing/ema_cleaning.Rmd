@@ -52,7 +52,7 @@ ema_data <- ema_data %>%
     morning_waketime,
     morning_outbed
   ) %>%
-  filter(secret_user_id %in% c(60295, 24683, 24696, 24702, 24699, 24697, 24053, 60107)) %>%
+  filter(secret_user_id %in% c(60295, 24683, 24696, 24702, 24699, 24697, 24053)) %>%
   rename(
     participantID = secret_user_id,
     sadness = now_sadness,
