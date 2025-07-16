@@ -35,7 +35,6 @@ if __name__ == "__main__":
         dummy_scans = 0
         if nss_cols:
             initial_volumes_df = df[nss_cols]
-            print(initial_volumes_df)
             dummy_scans = np.any(initial_volumes_df.to_numpy(), axis=1)
             dummy_scans = np.where(dummy_scans)[0]
 
@@ -52,7 +51,7 @@ if __name__ == "__main__":
         print(f"{subject} {task}: {fd}")
 
         # Add to output DataFrame
-        out_df = pd.DataFrame(
+        out_df = pd.Series(
             {
                 "subject": subject,
                 "task": task,
