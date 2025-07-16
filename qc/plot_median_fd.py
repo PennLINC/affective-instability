@@ -60,7 +60,7 @@ if __name__ == "__main__":
         )
         out_dfs.append(out_df)
 
-    out_df = pd.concat(out_dfs)
+    out_df = pd.DataFrame(out_dfs)
     out_df.to_csv(os.path.join(data_dir, "median_fd.tsv"), sep="\t", index=False)
 
     # Plot median FD across subjects as a histogram, with hue by task
