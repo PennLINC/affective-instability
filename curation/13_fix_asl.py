@@ -2,7 +2,8 @@
 """Prepare ASL data for BIDS compliance.
 
 1.  Split m0scan into two volumes.
-2.  Copy the two m0scan-derived volumes to anat as TDP with different acq entities.
+2.  Copy the two m0scan-derived volumes to anat as TDP (transit delay prescan)
+    with different acq entities.
     -   Need to add the right InversionTime values to the second(?) JSON.
 3.  Retain the first m0scan-derived volume as m0scan in the perf folder.
 4.  Add cbf scans to .bidsignore.
@@ -21,7 +22,6 @@
 
 import json
 import os
-import shutil
 from glob import glob
 
 import nibabel as nb
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
                 tdp2_json = os.path.join(anat_dir, f"{sub_id}_{ses_id}_acq-tr2_TDP.json")
                 tdp2_metadata = m0scan_metadata.copy()
-       	       	tdp2_metadata["SaturationPulseTime"] = 5
+                tdp2_metadata["SaturationPulseTime"] = 5
                 tdp2_metadata["InversionTime"] = 1.978
                 with open(tdp2_json, "w") as f:
                     json.dump(tdp2_metadata, f, indent=4, sort_keys=True)
