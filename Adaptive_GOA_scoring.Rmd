@@ -1,0 +1,134 @@
+---
+title: "CAT_GOA_scoring"
+author: "Juliette Brook"
+date: "2025-04-16"
+output: html_document
+---
+
+```{r}
+install.packages("tidyverse")
+install.packages("corrplot")
+install.packages("dplyr")
+install.packages("ggplot2")
+```
+
+```{r}
+library(tidyverse)
+library(corrplot)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+# Get a list of all csvs in that folder
+GOA_csv_files <- list.files(path = "/Users/jbhbrook/code_projects/OpenNeuro_PAFIN/CAT_GOA2/data", pattern = "\\.csv$", full.names = TRUE)
+
+# Read in each csv and store in a list and include the file name
+GOA_csv_data_list <- lapply(GOA_csv_files, function(file) {
+  raw_goa_data <- read.csv(file)
+  # Add a file with the file name
+  raw_goa_data$filename <- basename(file)
+  return(raw_goa_data)
+})
+
+# Combine all of the csvs together
+raw_goa_data <- do.call(rbind, GOA_csv_data_list)
+
+# Rename the "filename" column to "BBLID"
+names(raw_goa_data)[names(raw_goa_data) == "filename"] <- "BBLID"
+
+# Get rid of the extra info in the filename and keep only the BBLID (the 5 characters after session_)
+        # .*session matches everything before "session_"
+        # (\\d{5}) takes the 5 digits following "session_", \\d for digits, {5} for 5 digits
+        # _.* matches the underscore and everything after
+        # \\1 replaces the entire filename with the 5 digits
+raw_goa_data$BBLID <- sub(".*session_(\\d{5})_.*", "\\1", raw_goa_data$BBLID)
+
+# Filter GOA data to leave only BBLID and z-score for each domain
+filtered_goa_data <- raw_goa_data %>%
+  group_by(BBLID, Domain) %>%
+  slice_tail(n = 1) %>%
+  select(BBLID, Domain, Running.score) %>%
+  ungroup()
+
+# Adjut the df to make each domain a separate column
+final_filtered_goa_data <- filtered_goa_data %>%
+  pivot_wider(names_from = Domain, values_from = Running.score)
+```
+
+
+```{r}
+####################################################################
+#####################  SUMMARY STATS  #############################
+####################################################################
+
+# Create a list of GOA measures
+goa_measures <- c("Externalizing", "Mood/Anxiety", "Personality", "Phobias", "Psychosis")
+
+# Create a list of summary stats that you want to run on GOA data
+summary_stats_for_goa <- c("mean", "median", "sd", "min", "max")
+
+# Create new row names
+goa_scales_row_names <- c("Externalizing", "Mood/Anxiety", "Personality", "Phobias", "Psychosis")
+
+# Create an empty matrix
+prelim_summary_goa_matrix <- matrix(NA, nrow = length(goa_measures), ncol = length(summary_stats_for_goa))
+
+# Loop through each column
+for (row_number in 1:length(goa_measures)) {
+  
+  # Extract the column data
+  c_column <- final_filtered_goa_data[[goa_measures[row_number]]]
+  #print(paste0("current_column=",current_column,", rownumber=", row.number))
+  
+  # Loop through each statistic in stats_of_interest
+  for (col_number in 1:length(summary_stats_for_goa)) {
+    stat <- summary_stats_for_goa[col_number]
+    
+    # Construct the command to calculate the statistic
+    calculation_cmmd <- paste0("prelim_summary_goa_matrix[", row_number, ", ", col_number, "] <- ", stat, "(c_column, na.rm=TRUE)")
+    
+    # Evaluate the command
+    eval(parse(text = calculation_cmmd))
+    
+  }
+}
+
+# Add row and column names to the matrix
+rownames(prelim_summary_goa_matrix) <- goa_scales_row_names
+colnames(prelim_summary_goa_matrix) <- summary_stats_for_goa
+
+# Print the summary matrix
+print(prelim_summary_goa_matrix)
+```
+
+
+```{r}
+####################################################################
+###################  CORRELATION MATRIX  ###########################
+####################################################################
+
+# Select only the last 5 columns (excluding BBLID)
+final_filtered_goa_data_subset <- final_filtered_goa_data[, 2:6]
+
+# Calculate the correlation matrix
+goa_cor_matrix <- cor(final_filtered_goa_data_subset, use = "complete.obs")
+
+# Display the correlation matrix
+print(goa_cor_matrix)
+
+# Plot the correlation matrix for GOA scores only
+corrplot(goa_cor_matrix, 
+         method = "color", 
+         col = colorRampPalette(c("darkblue", "violetred2", "yellow"))(200),
+         type = "lower", 
+         col.lim = c(0, 1),
+         order = "original", 
+         addCoef.col = "black", 
+         number.cex = 0.5,
+         tl.col = "black", 
+         tl.srt = 45, 
+         tl.cex = 0.7,
+         is.corr = FALSE)
+```
+

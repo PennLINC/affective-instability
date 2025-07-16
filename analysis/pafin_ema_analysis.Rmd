@@ -1,0 +1,342 @@
+---
+title: "PAFIN EMA Data Analysis"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(patchwork)
+library(lubridate)
+
+```
+
+
+
+# Load cleaned data
+
+```{r}
+root <- "/Users/joelleba/Documents/large_data/pafin/"
+ema_data <- read_csv(file.path(root, "group_summary/ema_data_cleaned.csv"),
+                    show_col_types = FALSE)
+
+```
+
+
+# Daily mood scores across participants
+
+```{r, fig.height = 10, fig.width = 15}
+
+# helper functions
+create_spaghetti_plot <- function(data, x_var, y_var, title, color, title_size = 16, show_x_label = FALSE) {
+  ggplot(data, aes(x = {{x_var}}, y = {{y_var}})) +
+    geom_line(aes(group = participantID), alpha = 0.4, color = "gray70") +
+    stat_summary(fun = mean, geom = "line", color = color, size = 1) +
+    stat_summary(fun.data = mean_se, geom = "ribbon", alpha = 0.2, fill = color) +
+    scale_x_continuous(breaks = seq(0, max(data[[deparse(substitute(x_var))]]), by = 4)) +
+    scale_y_continuous(limits = c(1, 7), breaks = seq(1, 7, 1)) +  
+    theme_minimal() +
+    theme(
+      strip.text = element_text(size = title_size),
+      panel.grid.major = element_line(color = "gray90"),
+      text = element_text(size = title_size),
+      axis.title.x = if(!show_x_label) element_blank() else element_text(size = title_size)  # Hide x-axis title if not bottom plot
+    ) +
+    labs(
+      x = ifelse(deparse(substitute(x_var)) == "night", "Night", "Day"),
+      y = title
+    )
+}
+
+create_density_plot <- function(data, var, title, color, title_size = 16, show_x_label = FALSE) {
+  ggplot(data, aes(x = {{var}})) +
+    geom_density(fill = color, alpha = 0.5) +
+    coord_flip() +
+    theme_minimal() +
+    theme(
+      strip.text = element_blank(),
+      panel.grid.major = element_line(color = "gray90"),
+      text = element_text(size = title_size),
+      axis.title.y = element_blank(),
+      axis.text = element_text(size = 14),
+      axis.title.x = if(!show_x_label) element_blank() else element_text(size = title_size)  # Hide density label if not bottom plot
+    ) +
+    scale_x_continuous(limits = c(1, 7), breaks = seq(1, 7, 1)) +
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 3), 
+                      labels = function(x) ifelse(x == 0, "0", sprintf("%.2f", x))) +
+    labs(y = if(show_x_label) "Density" else "")
+}
+
+# Create daily averaged version of ema_data (across the 4 daily assessments)
+ema_data_daily <- ema_data %>%
+  group_by(participantID, day_number) %>%
+  summarise(
+    sadness = mean(sadness, na.rm = TRUE),
+    anxiousness = mean(anxiousness, na.rm = TRUE), 
+    active = mean(active, na.rm = TRUE),
+    tired = mean(tired, na.rm = TRUE),
+    thoughts_positive = mean(thoughts_positive, na.rm = TRUE),
+    thoughts_negative = mean(thoughts_negative, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+
+create_ema_panel <- function(ema_data_daily) {
+  # All plots with progressive purples (light to dark)
+  sadness_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, sadness, "Sadness", 
+    "#CBC3E3")
+  sadness_density <- create_density_plot(
+    ema_data_daily, sadness, "Sadness", 
+    "#CBC3E3")
+    
+  anxious_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, anxiousness, "Anxiousness", 
+    "#D8BFD8")
+  anxious_density <- create_density_plot(
+    ema_data_daily, anxiousness, "Anxiousness", 
+    "#D8BFD8")
+    
+  thoughts_pos_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, thoughts_positive, "Positive thoughts", 
+    "#8A2BE2", show_x_label = TRUE)  # Bottom plot of left column
+  thoughts_pos_density <- create_density_plot(
+    ema_data_daily, thoughts_positive, "Positive thoughts", 
+    "#8A2BE2", show_x_label = TRUE)  # Bottom plot of second column
+
+  active_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, active, "Active", 
+    "#BA55D3")
+  active_density <- create_density_plot(
+    ema_data_daily, active, "Active", 
+    "#BA55D3")
+
+  tired_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, tired, "Tired", 
+    "#9370DB")
+  tired_density <- create_density_plot(
+    ema_data_daily, tired, "Tired", 
+    "#9370DB")
+    
+  thoughts_neg_spaghetti <- create_spaghetti_plot(
+    ema_data_daily, day_number, thoughts_negative, "Negative thoughts", 
+    "#6A0DAD", show_x_label = TRUE)  # Bottom plot of third column
+  thoughts_neg_density <- create_density_plot(
+    ema_data_daily, thoughts_negative, "Negative thoughts", 
+    "#6A0DAD", show_x_label = TRUE)  # Bottom plot of fourth column
+
+  # Combine all plots
+  ema_panel <- (
+    (sadness_spaghetti / anxious_spaghetti / thoughts_pos_spaghetti) | 
+    (sadness_density / anxious_density / thoughts_pos_density) |
+    (active_spaghetti / tired_spaghetti / thoughts_neg_spaghetti) |
+    (active_density / tired_density / thoughts_neg_density)
+  ) +
+    plot_layout(widths = c(4, 1.6, 4, 1.6))
+    
+  ema_panel <- ema_panel + plot_annotation(title = "Daily EMA patterns", theme = theme(plot.title = element_text(size = 20)))
+  return(ema_panel)
+}
+
+# Create and save the panel
+ema_panel <- create_ema_panel(ema_data_daily)
+ema_panel
+
+# save as svg
+ggsave("/Users/joelleba/PennLINC/pafin/figures/ema_daily_patterns.svg", 
+       ema_panel, 
+       width = 15, 
+       height = 10, 
+       units = "in",
+       limitsize = FALSE)
+  
+
+```
+
+
+# Numerical summary of daily emotion scores across participants and days
+
+```{r}
+# Descriptive stats for daily emotion scores across participants and days
+
+# Calculate summary statistics for daily emotion scores
+daily_summary <- ema_data_daily %>%
+  summarise(
+    sadness_mean = mean(sadness, na.rm = TRUE),
+    sadness_sd = sd(sadness, na.rm = TRUE),
+    sadness_min = min(sadness, na.rm = TRUE), 
+    sadness_max = max(sadness, na.rm = TRUE),
+    anxiousness_mean = mean(anxiousness, na.rm = TRUE),
+    anxiousness_sd = sd(anxiousness, na.rm = TRUE),
+    anxiousness_min = min(anxiousness, na.rm = TRUE),
+    anxiousness_max = max(anxiousness, na.rm = TRUE),
+    thoughts_positive_mean = mean(thoughts_positive, na.rm = TRUE),
+    thoughts_positive_sd = sd(thoughts_positive, na.rm = TRUE),
+    thoughts_positive_min = min(thoughts_positive, na.rm = TRUE),
+    thoughts_positive_max = max(thoughts_positive, na.rm = TRUE),
+    thoughts_negative_mean = mean(thoughts_negative, na.rm = TRUE), 
+    thoughts_negative_sd = sd(thoughts_negative, na.rm = TRUE),
+    thoughts_negative_min = min(thoughts_negative, na.rm = TRUE),
+    thoughts_negative_max = max(thoughts_negative, na.rm = TRUE),
+    active_mean = mean(active, na.rm = TRUE),
+    active_sd = sd(active, na.rm = TRUE),
+    active_min = min(active, na.rm = TRUE),
+    active_max = max(active, na.rm = TRUE),
+    tired_mean = mean(tired, na.rm = TRUE),
+    tired_sd = sd(tired, na.rm = TRUE),
+    tired_min = min(tired, na.rm = TRUE),
+    tired_max = max(tired, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "value")
+
+print(daily_summary, n = Inf)
+
+
+```
+
+
+
+
+# Average mood scores across participants and days
+
+```{r, fig.height = 10, fig.width = 10}
+
+# helper function with optional emotion descriptions
+gg_emotion_act <- function(emotion_levels, emotion_labels, emotion_descriptions = TRUE) {
+  # Create custom color palette
+  custom_colors <- colorRampPalette(c("#4dc08a", "#f5f5f5", "#ab8ee3"))(7)
+  
+  # Create list of plot elements
+  plot_elements <- list( 
+    geom_bar(width = 0.6, position = position_fill(reverse = TRUE)),
+    labs(
+      title = "Mood Circumplex Scores",
+      y = "", 
+      fill = "Rating"
+    ),
+    theme_minimal(),
+    theme(
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.title = element_text(size = 16),
+      legend.box = "horizontal",
+      legend.spacing.x = unit(0.2, 'cm'),
+      legend.key.width = unit(1, 'cm'),
+      legend.key.height = unit(0.5, 'cm'),
+      plot.margin = unit(c(0.5, 0.8, 0.5, 0.5), "cm"),
+      axis.text = element_text(size = 16, color = "#000000"),
+      strip.text = element_text(size = 16),
+      axis.title = element_text(size = 16),
+      axis.title.x = element_text(margin = margin(t = 16)),
+      plot.title = element_text(size = 20, hjust = 0.5),  
+      panel.spacing = unit(3, "cm")
+    ),
+    guides(fill = guide_legend(nrow = 1)),
+    scale_fill_manual(values = custom_colors),
+    scale_x_continuous(
+      limits = c(0, 1), 
+      expand = c(0, 0),
+      breaks = seq(0, 1, length.out = 5),
+      labels = scales::percent
+    ),
+    coord_cartesian(clip = "off")
+  )
+  
+  # Add descriptions if provided
+  if (emotion_descriptions) {
+    # Create y positions
+    y_positions <- seq(1.4, 6.4, length.out = length(emotion_levels))
+    
+    # Split descriptions into left and right
+    left_descriptions <- c(
+      "None at all", 
+      "Very inactive/quiet",
+      "Very tired/sluggish",
+      "Very relaxed/calm",
+      "Very cheerful/happy",
+      "None at all"
+    )
+    
+    right_descriptions <- c(
+      "Many positive thoughts",
+      "Very active/aroused",
+      "Very energetic/lively",
+      "Very nervous/anxious",
+      "Very sad/depressed/unhappy",
+      "Many negative thoughts"
+    )
+    
+    # Create data frame for descriptions
+    var_descriptions <- data.frame(
+      variable = factor(emotion_levels, levels = emotion_levels),
+      label = emotion_labels,
+      left_desc = left_descriptions,
+      right_desc = right_descriptions,
+      y_pos = y_positions
+    )
+    
+    # Add text elements to the plot
+    plot_elements <- c(
+      plot_elements,
+      list(
+        # Left-aligned descriptions
+        geom_text(
+          data = var_descriptions,
+          aes(x = 0.1, y = y_pos, label = left_desc),
+          inherit.aes = FALSE,
+          size = 4.5,
+          hjust = 0,  # Left alignment
+          color = "black"
+        ),
+        # Right-aligned descriptions
+        geom_text(
+          data = var_descriptions,
+          aes(x = 0.9, y = y_pos, label = right_desc),
+          inherit.aes = FALSE,
+          size = 4.5,
+          hjust = 1,  # Right alignment
+          color = "black"
+        )
+      )
+    )
+  }
+  
+  return(plot_elements)
+}
+
+# Define variables in main code
+emotion_levels <- c("thoughts_positive", "active", "tired", "anxiousness", "sadness", "thoughts_negative")
+
+emotion_labels <- c("Positive thoughts", "Active", "Tired", "Anxiousness", "Sadness", "Negative thoughts")
+
+
+# Create plot with descriptions
+plot_all <- ema_data %>%
+  select(sadness:thoughts_negative) %>%
+  filter(!if_all(sadness:thoughts_negative, is.na)) %>% 
+  pivot_longer(everything(), names_to = "emotion", values_to = "rating") %>%
+  mutate(
+    emotion = factor(emotion, 
+                   levels = emotion_levels,
+                   labels = emotion_labels)
+  ) %>%
+  ggplot(aes(y = emotion, fill = factor(rating))) +
+  gg_emotion_act(emotion_levels, emotion_labels, emotion_descriptions = TRUE) +
+  labs(x = "Response") 
+plot_all
+ 
+# save as svg
+ggsave("/Users/joelleba/PennLINC/pafin/figures/emotions_overall_likert.svg", 
+       plot_all, 
+       width = 10, 
+       height = 9, 
+       units = "in"
+       )
+
+```
