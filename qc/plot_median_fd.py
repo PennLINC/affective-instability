@@ -66,6 +66,7 @@ if __name__ == "__main__":
     # Plot median FD across subjects as a histogram, with hue by task
     fig, ax = plt.subplots(figsize=(10, 5))
     sns.histplot(x="fd", data=out_df, hue="task", ax=ax, bins=10)
+    ax.set_xlim(0, 0.2)
     ax.set_title("Median Framewise Displacement (FD)")
     ax.set_xlabel("Task")
     ax.set_ylabel("FD")
