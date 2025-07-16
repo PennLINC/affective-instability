@@ -10,7 +10,7 @@ import seaborn as sns
 
 
 if __name__ == "__main__":
-    in_dir = "/cbica/projects/pafin/derivatives/xcp_d_gsr"
+    in_dir = "/cbica/projects/pafin/derivatives/fmriprep"
     data_dir = "/cbica/projects/pafin/code/data"
     figure_dir = "/cbica/projects/pafin/code/figures"
 
@@ -21,9 +21,11 @@ if __name__ == "__main__":
             "sub-*",
             "ses-*",
             "func",
-            "*_motion.tsv",
+            "*_desc-confounds_timeseries.tsv",
         )
     )
+    in_files = [f for f in in_files if "rec-nordic" not in f]
+    in_files = [f for f in in_files if "sub-PILOT" not in f]
 
     out_dfs = []
     for in_file in in_files:
