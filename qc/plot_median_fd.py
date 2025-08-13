@@ -49,13 +49,14 @@ if __name__ == "__main__":
         subject = [e for e in entities if e.startswith("sub-")]
         subject = subject[0].replace("sub-", "")
         print(f"{subject} {task}: {fd}")
+        task = "Bao" if task == "bao" else "Your Friend the Rat"
 
         # Add to output DataFrame
         out_df = pd.Series(
             {
                 "subject": subject,
-                "task": task,
-                "fd": fd,
+                "Task": task,
+                "FD": fd,
             }
         )
         out_dfs.append(out_df)
@@ -64,10 +65,12 @@ if __name__ == "__main__":
     out_df.to_csv(os.path.join(data_dir, "median_fd.tsv"), sep="\t", index=False)
 
     # Plot median FD across subjects as a histogram, with hue by task
+    sns.set_style("whitegrid")
     fig, ax = plt.subplots(figsize=(10, 5))
-    sns.histplot(x="fd", data=out_df, hue="task", ax=ax, bins=10)
+    sns.histplot(x="FD", data=out_df, hue="Task", multiple="stack", ax=ax, bins=10)
     ax.set_xlim(0, 0.2)
-    ax.set_title("Median Framewise Displacement (FD)")
-    ax.set_xlabel("Task")
-    ax.set_ylabel("FD")
-    plt.savefig(os.path.join(figure_dir, "median_fd.png"))
+    ax.set_xlabel("Median Framewise Displacement (mm)", fontsize=16)
+    ax.set_ylabel("Count", fontsize=16)
+    ax.set_xticks([0, 0.05, 0.1, 0.15, 0.2])
+    ax.set_yticks([0, 1, 2, 3, 4])
+    fig.savefig(os.path.join(figure_dir, "median_fd.png"), bbox_inches="tight")
