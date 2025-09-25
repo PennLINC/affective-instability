@@ -10,7 +10,9 @@ from bidsphysio.dcm2bids import dcm2bidsphysio
 if __name__ == "__main__":
     in_dir = "/cbica/projects/pafin"
 
-    subject_dirs = sorted(glob(os.path.join(in_dir, "sourcedata/imaging/scitran/bbl/PAFIN_844353/*_*")))
+    subject_dirs = sorted(
+        glob(os.path.join(in_dir, "sourcedata/imaging/scitran/bbl/PAFIN_844353/*_*"))
+    )
     for subject_dir in subject_dirs:
         subject_folder = os.path.basename(subject_dir)
         subject_id = subject_folder.split("_")[0]
@@ -20,7 +22,10 @@ if __name__ == "__main__":
         physio_dirs = sorted(glob(search))
         physio_folders = [os.path.basename(physio_dir) for physio_dir in physio_dirs]
         if not physio_dirs:
-            print(f'No physio found with pattern {os.path.join(subject_dir, "CAMRIS^Satterthwait*/*func*_PhysioLog*")}')
+            print(
+                "No physio found with pattern "
+                f"{os.path.join(subject_dir, 'CAMRIS^Satterthwait*/*func*_PhysioLog*')}"
+            )
         else:
             print("\t" + "\n\t".join(physio_dirs))
 

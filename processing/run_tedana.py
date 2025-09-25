@@ -61,6 +61,8 @@ def minimum_image_regression(
     acc = component_table[component_table.classification == "accepted"].index.values
     # Ignored components are classified as "accepted", so we need to remove them from the list
     acc = sorted(np.setdiff1d(acc, ign))
+    # Drop rejected components (by AROMA) from list of ignored components
+    ign = sorted(np.setdiff1d(ign, acc))
 
     # Compute temporal regression
     data_optcom_z = stats.zscore(data_optcom, axis=-1)
@@ -292,9 +294,9 @@ def run_tedana_aroma(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir, tedana_ar
         )
         tedana_df = pd.read_table(tedana_classifications)
 
-        assert (
-            aroma_df.shape[0] == tedana_df.shape[0]
-        ), "AROMA and tedana have different numbers of components"
+        assert aroma_df.shape[0] == tedana_df.shape[0], (
+            "AROMA and tedana have different numbers of components"
+        )
 
         # Combine the classifications
         for i_row, aroma_row in aroma_df.iterrows():
@@ -306,12 +308,6 @@ def run_tedana_aroma(raw_dir, fmriprep_dir, aroma_dir, tedana_out_dir, tedana_ar
             if aroma_clf == "rejected":
                 aroma_rationales = aroma_row["rationale"].split(";")
                 aroma_rationales = [f"AROMA {rationale}" for rationale in aroma_rationales]
-
-                # Remove tags equivalent to "ignored" classification, for MIR
-                tedana_rationales = [
-                    r for r in tedana_rationales if r not in ["low variance", "accept borderline"]
-                ]
-
                 tedana_df.loc[i_row, "classification"] = "rejected"
 
             tedana_rationales = [f"TEDANA {rationale}" for rationale in tedana_rationales]
