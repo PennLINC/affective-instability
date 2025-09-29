@@ -6,7 +6,7 @@ from glob import glob
 
 
 if __name__ == "__main__":
-    status_file = "/cbica/projects/pafin/code/curation/status_unzip_dicom_zips.txt"
+    status_file = "/cbica/projects/pafin/sourcedata/curation_files/01_status_unzip_dicom_zips.txt"
     if os.path.exists(status_file):
         with open(status_file, "r") as f:
             unzipped_subjects = f.read().splitlines()
