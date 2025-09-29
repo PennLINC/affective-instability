@@ -44,7 +44,7 @@ for subject in "${subjects[@]}"; do
 
     echo "Downloading subject ${subject}..."
     #~/bin/glibc-2.34/lib/ld-linux-x86-64.so.2 ~/bin/linux_amd64/fw download --yes --zip "fw://bbl/PAFIN_844353/${subject}"
-    if ~/bin/linux_amd64/fw download --yes --zip "fw://bbl/PAFIN_844353/${subject}"; then
+    if ~/bin/glibc-2.34/lib/ld-linux-x86-64.so.2 ~/bin/linux_amd64/fw download --yes --zip "fw://bbl/PAFIN_844353/${subject}"; then
         echo "Successfully downloaded ${subject}, adding to status file..."
         echo "${subject}" >> "$download_status_file"
     else
