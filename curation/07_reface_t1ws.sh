@@ -1,4 +1,7 @@
 #!/bin/bash
+# This will reface T1ws and T2ws in the dataset, overwriting the original files.
+# Only reface if there are no NORDIC-denoised files in the same session,
+# since NORDIC denoising is performed after refacing.
 
 # Function to submit reface job
 submit_reface_job() {
@@ -41,7 +44,7 @@ do
         continue
     fi
     echo "Submitting job for: $t1w_file"
-    # submit_reface_job "${t1w_file}"
+    submit_reface_job "${t1w_file}"
 done
 
 # Process T2w files
@@ -55,5 +58,5 @@ do
         continue
     fi
     echo "Submitting job for: $t2w_file"
-    # submit_reface_job "${t2w_file}"
+    submit_reface_job "${t2w_file}"
 done
