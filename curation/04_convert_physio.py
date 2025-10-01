@@ -69,5 +69,14 @@ if __name__ == "__main__":
 
                 prefix += f"_run-{run_num:02d}"
 
-                physio_data = dcm2bidsphysio.dcm2bids(physio_dicom)
-                physio_data.save_to_bids(bids_fName=prefix)
+                physio_file = prefix + '*_physio.tsv.gz'
+                print(physio_file)
+                if len(glob(physio_file)) > 0:
+                    print('Physio already converted.')
+                    continue
+
+                try:
+                    physio_data = dcm2bidsphysio.dcm2bids(physio_dicom)
+                    physio_data.save_to_bids(bids_fName=prefix)
+                except Exception as e:
+                    print(e)
