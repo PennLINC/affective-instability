@@ -34,8 +34,8 @@ mkdir -p logs
 t1w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T1w.nii.gz)
 for t1w_file in $t1w_files
 do
-    tdp_file=$(find $(dirname "${t1w_file}") -name "*TDP.nii.gz")
-    if [ -f "${tdp_file}" ]; then
+    tdp_files=$(find $(dirname "${t1w_file}") -name "*TDP.nii.gz")
+    if [ -n "${tdp_files}" ]; then
         echo "Skipping: $t1w_file"
         continue
     fi
@@ -47,8 +47,8 @@ done
 t2w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T2w.nii.gz)
 for t2w_file in $t2w_files
 do
-    tdp_file=$(find $(dirname "${t2w_file}") -name "*TDP.nii.gz")
-    if [ -f "${tdp_file}" ]; then
+    tdp_files=$(find $(dirname "${t2w_file}") -name "*TDP.nii.gz")
+    if [ -n "${tdp_files}" ]; then
         echo "Skipping: $t2w_file"
         continue
     fi
