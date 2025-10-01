@@ -29,18 +29,29 @@ submit_reface_job() {
 # Create logs directory if it doesn't exist
 mkdir -p logs
 
+# Only defaced T1ws when a TDP file isn't present in the same directory
 # Process T1w files
 t1w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T1w.nii.gz)
 for t1w_file in $t1w_files
 do
+    tdp_file=$(find $(dirname "${t1w_file}") -name "*TDP.nii.gz")
+    if [ -f "${tdp_file}" ]; then
+        echo "Skipping: $t1w_file"
+        continue
+    fi
     echo "Submitting job for: $t1w_file"
-    submit_reface_job "${t1w_file}"
+    # submit_reface_job "${t1w_file}"
 done
 
 # Process T2w files
 t2w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T2w.nii.gz)
 for t2w_file in $t2w_files
 do
+    tdp_file=$(find $(dirname "${t2w_file}") -name "*TDP.nii.gz")
+    if [ -f "${tdp_file}" ]; then
+        echo "Skipping: $t2w_file"
+        continue
+    fi
     echo "Submitting job for: $t2w_file"
-    submit_reface_job "${t2w_file}"
+    # submit_reface_job "${t2w_file}"
 done
