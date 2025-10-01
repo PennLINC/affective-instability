@@ -34,8 +34,9 @@ mkdir -p logs
 t1w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T1w.nii.gz)
 for t1w_file in $t1w_files
 do
-    tdp_files=$(find $(dirname "${t1w_file}") -name "*TDP.nii.gz")
-    if [ -n "${tdp_files}" ]; then
+    session_dir=$(dirname $(dirname "${t1w_file}"))
+    nordic_files=$(find "${session_dir}/func" -name "*nordic*.nii.gz")
+    if [ -n "${nordic_files}" ]; then
         echo "Skipping: $t1w_file"
         continue
     fi
@@ -47,8 +48,9 @@ done
 t2w_files=$(find /cbica/projects/pafin/dset/sub-*/ses-*/anat/*T2w.nii.gz)
 for t2w_file in $t2w_files
 do
-    tdp_files=$(find $(dirname "${t2w_file}") -name "*TDP.nii.gz")
-    if [ -n "${tdp_files}" ]; then
+    session_dir=$(dirname $(dirname "${t2w_file}"))
+    nordic_files=$(find "${session_dir}/func" -name "*nordic*.nii.gz")
+    if [ -n "${nordic_files}" ]; then
         echo "Skipping: $t2w_file"
         continue
     fi
