@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Only run this the first time you create the dataset.
 # Add .heudiconv/ and sourcedata/ to the .gitignore file
 echo ".heudiconv/" >> /cbica/projects/pafin/dset/.gitignore
 echo "sourcedata/" >> /cbica/projects/pafin/dset/.gitignore

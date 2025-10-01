@@ -39,7 +39,10 @@ if __name__ == "__main__":
             dwi_dir = os.path.join(session_dir, "dwi")
 
             # Remove events files
-            events_files = sorted(glob(os.path.join(func_dir, "*_events.tsv")))
+            events_files = sorted(
+                glob(os.path.join(func_dir, "*part-mag_events.tsv"))
+                + glob(os.path.join(func_dir, "*part-phase_events.tsv"))
+            )
             for events_file in events_files:
                 os.remove(events_file)
 
