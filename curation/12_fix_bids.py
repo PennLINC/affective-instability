@@ -1,4 +1,4 @@
-#!/cbica/home/salot/miniconda3/envs/salot/bin/python
+#!/cbica/projects/pafin/miniforge3/envs/curation/bin/python
 """Fix BIDS files after heudiconv conversion.
 
 The necessary steps are:

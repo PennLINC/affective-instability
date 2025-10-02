@@ -1,4 +1,4 @@
-#!/cbica/home/salot/miniconda3/envs/salot/bin/python
+#!/cbica/projects/pafin/miniforge3/envs/curation/bin/python
 """Prepare ASL data for BIDS compliance.
 
 1.  Split m0scan into two volumes.

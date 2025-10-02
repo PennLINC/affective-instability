@@ -1,4 +1,4 @@
-#!/cbica/home/salot/miniconda3/envs/salot/bin/python
+#!/cbica/projects/pafin/miniforge3/envs/curation/bin/python
 """Assign IntendedFor and related metadata fields.
 
 This will do the following:
