@@ -13,6 +13,7 @@ from glob import glob
 if __name__ == "__main__":
     dset_dir = "/cbica/projects/pafin/dset"
     subject_dirs = sorted(glob(os.path.join(dset_dir, "sub-*")))
+    modify_subjects = []
     for subject_dir in subject_dirs:
         sub_id = os.path.basename(subject_dir)
         session_dirs = sorted(glob(os.path.join(subject_dir, "ses-*")))
@@ -28,6 +29,7 @@ if __name__ == "__main__":
                 continue
 
             print(f"\t{len(run02_files)} run-02 files found")
+            modify_subjects.append(sub_id)
             for run02_file in run02_files:
                 run01_file = run02_file.replace("run-02", "run-01")
                 run02_filename = os.path.basename(run02_file)
@@ -38,3 +40,5 @@ if __name__ == "__main__":
 
                 print(f"\t\tCopying {run02_filename} to {run01_filename}")
                 # shutil.copyfile(run02_file, run01_file)
+
+    print(f"Subjects to modify: {modify_subjects}")
