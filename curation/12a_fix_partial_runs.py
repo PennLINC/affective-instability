@@ -36,9 +36,9 @@ if __name__ == "__main__":
                 run01_filename = os.path.basename(run01_file)
                 if os.path.isfile(run01_file):
                     print(f"\t\tRemoving {run01_filename}")
-                    # os.remove(run01_file)
+                    os.remove(run01_file)
 
                 print(f"\t\tCopying {run02_filename} to {run01_filename}")
-                # shutil.copyfile(run02_file, run01_file)
+                shutil.copyfile(run02_file, run01_file)
 
     print(f"Subjects to modify: {modify_subjects}")
