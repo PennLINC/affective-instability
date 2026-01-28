@@ -2,7 +2,7 @@
 #SBATCH --job-name=qsiprep
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1-12
+#SBATCH --array=1-51
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=36:00:00
@@ -39,7 +39,7 @@ cmd="apptainer run --cleanenv \
       -B ${FS_LICENSE}:/license.txt \
       /cbica/projects/pafin/apptainer/qsiprep-1.0.0.sif \
       /data \
-      /deriv/qsiprep \
+      /deriv/qsiprep2 \
       participant \
       --participant-label ${subject} \
       -w /work/ \

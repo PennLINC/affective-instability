@@ -7,7 +7,7 @@ from bids.layout import BIDSLayout, Query
 layout = BIDSLayout("/cbica/projects/pafin/dset", validate=False)
 files = layout.get(
     echo=1,
-    reconstruction="nordic",
+    reconstruction=Query.NONE,
     part="mag",
     suffix=["noRF", "bold"],
     extension=["nii.gz"],

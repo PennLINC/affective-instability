@@ -39,6 +39,6 @@ if __name__ == "__main__":
                     os.remove(run01_file)
 
                 print(f"\t\tCopying {run02_filename} to {run01_filename}")
-                shutil.copyfile(run02_file, run01_file)
+                os.rename(run02_file, run01_file)
 
     print(f"Subjects to modify: {modify_subjects}")
