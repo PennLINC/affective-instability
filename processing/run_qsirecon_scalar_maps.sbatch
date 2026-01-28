@@ -1,0 +1,60 @@
+#!/bin/bash
+#SBATCH --job-name=qsirecon
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --array=1-51
+#SBATCH --cpus-per-task=20
+#SBATCH --mem-per-cpu=4gb
+#SBATCH --time=36:00:00
+# Outputs ----------------------------------
+#SBATCH --output=/cbica/projects/pafin/code/processing/jobs/qsirecon_%A-%a.out
+#SBATCH --error=/cbica/projects/pafin/code/processing/jobs/qsirecon_%A-%a.err
+# ------------------------------------------
+
+pwd; hostname; date
+set -e
+
+#==============Shell script==============#
+# Location of the *reduced* BIDS dataset
+CODE_DIR="/cbica/projects/pafin/code/processing"
+BIDS_DIR="/cbica/projects/pafin/dset"
+SCRATCH_DIR="/cbica/comp_space/pafin/pafin-qsirecon"
+DERIV_DIR="/cbica/projects/pafin/derivatives"
+mkdir -p ${SCRATCH_DIR}
+
+# Make sure FS_LICENSE is defined in the container.
+FS_LICENSE="/cbica/projects/pafin/tokens/freesurfer_license.txt"
+
+# Parse the participants.tsv file and extract one subject ID from the line corresponding to this SLURM task.
+subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${BIDS_DIR}/participants.tsv )
+
+cmd="apptainer run --cleanenv \
+      -B ${CODE_DIR}:/code \
+      -B ${DERIV_DIR}:/data \
+      -B ${SCRATCH_DIR}:/work \
+      -B ${FS_LICENSE}:/license.txt \
+      /cbica/projects/pafin/apptainer/qsirecon-1.0.1.sif \
+      /data/qsiprep \
+      /data/qsirecon_scalar_maps \
+      participant \
+      --participant-label ${subject} \
+      -w /work/ \
+      --omp-nthreads ${SLURM_CPUS_PER_TASK} \
+      --nprocs ${SLURM_CPUS_PER_TASK} \
+      --mem 79000 \
+      --fs-license-file /license.txt \
+      --output-resolution 1.7 \
+      --recon-spec /code/recon_spec_scalar_maps.yml \
+      --report-output-level session"
+
+# Setup done, run the command
+echo Running task "${SLURM_ARRAY_TASK_ID}"
+echo Commandline: "$cmd"
+eval "$cmd"
+exitcode=$?
+
+# Output results to a table
+echo "sub-$subject   ${SLURM_ARRAY_TASK_ID}    $exitcode" \
+      >> ${CODE_DIR}/jobs/"${SLURM_JOB_NAME}"_"${SLURM_ARRAY_JOB_ID}".tsv
+echo Finished tasks "${SLURM_ARRAY_TASK_ID}" with exit code $exitcode
+exit $exitcode
