@@ -116,6 +116,8 @@ nodes:
     - dipy_dki
     - tortoise_fullshell_tensor
     - tortoise_dtmapmri
+    - fit_noddi
+    - fit_noddi_gm
     software: qsirecon
 
 -   action: template_map
@@ -128,4 +130,6 @@ nodes:
     - dipy_dki
     - tortoise_fullshell_tensor
     - tortoise_dtmapmri
+    - fit_noddi
+    - fit_noddi_gm
     software: qsirecon
