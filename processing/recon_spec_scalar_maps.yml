@@ -25,8 +25,6 @@ nodes:
     input: extrapolate_abcd
     name: dipy_dki
     parameters:
-        # Calculate MSDKI metrics
-        msdki: false
         # Calculate microstructural metrics
         wmti: false
         write_fibgz: false
