@@ -11,11 +11,13 @@ nodes:
     input: qsirecon
     name: extrapolate_abcd
     parameters:
+        big_delta: 0.01973
         extrapolate_scheme: ABCD
         lambdaL: 1.0e-08
         lambdaN: 1.0e-08
         radial_order: 8
         regularization: L2
+        small_delta: 0.04302
         write_fibgz: false
         write_mif: false
     software: Dipy
@@ -36,14 +38,14 @@ nodes:
     input: extrapolate_abcd
     name: tortoise_dtmapmri
     parameters:
-        big_delta: null
+        big_delta: 0.01973
         estimate_mapmri:
             map_order: 4
         estimate_tensor:
             bval_cutoff: 1200
             write_cs: true
         estimate_tensor_separately: true
-        small_delta: null
+        small_delta: 0.04302
     qsirecon_suffix: TORTOISE_model-MAPMRI
     software: TORTOISE
 
@@ -51,12 +53,12 @@ nodes:
     input: extrapolate_abcd
     name: tortoise_fullshell_tensor
     parameters:
-        big_delta: null
+        big_delta: 0.01973
         estimate_tensor:
             bval_cutoff: 4000
             write_cs: true
         estimate_tensor_separately: true
-        small_delta: null
+        small_delta: 0.04302
     qsirecon_suffix: TORTOISE_model-tensor
     software: TORTOISE
 
@@ -67,6 +69,26 @@ nodes:
         method: gqi
     qsirecon_suffix: DSIStudio
     software: DSI Studio
+
+-   action: fit_noddi
+    input: extrapolate_abcd
+    name: fit_noddi
+    parameters:
+        dIso: 0.003
+        dPar: 0.0017
+        isExvivo: false
+    qsirecon_suffix: wmNODDI
+    software: AMICO
+
+-   action: fit_noddi
+    input: extrapolate_abcd
+    name: fit_noddi_gm
+    parameters:
+        dIso: 0.003
+        dPar: 0.0011
+        isExvivo: false
+    qsirecon_suffix: gmNODDI
+    software: AMICO
 
 -   action: autotrack
     input: dsistudio_gqi
