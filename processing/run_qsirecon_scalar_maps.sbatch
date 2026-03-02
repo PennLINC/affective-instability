@@ -2,7 +2,7 @@
 #SBATCH --job-name=qsirecon
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --array=1-51
+#SBATCH --array=45
 #SBATCH --cpus-per-task=20
 #SBATCH --mem-per-cpu=4gb
 #SBATCH --time=36:00:00
@@ -18,7 +18,7 @@ set -e
 # Location of the *reduced* BIDS dataset
 CODE_DIR="/cbica/projects/pafin/code/processing"
 BIDS_DIR="/cbica/projects/pafin/dset"
-SCRATCH_DIR="/cbica/comp_space/pafin/pafin-qsirecon"
+SCRATCH_DIR="/cbica/comp_space/pafin/pafin-qsirecon-scalar-maps"
 DERIV_DIR="/cbica/projects/pafin/derivatives"
 mkdir -p ${SCRATCH_DIR}
 
