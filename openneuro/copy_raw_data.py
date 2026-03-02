@@ -16,4 +16,3 @@ for subject in subjects_to_copy:
     out_subject_dir = os.path.join(out_dir, subject)
     # cp -RL in_subject_dir out_subject_dir
     os.system(f"cp -RL {in_subject_dir} {out_subject_dir}")
-
