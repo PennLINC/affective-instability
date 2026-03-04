@@ -68,8 +68,8 @@ cluster_resources:
 
 # Script preamble (optional)
 script_preamble: |
-    eval "$(micromamba shell hook --shell bash)"
-    micromamba activate babs
+    # eval "$(mamba shell hook --shell bash)"
+    source /cbica/projects/pafin/miniforge3/bin/activate babs
 
 # Where to run the jobs:
-job_compute_space: "${TMP}" # [FIX ME] replace "/path/to/temporary_compute_space" with yours
+job_compute_space: "/cbica/comp_space/pafin/nordic_fmriprep"

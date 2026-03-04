@@ -2,8 +2,8 @@ import os
 import subprocess
 from glob import glob
 
-in_dir = os.path.abspath("dset")
-out_dir = os.path.abspath("ds006131")
+out_dir = "/cbica/projects/pafin/ds006131"
+in_dir = "/cbica/projects/pafin/test/ds006131"
 
 files = sorted(glob(os.path.join(in_dir, "sub-*", "ses-*", "func", "*_physio.tsv.gz")))
 print(len(files))
