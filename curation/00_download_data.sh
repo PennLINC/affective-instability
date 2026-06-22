@@ -8,7 +8,7 @@ cd "/cbica/projects/pafin/sourcedata/imaging" || exit
 
 # Define files
 download_status_file="/cbica/projects/pafin/sourcedata/curation_files/00_status_download.txt"
-participants_file="/cbica/projects/pafin/sourcedata/curation_files/flywheel_participants.txt"
+participants_file="/cbica/projects/pafin/sourcedata/curation_files/pafin_participants.txt"
 
 # Initialize download status file if it doesn't exist
 touch "$download_status_file"
@@ -25,22 +25,31 @@ else
 fi
 
 # Reduce the list of subjects based on entries in status_download.txt
+downloaded_set=()
 if [[ -f "$download_status_file" ]]; then
-    declare -A downloaded_set=()
-    while IFS= read -r d; do
-        [[ -n "$d" ]] && downloaded_set["$d"]=1
+    while IFS= read -r s; do
+        [[ -n "$s" ]] && downloaded_set+=("$s")
     done < "$download_status_file"
-
-    filtered_subjects=()
-    for s in "${subjects[@]}"; do
-        if [[ -z "${downloaded_set[$s]}" ]]; then
-            filtered_subjects+=("$s")
-        fi
-    done
-    subjects=("${filtered_subjects[@]}")
 fi
 
-for subject in "${subjects[@]}"; do
+# Build lookup table
+declare -A downloaded_lookup
+for subj in "${downloaded_set[@]}"; do
+    downloaded_lookup["$subj"]=1
+done
+
+# Filter subjects
+filtered_subjects=()
+for subj in "${subjects[@]}"; do
+    if [[ -z "${downloaded_lookup[$subj]}" ]]; then
+        filtered_subjects+=("$subj")
+    fi
+done
+
+echo "Subjects"
+echo ${filtered_subjects[*]}
+
+for subject in "${filtered_subjects[@]}"; do
 
     echo "Downloading subject ${subject}..."
     #~/bin/glibc-2.34/lib/ld-linux-x86-64.so.2 ~/bin/linux_amd64/fw download --yes --zip "fw://bbl/PAFIN_844353/${subject}"
