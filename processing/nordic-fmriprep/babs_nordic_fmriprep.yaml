@@ -73,3 +73,9 @@ script_preamble: |
 
 # Where to run the jobs:
 job_compute_space: "/cbica/comp_space/pafin/nordic_fmriprep"
+
+# Files to be copied into the datalad dataset:
+imported_files:
+    # Change original_path to the path to the file on your local machine
+    - original_path: "/cbica/projects/pafin/code/processing/nordic-fmriprep/fmriprep_filter.json"
+      analysis_path: "code/fmriprep_filter.json"
