@@ -49,6 +49,8 @@ done
 echo "Subjects"
 echo ${filtered_subjects[*]}
 
+filtered_subjects=("25636_13599")
+
 for subject in "${filtered_subjects[@]}"; do
 
     echo "Downloading subject ${subject}..."
