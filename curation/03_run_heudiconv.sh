@@ -21,11 +21,11 @@ out_dir="/cbica/projects/pafin/dset"
 dicom_dir="/cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353"
 
 # Run heudiconv on the first session
-subjects=($(ls -d /cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353/*_* | sed 's|.*/\([0-9a-zA-Z]*\)_.*|\1|' | sort -u))
+subjects=($(ls -d ${dicom_dir}/*_* | sed 's|.*/\([0-9a-zA-Z]*\)_.*|\1|' | sort -u))
 
 # Filter out already-converted subjects
-subjects=($(for s in "${subjects[@]}"; do [ ! -d "/cbica/projects/pafin/dset/sub-$s/ses-1" ] && echo "$s"; done))
-subjects=("25636")
+subjects=($(for s in "${subjects[@]}"; do [ ! -d "${out_dir}/sub-$s/ses-1" ] && echo "$s"; done))
+
 for sub in "${subjects[@]}"
 do
     echo "$sub"

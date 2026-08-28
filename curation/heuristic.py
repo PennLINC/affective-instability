@@ -5,6 +5,8 @@ import re
 from typing import Any, Optional
 
 from heudiconv.utils import SeqInfo
+from pydicom.filereader import read_partial
+from pydicom.tag import Tag
 
 # The scanner was upgraded from 'syngo MR E11' to 'syngo MR XA60' partway through
 # the study, which changed how the DICOMs are organized:
@@ -29,6 +31,11 @@ SIEMENS_PRIVATE_IMAGE_TYPE = 0x75
 
 PHASE_SUFFIX = "_Pha"
 ECHO_SUFFIX = re.compile(r"^(?P<base>.+)_TE(?P<echo>\d+)$")
+
+# (0028,0008) Number of Frames, which only enhanced (XA) DICOMs have.
+NUMBER_OF_FRAMES = Tag(0x0028, 0x0008)
+# Frame count of every file in a series directory, filled one directory at a time.
+_series_frames: dict[str, dict[str, Optional[int]]] = {}
 
 # '<echo>' is replaced with '_echo-<n>' for series that hold a single echo of a
 # multi-echo acquisition, and with nothing when dcm2niix splits the echoes itself
@@ -137,19 +144,156 @@ RS_PHASE = (
 )
 
 
-def filter_files(fn: str) -> bool:
-    """Drop files heudiconv can't parse before it tries to.
+def _stop_after_frames(tag: Tag, VR: Optional[str], length: int) -> bool:  # noqa: U100
+    """Stop parsing a DICOM once NumberOfFrames has been read."""
+    return tag > NUMBER_OF_FRAMES
 
-    The XA localizer is an enhanced DICOM whose three frames are mutually
-    orthogonal, which makes nibabel's multi-frame wrapper raise
-    ``Number of slice indices and positions don't match`` and abort the whole
-    run.  We never convert the localizer, so skip it outright.  The flywheel
-    export names each series directory after its SeriesDescription, so matching
-    on the path is enough.
+
+def _number_of_frames(fn: str) -> Optional[int]:
+    """Frames in an enhanced DICOM, 0 for a classic one, None for a non-DICOM.
+
+    Only the first few kilobytes of the file are read, since NumberOfFrames comes
+    well before the per-frame functional groups and the pixel data.
     """
-    return not any(
-        part.lower().startswith("localizer") for part in fn.split(os.sep)
-    )
+    try:
+        with open(fn, "rb") as fo:
+            dcm = read_partial(fo, stop_when=_stop_after_frames)
+        frames = dcm.get("NumberOfFrames", None)
+    except Exception:
+        return None
+
+    return int(frames) if frames else 0
+
+
+def _series_frame_counts(directory: str) -> dict[str, Optional[int]]:
+    """Frame count of every file in a series directory, read once per directory.
+
+    The flywheel export puts each series in its own directory, so a file's
+    siblings are the other volumes of its own series.
+    """
+    if directory in _series_frames:
+        return _series_frames[directory]
+
+    counts: dict[str, Optional[int]] = {}
+    try:
+        names = sorted(os.listdir(directory))
+    except OSError:
+        names = []
+
+    for name in names:
+        path = os.path.join(directory, name)
+        if not os.path.isfile(path):
+            continue
+
+        counts[name] = _number_of_frames(path)
+        if counts[name] == 0:
+            # A classic (E11) DICOM holds a single frame and a series is all one
+            # flavor, so there is nothing to compare within this directory and no
+            # reason to read the rest of it.
+            counts = dict.fromkeys(names, 0)
+            break
+
+    _series_frames[directory] = counts
+
+    return counts
+
+
+def _is_truncated_volume(fn: str) -> bool:
+    """Whether this file holds a volume that was cut short.
+
+    XA writes one volume per file, so a run that was stopped partway through a
+    volume leaves behind a file with fewer frames than the rest of its series.
+    Classic (E11) DICOMs have no NumberOfFrames at all, so this is always False
+    for them.
+    """
+    counts = _series_frame_counts(os.path.dirname(fn))
+    frames = counts.get(os.path.basename(fn))
+    if not frames:
+        return False
+
+    return frames < max(count for count in counts.values() if count)
+
+
+def filter_files(fn: str) -> bool:
+    """Drop files heudiconv can't handle before it tries to.
+
+    Two kinds, both of which only come up under XA:
+
+    1.  The XA localizer is an enhanced DICOM whose three frames are mutually
+        orthogonal, which makes nibabel's multi-frame wrapper raise
+        ``Number of slice indices and positions don't match`` and abort the whole
+        run.  We never convert the localizer, so skip it outright.  The flywheel
+        export names each series directory after its SeriesDescription, so
+        matching on the path is enough.
+    2.  The truncated final volume of an aborted run.  dcm2niix splits it into an
+        output of its own ('..._e1a' next to '..._e1'), which heudiconv then tries
+        to name echo-1 a second time, and the conversion dies on the collision.  A
+        volume missing most of its slices is unusable regardless.
+    """
+    if any(part.lower().startswith("localizer") for part in fn.split(os.sep)):
+        return False
+
+    return not _is_truncated_volume(fn)
+
+
+def _series_number(s: SeqInfo) -> int:
+    """Series number, which heudiconv prefixes to the series id."""
+    number, _, _ = str(s.series_id).partition("-")
+    try:
+        return int(number)
+    except ValueError:
+        return 0
+
+
+def _aborted_series(seqinfo: list[SeqInfo]) -> set[str]:
+    """Series ids belonging to a run that was stopped early and started over.
+
+    An aborted run is repeated in full, single-band reference included, so the
+    series of a protocol divide into attempts at every point where a reference
+    follows an image series.  The attempt that collected the most volumes is the
+    real one and the rest are discarded, rather than converted and then cleaned up
+    afterwards by '12a_fix_partial_runs.py'.
+
+    Attempts can't be counted per series description, because under E11 the
+    magnitude and phase series of one acquisition share a description.  Splitting
+    on the reference instead only ever divides a protocol that reacquired its
+    reference, which is exactly what restarting a run does.
+    """
+    # (protocol name, attempt) for each series, and how far each attempt got,
+    # measured as the number of files in its longest image series.
+    attempts: dict[str, tuple[str, int]] = {}
+    longest: dict[tuple[str, int], int] = {}
+    current: dict[str, int] = {}
+    started: dict[str, bool] = {}
+
+    for s in sorted(seqinfo, key=_series_number):
+        protocol = s.protocol_name
+        attempt = current.setdefault(protocol, 0)
+        is_reference = "SBRef" in s.series_description
+        if is_reference and started.get(protocol, False):
+            attempt = current[protocol] = attempt + 1
+            started[protocol] = False
+
+        longest.setdefault((protocol, attempt), 0)
+        if not is_reference:
+            started[protocol] = True
+            longest[(protocol, attempt)] = max(
+                longest[(protocol, attempt)], s.series_files
+            )
+
+        attempts[s.series_id] = (protocol, attempt)
+
+    # An attempt is aborted when another attempt of the same protocol got further.
+    # Equal-length attempts are both kept, since neither was cut short.
+    return {
+        series_id
+        for series_id, (protocol, attempt) in attempts.items()
+        if any(
+            files > longest[(protocol, attempt)]
+            for (other_protocol, _), files in longest.items()
+            if other_protocol == protocol
+        )
+    }
 
 
 def create_key(
@@ -247,6 +391,8 @@ def infotodict(
     outdicom = ("dicom", "nii.gz")
 
     info: dict[tuple[str, tuple[str, ...], None], list] = {}
+    aborted = _aborted_series(seqinfo)
+    seqinfo = [s for s in seqinfo if s.series_id not in aborted]
     descriptions = {s.series_description for s in seqinfo}
 
     def add(template: str, s: SeqInfo, echo: Optional[int] = None) -> None:
