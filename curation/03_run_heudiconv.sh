@@ -6,8 +6,19 @@
 #SBATCH --time=48:00:00
 
 /cbica/projects/pafin/.bashrc
+# Convert the DICOMs to BIDS with heudiconv.
+#
+# The session directories are handed to heudiconv with --files, which searches
+# them recursively, instead of the fixed-depth -d glob it used to use.
+# 'syngo MR XA60' sessions write single-file (enhanced) series one directory
+# shallower than 'syngo MR E11' sessions do, so no single glob depth finds all
+# of the DICOMs in both.
 
 mamba activate curation
+
+heuristic="/cbica/projects/pafin/code/curation/heuristic.py"
+out_dir="/cbica/projects/pafin/dset"
+dicom_dir="/cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353"
 
 # Run heudiconv on the first session
 subjects=($(ls -d /cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353/*_* | sed 's|.*/\([0-9a-zA-Z]*\)_.*|\1|' | sort -u))
@@ -19,12 +30,13 @@ for sub in "${subjects[@]}"
 do
     echo "$sub"
     heudiconv \
-        -f /cbica/projects/pafin/code/curation/heuristic.py \
-        -o /cbica/projects/pafin/dset \
-        -d "/cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353/{subject}_*/*/*/*/*.dcm" \
+        -f "${heuristic}" \
+        -o "${out_dir}" \
+        --files "${dicom_dir}/${sub}"_*/ \
         --subjects "$sub" \
         --ses 1 \
         -g all \
         --bids \
-        --queue SLURM
+        --minmeta \
+        -c dcm2niix
 done

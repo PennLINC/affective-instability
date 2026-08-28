@@ -17,6 +17,14 @@ if __name__ == "__main__":
         "InstitutionAddress",
         "TaskName",
         "ImageComments",
+        # dcmstack metadata heudiconv embeds when --minmeta is not used. Only the
+        # single-file XA series ever got these, and they run to ~340 KB apiece.
+        "global",
+        "dcmmeta_affine",
+        "dcmmeta_reorient_transform",
+        "dcmmeta_shape",
+        "dcmmeta_slice_dim",
+        "dcmmeta_version",
     ]
 
     json_files = sorted(glob(os.path.join(dset_dir, "sub-*/ses-*/*/*.json")))
