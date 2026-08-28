@@ -6,8 +6,8 @@ from glob import glob
 
 
 if __name__ == "__main__":
-    in_dir = "/mnt/c/Users/tsalo/Downloads/pafin-dicoms/flywheel/bbl/PAFIN_844353"
-    status_file = "02_status_unzip_dicoms.txt"
+    in_dir = "/cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844353"
+    status_file = "/cbica/projects/pafin/sourcedata/curation_files/02_status_unzip_dicoms.txt"
     if os.path.exists(status_file):
         with open(status_file, "r") as f:
             unzipped_subjects = f.read().splitlines()

@@ -25,7 +25,7 @@ subjects=($(ls -d /cbica/projects/pafin/sourcedata/imaging/scitran/bbl/PAFIN_844
 
 # Filter out already-converted subjects
 subjects=($(for s in "${subjects[@]}"; do [ ! -d "/cbica/projects/pafin/dset/sub-$s/ses-1" ] && echo "$s"; done))
-
+subjects=("25636")
 for sub in "${subjects[@]}"
 do
     echo "$sub"
@@ -37,6 +37,7 @@ do
         --ses 1 \
         -g all \
         --bids \
+        --queue SLURM \
         --minmeta \
         -c dcm2niix
 done
