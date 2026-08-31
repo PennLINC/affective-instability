@@ -77,7 +77,7 @@ if __name__ == "__main__":
             os.path.join(args.dset_dir, "sub-*", "ses-*", "anat", f"*_{suffix}.nii.gz")
         )
 
-    anat_images = sorted(image for image in anat_images if is_refaced(image))
+    anat_images = sorted(anat_images)
     if not anat_images:
         raise SystemExit(
             f"No refaced anatomicals found in {args.dset_dir}. "
@@ -92,6 +92,9 @@ if __name__ == "__main__":
         # separate files instead of overwriting each other.
         name = os.path.basename(anat_image).replace(".nii.gz", "")
         out_file = os.path.join(args.out_dir, f"{name}.png")
+
+        if is_refaced(anat_image):
+            name = f'{name} (refaced)'
 
         if os.path.isfile(out_file) and not args.overwrite:
             n_skipped += 1
