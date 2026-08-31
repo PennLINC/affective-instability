@@ -28,7 +28,7 @@ matplotlib.use("Agg")
 from nilearn import plotting  # noqa: E402
 
 # Sagittal cuts per image, chosen automatically by nilearn across the head.
-N_CUTS = 5
+N_CUTS = 1
 # Above nilearn's default of 100, since a residual face is easy to miss in a slice
 # only a couple of hundred pixels wide.
 DPI = 150

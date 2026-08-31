@@ -22,6 +22,8 @@ import json
 import os
 from glob import glob
 
+import pandas as pd
+
 # The version @afni_refacer_run reports under the afni/2022_05_03 module, which is
 # what refaced every subject curated so far.  07 reads the version from `afni -vnum`
 # at job time; nothing here can, since the images were refaced long ago.
@@ -31,13 +33,8 @@ DEFAULT_AFNI_VERSION = "AFNI_22.1.03"
 def _parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "subjects",
-        nargs="+",
-        help=(
-            "IDs of the subjects in the new, not-yet-refaced batch, with or without "
-            "the 'sub-' prefix. Every other subject in the dataset is marked as "
-            "already refaced."
-        ),
+        "tsv",
+        help="participants file containing only defaced subjects",
     )
     parser.add_argument(
         "--dset-dir",
@@ -69,6 +66,9 @@ def find_anat_images(subject_dir):
 if __name__ == "__main__":
     args = _parse_args()
 
+    df = pd.read_table(args.tsv)
+    defaced_subjects = df['participant_id'].tolist()
+
     subject_dirs = sorted(glob(os.path.join(args.dset_dir, "sub-*")))
     subject_dirs = [d for d in subject_dirs if os.path.isdir(d)]
     if not subject_dirs:
@@ -76,29 +76,16 @@ if __name__ == "__main__":
 
     all_subjects = {os.path.basename(d) for d in subject_dirs}
 
-    new_subjects = {
-        s if s.startswith("sub-") else f"sub-{s}" for s in args.subjects
-    }
-    # A typo here would mark a new subject as already refaced and leave its face in
-    # the dataset, so refuse to write anything until every ID resolves.
-    unknown = sorted(new_subjects - all_subjects)
-    if unknown:
-        raise SystemExit(
-            f"These subjects are not in {args.dset_dir}: {', '.join(unknown)}\n"
-            "Nothing was written. Check the IDs and rerun."
-        )
-
     method = (
         f"Face replaced with AFNI's @afni_refacer_run ({args.afni_version}) "
         "in reface mode."
     )
 
-    print(f"Excluding {len(new_subjects)} new subject(s): {', '.join(sorted(new_subjects))}")
-    print(f"Marking the remaining {len(all_subjects - new_subjects)} subject(s) as refaced")
+    print(f"Marking {len(defaced_subjects)} subject(s) as refaced")
 
     n_marked, n_already, n_missing = 0, 0, 0
     for subject_dir in subject_dirs:
-        if os.path.basename(subject_dir) in new_subjects:
+        if os.path.basename(subject_dir) not in defaced_subjects:
             continue
 
         for anat_image in find_anat_images(subject_dir):
