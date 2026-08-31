@@ -307,6 +307,7 @@ if __name__ == "__main__":
             metadata = json.load(fo)
 
         if not str(metadata.get("SoftwareVersions", "")).startswith("syngo MR XA"):
+            print(f'Skipping {json_file}')
             continue
 
         fields = {}
