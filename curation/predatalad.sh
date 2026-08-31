@@ -14,7 +14,8 @@ python 05_copy_events.py
 bash 06_chmod.sh
 bash 07_reface_t1ws.sh
 # must be run separately since reface_t1ws submits jobs and
-# they must finish before this can run
+# they must finish before these can run
 # bash 08_remove_face_files.sh
+# python 07b_plot_refaced_anats.py
 python 09_anonymize_acqtimes.py
 python 10_clean_jsons.py
